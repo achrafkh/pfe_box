@@ -21,6 +21,7 @@ class CreateAppointmentsTable extends Migration
             $table->datetime('start_at');
             $table->datetime('end_at');
             $table->enum('status', ['waiting', 'done' , 'rescheduled']);
+            $table->text('notes');
             $table->timestamps();
             
             $table->foreign('user_id')->references('id')->on('users');
