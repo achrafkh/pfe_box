@@ -18,13 +18,11 @@ class CreateInvoicesTable extends Migration
 
             $table->integer('client_id')->unsigned();
             $table->integer('appointment_id')->unsigned();
-            $table->integer('product_id')->unsigned();
             
 
             
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('appointment_id')->references('id')->on('appointments');
             $table->foreign('client_id')->references('id')->on('clients');
         });

@@ -17,11 +17,8 @@ class CreateAdsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('description');
-            $table->integer('product_id')->unsigned();
             $table->enum('status', ['active', 'inactive']);
             $table->timestamps();
-
-            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 
