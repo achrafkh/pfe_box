@@ -6,22 +6,32 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Appointment;
 use Session;
+use Illuminate\Support\Collection;
 
 class AppointmentsController extends Controller
 {
-    public function setappointment(Request $request)
+    public function setAppointment(Request $request)
     {
-        $app = new Appointment;
+        $appointment = new Appointment;
 
-        $app->title = $request->title;
-        $app->status = 'pending';
-        $app->notes = $request->note;
-        $app->showroom_id = $request->showroom_id;
-        $app->client_id = $request->client_id;
-        $app->start_at = $request->day . ' ' . $request->start_time;
-        $app->end_at = $request->day . ' ' . $request->end_time;
+        $appointment->title = $request->title;
+        $appointment->status = 'pending';
+        $appointment->notes = $request->note;
+        $appointment->showroom_id = $request->showroom_id;
+        $appointment->client_id = $request->client_id;
+        $appointment->start_at = $request->day . ' ' . $request->start_time;
+        $appointment->end_at = $request->day . ' ' . $request->end_time;
+        $status = $appointment->save();
 
-        if (!$app->save()) {
+        
+      
+        if ($status && $request->ajax()) {
+            $data["status"] = true;
+            $data["event"]  = $appointment->toarray();
+            return response()->json($data);
+        }
+
+        if (!$status) {
             Session::flash('error', 'Something went Wrong');
             return redirect()->back();
         }

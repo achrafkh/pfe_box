@@ -45,7 +45,7 @@ Route::middleware('auth', 'IsCallcenter')->namespace('Callcenter')->prefix('op')
     Route::post('/client/{client}', 'ClientsController@delete')->name('deleteClient');
     Route::get('/client/{client}/edit', 'ClientsController@edit')->name('editClientForm');
 
-    Route::post('/setappointment', 'AppointmentsController@setappointment')->name('setAppointment');
+    Route::post('/setappointment', 'AppointmentsController@setAppointment')->name('setAppointment');
 });
 
 //  Routes des Commerciaux...

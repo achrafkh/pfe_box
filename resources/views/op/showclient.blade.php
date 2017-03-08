@@ -103,44 +103,44 @@ border-top: 0;
 		</div>
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 toppad pull-righ">
-<h2>Previous invoices</h2>
-	  <table class="table">
-	    <thead>
-	      <tr>
-	        <th>Code</th>
-	        <th>Date</th>
-	        <th>Product</th>
-	        <th>Action</th>
-	      </tr>
-	    </thead>
-	    <tbody>
-		      <tr>
-		        <td>zaeza</td>
-		        <td>zaeaeaze</td>
-		        <td>azeaezaea</td>
-		        <td> <a href="#" class="btn btn-primary">View</a>
-		      </tr>
-		      <tr>
-		        <td>zaeza</td>
-		        <td>zaeaeaze</td>
-		        <td>azeaezaea</td>
-		        <td> <a href="#" class="btn btn-primary">View</a>
-		      </tr>
-		      <tr>
-		        <td>zaeza</td>
-		        <td>zaeaeaze</td>
-		        <td>azeaezaea</td>
-		        <td> <a href="#" class="btn btn-primary">View</a>
-		      </tr>
-		      <tr>
-		        <td>zaeza</td>
-		        <td>zaeaeaze</td>
-		        <td>azeaezaea</td>
-		        <td> <a href="#" class="btn btn-primary">View</a>
-		      </tr>
-	      </tbody>
-	  </table>
-  </div>
+		<h2>Previous invoices</h2>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Code</th>
+					<th>Date</th>
+					<th>Product</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>zaeza</td>
+					<td>zaeaeaze</td>
+					<td>azeaezaea</td>
+					<td> <a href="#" class="btn btn-primary">View</a>
+				</tr>
+				<tr>
+					<td>zaeza</td>
+					<td>zaeaeaze</td>
+					<td>azeaezaea</td>
+					<td> <a href="#" class="btn btn-primary">View</a>
+				</tr>
+				<tr>
+					<td>zaeza</td>
+					<td>zaeaeaze</td>
+					<td>azeaezaea</td>
+					<td> <a href="#" class="btn btn-primary">View</a>
+				</tr>
+				<tr>
+					<td>zaeza</td>
+					<td>zaeaeaze</td>
+					<td>azeaezaea</td>
+					<td> <a href="#" class="btn btn-primary">View</a>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
 <div class="modal fade" id="schedule" role="dialog">
 	<div class="modal-dialog">
@@ -227,99 +227,127 @@ border-top: 0;
 							<ul class="nav navbar-right panel_toolbox">
 								<li><a class="collapse-link" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><i id="arrow" class="fa fa-chevron-down"></i></a>
 							</li>
-					
-			</ul>
-			<div class="clearfix"></div>
-		</div>
-		<div class="x_content" id="collapseOne" class="panel-collapse collapse">
-			<div id='calendar'></div>
+							
+						</ul>
+						<div class="clearfix"></div>
+					</div>
+					<div class="x_content" id="collapseOne" class="panel-collapse collapse">
+						<div id='calendar'></div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-</div>
-</div>
-</div>
 </div>
 <!-- Start Calender modal -->
 <div id="CalenderModalNew" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-<div class="modal-content">
-<div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	<h4 class="modal-title" id="myModalLabel">New Calender Entry</h4>
-</div>
-<div class="modal-body">
-	<div id="testmodal" style="padding: 5px 20px;">
-		<form id="antoform" class="form-horizontal calender" role="form">
-			<div class="form-group">
-				<label class="col-sm-3 control-label">Title</label>
-				<div class="col-sm-9">
-					<input type="text" class="form-control" id="title" name="title">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title" id="myModalLabel">New Calender Entry</h4>
+			</div>
+			<div class="modal-body">
+				<div id="testmodal" style="padding: 5px 20px;">
+					<form id="antoform" class="form-horizontal calender" role="form">
+						{{ csrf_field() }}
+						
+						<input type="hidden" class="form-control" id="client_id" name="client_id" value="{{ $client->id }} ">
+						<div class="form-group">
+							<label for="note">Title:</label>
+							<input type="text" class="form-control" name="title" id="title">
+						</div>
+						<div class="form-group">
+							<label for="note">Note:</label>
+							<textarea class="form-control" name="note" id="note"></textarea>
+						</div>
+						
+						<div class="form-group start-date">
+							<label class="control-label" for="start-date">Day</label>
+							<div class="input-group start-date-time">
+								<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></span>
+								<input class="form-control" name="day" id="start-datee" type="date">
+								
+							</div>
+							<div class="row" style="margin-left: 2%;margin-right: 2%">
+								<label class="control-label pull-left" for="end-date">Start time:</label>
+								<label class="control-label pull-right" for="end-date">End Time:</label>
+							</div>
+							<div class="input-group end-date-time">
+								<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></span>
+								<input class="form-control" name="start_time" id="end-date" type="time">
+								<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></span>
+								<input  class="form-control" name="end_time" id="end-time" type="time">
+								
+							</div>
+						</div>
+						<div class="input-group col-sm-12 col-md-12">
+							<div>
+								<label class="control-label col-sm-6 pull-left" for="showroom">Select Showroom</label>
+							</div>
+							
+							<div class="col-sm-6">
+								<select class="form-control input-large" name="showroom_id">
+									@foreach($showrooms as $showroom)
+									<option value="{{ $showroom->id }} "> {{ $showroom->city }} </option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+						
+					</form>
 				</div>
 			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">Description</label>
-				<div class="col-sm-9">
-					<textarea class="form-control" style="height:55px;" id="descr" name="descr"></textarea>
-				</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default antoclose" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary antosubmit">Save changes</button>
 			</div>
-		</form>
+		</div>
 	</div>
-</div>
-<div class="modal-footer">
-	<button type="button" class="btn btn-default antoclose" data-dismiss="modal">Close</button>
-	<button type="button" class="btn btn-primary antosubmit">Save changes</button>
-</div>
-</div>
-</div>
 </div>
 <div id="CalenderModalEdit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-<div class="modal-content">
-<div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	<h4 class="modal-title" id="myModalLabel2">Edit Calender Entry</h4>
-</div>
-<div class="modal-body">
-	<div id="testmodal2" style="padding: 5px 20px;">
-		<form id="antoform2" class="form-horizontal calender" role="form">
-			<div class="form-group">
-				<label class="col-sm-3 control-label">Title</label>
-				<div class="col-sm-9">
-					<input type="text" class="form-control" id="title2" name="title2">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title" id="myModalLabel2">Edit Calender Entry</h4>
+			</div>
+			<div class="modal-body">
+				<div id="testmodal2" style="padding: 5px 20px;">
+					<form id="antoform2" class="form-horizontal calender" role="form">
+						{{ csrf_field() }}
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Title</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="title2" name="title2">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Description</label>
+							<div class="col-sm-9">
+								<textarea class="form-control" style="height:55px;" id="descr2" name="descr"></textarea>
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">Description</label>
-				<div class="col-sm-9">
-					<textarea class="form-control" style="height:55px;" id="descr2" name="descr"></textarea>
-				</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary antosubmit2">Save changes</button>
 			</div>
-		</form>
+		</div>
 	</div>
-</div>
-<div class="modal-footer">
-	<button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Close</button>
-	<button type="button" class="btn btn-primary antosubmit2">Save changes</button>
-</div>
-</div>
-</div>
 </div>
 <div id="fc_create" data-toggle="modal" data-target="#CalenderModalNew"></div>
 <div id="fc_edit" data-toggle="modal" data-target="#CalenderModalEdit"></div>
 </div>
-
 @endsection
-
-
 @section('js')
 <script src="/js/moment/moment.min.js"></script>
 <script src="/js/calendar/fullcalendar.min.js"></script>
-<!-- pace -->
 <script>
 
 var evs = {!! json_encode($calendar) !!};
-
-
 console.log(evs);
 $(window).load(function() {
     var date = new Date();
@@ -338,12 +366,33 @@ $(window).load(function() {
         selectable: true,
         selectHelper: true,
         select: function(start, end, allDay = false) {
+			document.getElementById("start-datee").valueAsDate = new Date(start);
             $('#fc_create').click();
             console.log('this creates');
             started = start;
             ended = end
             $(".antosubmit").on("click", function() {
+            	 $.ajax({
+			        url: '/op/setappointment',
+			        type: 'post',
+			        dataType: 'json',
+			        data: $('form#antoform').serialize(),
+			        success: function(data) {
+				       var evee={
+				       	id:data.event.id ,
+				       	title:data.event.title, 
+				       	start:  data.event.start_at,
+				       	end:  data.event.end_at,
+				       	allDay : false,
+				       	notes : data.event.notes,
+				       	color : '#1751c3',
+
+				       };
+					$('#calendar').fullCalendar( 'renderEvent', evee, true);
+			         }
+			    });
                 var title = $("#title").val();
+                var desc = $("#descr").val();
                 if (end) {
                     ended = end
                 }
