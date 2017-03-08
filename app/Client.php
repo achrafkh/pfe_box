@@ -6,8 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
-    public function leads()
+    protected $fillable = [
+        'firstname', 'lastname', 'phone','city', 'state' ,'address' , 'birthdate' , 'email',
+    ];
+
+    
+    public function appointments()
     {
-        return $this->hasMany(Lead::class);
+        return $this->hasMany(Appointment::class);
     }
 }

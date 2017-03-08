@@ -28,11 +28,11 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        return '/'.Auth::user()->role;
+        return '/'.Auth::user()->role->title;
     }
 
     public function username()
     {
-        return 'login';
+        return 'username';
     }
 }

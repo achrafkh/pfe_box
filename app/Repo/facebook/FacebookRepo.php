@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repo;
+namespace App\Repo\facebook;
 
 use FacebookAds\Api;
 use FacebookAds\Object\AdUser;
@@ -15,8 +15,8 @@ class FacebookRepo implements IFacebookRepository
 
     public function __construct()
     {
-        $this->app_secret = env('APP_SECRET');
-        $this->app_id = env('APP_ID');
+        $this->app_secret = env('FACEBOOK_APP_SECRET');
+        $this->app_id = env('FACEBOOK_APP_ID');
         $this->baseurl = 'https://graph.facebook.com/v2.8/';
 
         $this->client = new \GuzzleHttp\Client();

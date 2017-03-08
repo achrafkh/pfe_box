@@ -36,6 +36,8 @@
                 <!-- /.row -->
             @include('partials.flash')
             @yield('content')
+
+            @yield('content2')
                 <!-- /.row -->
 
             </div>
@@ -49,6 +51,12 @@
 
     <script src="{{ asset('js/app.js') }}"></script>
     @yield('js')
+    <script type="text/javascript">
+        var loc = window.location.pathname;
+        $('#nav').find('a').each(function() {
+            $(this).toggleClass('active', $(this).attr('href') == loc);
+        });
+    </script>
 </body>
 
 </html>

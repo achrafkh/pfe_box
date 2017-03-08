@@ -15,17 +15,17 @@ class CreateAppointmentsTable extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('showroom_id')->unsigned();
             $table->string('title');
-            $table->integer('user_id')->unsigned();
             $table->integer('client_id')->unsigned();
             $table->datetime('start_at');
             $table->datetime('end_at');
-            $table->enum('status', ['waiting', 'done' , 'rescheduled']);
+            $table->enum('status', ['pending', 'done' , 'rescheduled']);
             $table->text('notes');
             $table->timestamps();
             
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('showroom_id')->references('id')->on('showrooms')->onDelete('cascade');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
         });
     }
 

@@ -16,35 +16,40 @@
                 </div>
 
 
-<h2>Clients</h2>
+<h2>Clients</h2><a class="btn btn-primary pull-right" href="{{ route('addClientForm') }}"> New client</a>
   <table class="table">
     <thead>
       <tr>
-        <th>Name</th>
+        <th>Fist Name</th>
+        <th>Last Name</th>
         <th>Email</th>
         <th>Phone Number</th>
+        <th>City</th>
         <th>Action</th>
       </tr>
     </thead>
     <tbody>
 
-    @foreach($leads as $lead)
+    @foreach($clients as $client)
       <tr>
-        <td>{{$lead->client->name}}</td>
-        <td>{{$lead->client->email}}</td>
-        <td>{{$lead->client->phone}}</td>
-        <td> <a href="{{route('showClient',["id"=>$lead->id])}}" class="btn btn-primary">View</a>
-        <form style="display: inline;" method="POST" action="{{route('deleteClient',["id"=>$lead->id])}}">
+        <td>{{$client->firstname}}</td>
+        <td>{{$client->lastname}}</td>
+        <td>{{$client->email}}</td>
+        <td>{{$client->phone}}</td>
+        <td>{{$client->city}}</td>
+        <td> <a href="{{route('showClient',["id"=>$client->id])}}" class="btn btn-primary">View</a>
+        <form style="display: inline;" method="POST" action="{{route('deleteClient',["id"=>$client->id])}}">
           {{ csrf_field() }}
          <input type="submit" class="btn btn-danger" value="delete"></td>
          </form>
       </tr>
-
       @endforeach
     </tbody>
   </table>
-
-  {{ $leads->links() }}
+<div class="row">
+  {{ $clients->links() }}
+</div>
+  
 
 @endsection
 @section('js')

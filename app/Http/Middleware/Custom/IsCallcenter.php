@@ -15,8 +15,8 @@ class IsCallcenter
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user()->role != 'op') {
-            return redirect('/'.$request->user()->role);
+        if ($request->user()->role->title != 'op') {
+            return redirect('/'.$request->user()->role->title);
         }
         
         return $next($request);

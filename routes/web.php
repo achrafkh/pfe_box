@@ -11,57 +11,50 @@
 |
 */
 
+Route::get('/fb', 'TestController@test');
+Route::get('/fb2', 'TestController@test2');
+
+Route::get('test', 'TestController@index')->name('test');
+
+
+
+
+
 // Authentication Routes...
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginview');
 Route::post('login', 'Auth\LoginController@login')->name('login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('test', 'TestController@index')->name('test');
+Route::get('/login', function () {
+    return redirect('/');
+});
 
 
 //  Routes des Operateurs...
-Route::middleware('IsCallcenter')->namespace('Callcenter')->prefix('op')->group(function () {
-    Route::get('/', 'DashboardController@index')->name('op');
-    Route::get('/client/{lead}', 'DashboardController@show')->name('showClient');
-    Route::post('/client/{lead}', 'DashboardController@delete')->name('deleteClient');
+Route::middleware('auth', 'IsCallcenter')->namespace('Callcenter')->prefix('op')->group(function () {
+    Route::get('/', 'DashboardController@index');
+    Route::get('/clients', 'ClientsController@index')->name('op');
+    Route::get('/client/create', 'ClientsController@create')->name('addClientForm');
+    
+
+    Route::post('/client/create', 'ClientsController@store')->name('createClient');
+    Route::post('/client/update', 'ClientsController@update')->name('updateClient');
+
+
+    Route::get('/client/{client}', 'ClientsController@show')->name('showClient');
+    Route::post('/client/{client}', 'ClientsController@delete')->name('deleteClient');
+    Route::get('/client/{client}/edit', 'ClientsController@edit')->name('editClientForm');
+
+    Route::post('/setappointment', 'AppointmentsController@setappointment')->name('setAppointment');
 });
 
 //  Routes des Commerciaux...
-Route::middleware('IsCommercial')->namespace('Commercial')->prefix('com')->group(function () {
+Route::middleware('auth', 'IsCommercial')->namespace('Commercial')->prefix('com')->group(function () {
     Route::get('/', 'DashboardController@index');
 });
 
 
 //  Routes des Marketeurs..
-Route::middleware('IsMarketer')->namespace('Marketer')->prefix('mark')->group(function () {
+Route::middleware('auth', 'IsMarketer')->namespace('Marketer')->prefix('mark')->group(function () {
     Route::get('/', 'DashboardController@index');
-});
-
-
-Route::get('/testing', function () {
-    $ad = new App\Ad;
-    $ad->title = "the ad";
-    $ad->description = "the desc";
-    $ad->status = "active";
-    $ad->save();
-
-    $client = new App\Client;
-    $client->name = "elpach";
-    $client->email = "azee-".rand()."@azezae.ze";
-    $client->phone = "232".rand()."3223";
-    $client->address = "rue 118 charles";
-    $client->city = "mahdia";
-    $client->state = "mahdia";
-    $client->save();
- 
-    $lead = new App\Lead;
-    $lead->ad_id = $ad->id;
-    $lead->client_id = $client->id;
-    $lead->status = "unconfirmed";
-    $lead->save();
-
-
-
-
-    return "k";
 });

@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('App\Repo\IFacebookRepository', 'App\Repo\FacebookRepo');
+        $this->app->bind('App\Repo\facebook\IFacebookRepository', 'App\Repo\facebook\FacebookRepo');
+        $this->app->bind('App\Repo\Calendar\ICalendarRepository', 'App\Repo\Calendar\CalendarRepo');
     }
 }

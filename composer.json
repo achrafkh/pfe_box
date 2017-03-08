@@ -6,11 +6,11 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
-        "facebook/graph-sdk": "^5.4",
-        "facebook/php-ads-sdk": "2.8.*",
+        "facebook/graph-sdk": "*",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.4.*",
-        "laravel/tinker": "~1.0"
+        "laravel/tinker": "~1.0",
+        "maddhatter/laravel-fullcalendar": "^1.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

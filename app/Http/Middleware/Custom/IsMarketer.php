@@ -15,8 +15,8 @@ class IsMarketer
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user()->role != 'mark') {
-            return redirect('/'.$request->user()->role);
+        if ($request->user()->role->title != 'mark') {
+            return redirect('/'.$request->user()->role->title);
         }
 
         return $next($request);

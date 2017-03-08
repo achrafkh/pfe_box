@@ -11,19 +11,21 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class)->create([
-            'login' => 'operateur',
-            'role'  => 'op',
-        ]);
+        factory(App\Role::class)->create(['title'=>'op'])->each(function ($u) {
+            $u->users()->save(factory(App\User::class)->make(['username' => 'operateur']));
+        });
 
-        factory(App\User::class)->create([
-            'login' => 'commercial',
-            'role'  => 'com',
-        ]);
 
-        factory(App\User::class)->create([
-            'login' => 'marketer',
-            'role'  => 'mark',
-        ]);
+        factory(App\Role::class)->create(['title'=>'com'])->each(function ($u) {
+            $u->users()->save(factory(App\User::class)->make(['username' => 'commercial']));
+        });
+
+        factory(App\Role::class)->create(['title'=>'mark'])->each(function ($u) {
+            $u->users()->save(factory(App\User::class)->make(['username' => 'marketeur']));
+        });
+                
+        factory(App\Role::class)->create(['title'=>'admin'])->each(function ($u) {
+            $u->users()->save(factory(App\User::class)->make(['username' => 'superadmin']));
+        });
     }
 }

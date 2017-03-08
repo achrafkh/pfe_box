@@ -15,8 +15,8 @@ class IsCommercial
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user()->role != 'com') {
-            return redirect('/'.$request->user()->role);
+        if ($request->user()->role->title != 'com') {
+            return redirect('/'.$request->user()->role->title);
         }
         return $next($request);
     }
