@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Appointment;
 use Session;
 use Illuminate\Support\Collection;
+use App\User;
 
 class AppointmentsController extends Controller
 {
@@ -63,5 +64,16 @@ class AppointmentsController extends Controller
 
         Session::flash('success', 'Added successfully');
         return redirect()->back();
+    }
+
+    public function checkAvailable(Request $request)
+    {
+        $commercials = User::where('showroom_id', $request->showroom_id)->whereHas('role', function ($query) {
+            $query->where('title', 'like', 'com');
+        })->get();
+
+        $response['status'] = "success";
+        $response['coms'] = $commercials->toarray();
+        return response()->json($response);
     }
 }

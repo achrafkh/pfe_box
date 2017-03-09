@@ -356,7 +356,7 @@ border-top: 0;
 							</div>
 							
 							<div class="col-sm-6">
-								<select class="form-control input-large showroom" name="showroom_id" id="showroom_id">
+								<select class="form-control input-large showroom" name="showroom_id" id="showroom_id_edit">
 									@foreach($showrooms as $showroom)
 									<option value="{{ $showroom->id }} "> {{ $showroom->city }} </option>
 									@endforeach
@@ -404,17 +404,13 @@ border-top: 0;
 
 var evs = {!! json_encode($calendar) !!};
 
-
-console.log(evs);
 $(window).load(function() {
 	$("#contain").hide();
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
-    var started;
-    var categoryClass;
-    console.log(new Date(y, m, d + 14, 12, 0));
+
     var calendar = $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
@@ -426,8 +422,6 @@ $(window).load(function() {
         select: function(start, end, allDay = false) {
 			document.getElementById("start-datee").valueAsDate = new Date(start);
             $('#fc_create').click();
-            started = start;
-            ended = end
             $(".antosubmit").on("click", function() {
             	 $.ajax({
 			        url: '/op/setappointment',
@@ -507,24 +501,22 @@ $(window).load(function() {
 }
 
 		$( ".showroom" ).change(function() {
-
-
-			$.each(coms, function (i, item) {
-				if(item.showroom_id ==  $('#showroom_id').find(":selected").val()){
-					 $('#com_id').append('<option value="'+ item.id +'">'+ item.fullname +' </option>' );
-				}
-			});
+		
 			    $.ajax({
 			        url: '/op/checkavailable',
 			        type: 'post',
 			        dataType: 'json',
-			        data: $('form#editform').serialize(),
-			        success: function(data) {
-				    	$("#contain").show();
-						$('#com_id').empty();
+			        data:  {'showroom_id':$( "#showroom_id_edit option:selected" ).val(), '_token': $('input[name=_token]').val()},
 
-						if(data.coms.lenth > 0)
+			        success: function(data) {
+			        	console.log(data);
+			        	$('#com_id').empty();
+			        	$("#contain").hide();
+
+						if(data.coms.length > 0)
 						{
+						$("#contain").show();
+						
 						$.each(data.coms, function (i, item) {
 							$('#com_id').append('<option value="'+ item.id +'">'+ item.fullname +' </option>' );
 						});
