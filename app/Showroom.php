@@ -14,7 +14,7 @@ class Showroom extends Model
     public function commercials()
     {
         return $this->users()->whereHas('role', function ($query) {
-            $query->where('role', 'like', 'com');
+            $query->where('title', 'like', 'com');
         });
     }
 }

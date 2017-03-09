@@ -23,8 +23,33 @@ class AppointmentsController extends Controller
         $appointment->end_at = $request->day . ' ' . $request->end_time;
         $status = $appointment->save();
 
-        
-      
+        if ($status && $request->ajax()) {
+            $data["status"] = true;
+            $data["event"]  = $appointment->toarray();
+            return response()->json($data);
+        }
+
+        if (!$status) {
+            Session::flash('error', 'Something went Wrong');
+            return redirect()->back();
+        }
+
+        Session::flash('success', 'Added successfully');
+        return redirect()->back();
+    }
+
+    public function updateAppointment(Request $request)
+    {
+        $appointment = Appointment::find($request->id);
+        $appointment->title = $request->title;
+        $appointment->notes = $request->notes;
+        $appointment->client_id = $request->client_id;
+        $appointment->showroom_id = $request->showroom_id;
+        $appointment->client_id = $request->client_id;
+        $appointment->start_at = $request->day . ' ' . $request->start_time;
+        $appointment->end_at = $request->day . ' ' . $request->end_time;
+        $status = $appointment->update();
+
         if ($status && $request->ajax()) {
             $data["status"] = true;
             $data["event"]  = $appointment->toarray();

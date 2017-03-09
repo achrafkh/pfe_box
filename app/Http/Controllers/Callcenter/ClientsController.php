@@ -7,12 +7,14 @@ use App\Http\Requests\UpdateClientRequest;
 use App\Http\Controllers\Controller;
 use App\Repo\Calendar\ICalendarRepository;
 use App\Client;
+use App\User;
 use App\Showroom;
 use Session;
 
 class ClientsController extends Controller
 {
     protected $test;
+    
     public function __construct(ICalendarRepository $calendar)
     {
         $this->test = $calendar;
@@ -26,8 +28,10 @@ class ClientsController extends Controller
     {
         $calendar = $this->test->getClientCalender($client->id);
         $showrooms = Showroom::get();
-
-        return view('op.showclient', compact('showrooms', 'client', 'calendar'));
+        $commercials = User::whereHas('role', function ($query) {
+            $query->where('title', 'like', 'com');
+        })->get();
+        return view('op.showclient', compact('showrooms', 'client', 'calendar', 'commercials'));
     }
 
     public function create()

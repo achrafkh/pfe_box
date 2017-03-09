@@ -10,10 +10,12 @@ class CalendarRepo implements ICalendarRepository
 {
     public function getClientCalender($client_id)
     {
-        $appointments = Appointment::where('client_id', $client_id)->get(['title', 'start_at', 'end_at','status','notes']);
+        $appointments = Appointment::where('client_id', $client_id)->get(['title', 'start_at', 'end_at','status','notes','id']);
         
         $data = $appointments->map(function ($item) {
-            return ['title'  => $item->title,
+            return [
+                    'appid'  => $item->id,
+                    'title'  => $item->title,
                     'start'  => $item->start_at,
                     'end'    => $item->end_at,
                     'allDay' => false,
@@ -29,7 +31,9 @@ class CalendarRepo implements ICalendarRepository
         $appointments = Appointment::where('showroom_id', $showroom_id)->get(['title', 'start_at', 'end_at','status','notes']);
         
         $data = $appointments->map(function ($item) {
-            return ['title'  => $item->title,
+            return [
+                    'appid'  => $item->id,
+                    'title'  => $item->title,
                     'start'  => $item->start_at,
                     'end'    => $item->end_at,
                     'allDay' => false,

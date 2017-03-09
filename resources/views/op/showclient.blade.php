@@ -287,7 +287,7 @@ border-top: 0;
 							</div>
 							
 							<div class="col-sm-6">
-								<select class="form-control input-large" name="showroom_id">
+								<select class="form-control input-large" name="showroom_id" id="showroom_id">
 									@foreach($showrooms as $showroom)
 									<option value="{{ $showroom->id }} "> {{ $showroom->city }} </option>
 									@endforeach
@@ -314,21 +314,76 @@ border-top: 0;
 			</div>
 			<div class="modal-body">
 				<div id="testmodal2" style="padding: 5px 20px;">
-					<form id="antoform2" class="form-horizontal calender" role="form">
+					
+					
+					<form id="editform" class="form-horizontal calender" role="form">
 						{{ csrf_field() }}
+						
+						<input type="hidden" class="form-control" id="client_id-edit" name="client_id" value="{{ $client->id }} ">
+						<input type="hidden" class="form-control" id="appid" name="id"
+						 value="">
 						<div class="form-group">
-							<label class="col-sm-3 control-label">Title</label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="title2" name="title2">
-							</div>
+							<label for="note">Title:</label>
+							<input type="text" class="form-control" name="title" id="title-edit">
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label">Description</label>
-							<div class="col-sm-9">
-								<textarea class="form-control" style="height:55px;" id="descr2" name="descr"></textarea>
+							<label for="note">Note:</label>
+							<textarea class="form-control" name="notes" id="note-edit"></textarea>
+						</div>
+						
+						<div class="form-group start-date">
+							<label class="control-label" for="start-date">Day</label>
+							<div class="input-group start-date-time">
+								<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></span>
+								<input class="form-control" name="day" id="date-edit" type="date">
+								
+							</div>
+							<div class="row" style="margin-left: 2%;margin-right: 2%">
+								<label class="control-label pull-left" for="start-date">Start time:</label>
+								<label class="control-label pull-right" for="end-date">End Time:</label>
+							</div>
+							<div class="input-group end-date-time">
+								<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></span>
+								<input class="form-control" name="start_at" id="start-date-edit" type="time">
+								<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></span>
+								<input  class="form-control" name="end_at" id="end-time-edit" type="time">
+								
 							</div>
 						</div>
+						<div class="input-group col-sm-12 col-md-12">
+							<div>
+								<label class="control-label col-sm-6 pull-left" for="showroom">Select Showroom</label>
+							</div>
+							
+							<div class="col-sm-6">
+								<select class="form-control input-large showroom" name="showroom_id" id="showroom_id">
+									@foreach($showrooms as $showroom)
+									<option value="{{ $showroom->id }} "> {{ $showroom->city }} </option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+
+						<div class="input-group col-sm-12 col-md-12" id="contain">
+							<div>
+								<label class="control-label col-sm-6 pull-left" for="showroom">Select Commercial</label>
+							</div>
+							
+							<div class="col-sm-6">
+								<select class="form-control input-large" name="commercial_id" id="com_id" >
+									
+								</select>
+							</div>
+						</div>
+
+
+						
 					</form>
+
+
+
+
+
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -348,8 +403,11 @@ border-top: 0;
 <script>
 
 var evs = {!! json_encode($calendar) !!};
+
+
 console.log(evs);
 $(window).load(function() {
+	$("#contain").hide();
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
@@ -368,7 +426,6 @@ $(window).load(function() {
         select: function(start, end, allDay = false) {
 			document.getElementById("start-datee").valueAsDate = new Date(start);
             $('#fc_create').click();
-            console.log('this creates');
             started = start;
             ended = end
             $(".antosubmit").on("click", function() {
@@ -378,36 +435,20 @@ $(window).load(function() {
 			        dataType: 'json',
 			        data: $('form#antoform').serialize(),
 			        success: function(data) {
+
 				       var evee={
-				       	id:data.event.id ,
+				       	appid:data.event.id ,
 				       	title:data.event.title, 
 				       	start:  data.event.start_at,
 				       	end:  data.event.end_at,
 				       	allDay : false,
 				       	notes : data.event.notes,
 				       	color : '#1751c3',
-
 				       };
-					$('#calendar').fullCalendar( 'renderEvent', evee, true);
+				    
+					calendar.fullCalendar( 'renderEvent', evee, true);
 			         }
-			    });
-                var title = $("#title").val();
-                var desc = $("#descr").val();
-                if (end) {
-                    ended = end
-                }
-                categoryClass = $("#event_type").val();
-                if (title) {
-                    calendar.fullCalendar('renderEvent', {
-                            title: title,
-                            start: started,
-                            end: end,
-                            allDay: allDay
-                        },
-                        true // make the event "stick"
-                    );
-                }
-                $('#title').val('');
+			    });     
                 calendar.fullCalendar('unselect');
                 $('.antoclose').click();
                 return false;
@@ -415,14 +456,41 @@ $(window).load(function() {
         },
         eventClick: function(calEvent, jsEvent, view) {
             //alert(calEvent.title, jsEvent, view);
+            var start = new Date(calEvent.start);
+            var end = new Date(calEvent.end);
+            var evid = calEvent._id;
             $('#fc_edit').click();
-            $('#title2').val(calEvent.title);
-            $('#descr2').val(calEvent.notes);
-            categoryClass = $("#event_type").val();
+            $('#title-edit').val(calEvent.title);
+			$('#note-edit').val(calEvent.notes);
+			$('#appid').val(calEvent.appid);
+			
+			document.getElementById("date-edit").valueAsDate = new Date(calEvent.start);
+			$('#start-date-edit').val(timeNow(start));
+			$('#end-time-edit').val(timeNow(end));
+
             $(".antosubmit2").on("click", function() {
-                calEvent.title = $("#title2").val();
-                calendar.fullCalendar('updateEvent', calEvent);
-                console.log('this updates');
+                
+            	$.ajax({
+			        url: '/op/updateappointment',
+			        type: 'post',
+			        dataType: 'json',
+			        data: $('form#editform').serialize(),
+			        success: function(data) {
+				       var evee={
+				       	_id:evid,
+				       	appid:data.event.id ,
+				       	title:data.event.title, 
+				       	start:  data.event.start_at,
+				       	end:  data.event.end_at,
+				       	allDay : false,
+				       	notes : data.event.notes,
+				       	color : '#1751c3',
+				       };
+				       calendar.fullCalendar( 'removeEvents', evid );
+				       calendar.fullCalendar( 'renderEvent', evee, true);
+
+			         }
+			    });
                 $('.antoclose2').click();
             });
             calendar.fullCalendar('unselect');
@@ -430,6 +498,45 @@ $(window).load(function() {
         editable: true,
         events: evs,
     });
-});
+
+    function timeNow(d) {
+	    h = (d.getHours()<10?'0':'') + d.getHours(),
+	    m = (d.getMinutes()<10?'0':'') + d.getMinutes();
+	   	i = h + ':' + m;
+	  return i;
+}
+
+		$( ".showroom" ).change(function() {
+
+
+			$.each(coms, function (i, item) {
+				if(item.showroom_id ==  $('#showroom_id').find(":selected").val()){
+					 $('#com_id').append('<option value="'+ item.id +'">'+ item.fullname +' </option>' );
+				}
+			});
+			    $.ajax({
+			        url: '/op/checkavailable',
+			        type: 'post',
+			        dataType: 'json',
+			        data: $('form#editform').serialize(),
+			        success: function(data) {
+				    	$("#contain").show();
+						$('#com_id').empty();
+
+						if(data.coms.lenth > 0)
+						{
+						$.each(data.coms, function (i, item) {
+							$('#com_id').append('<option value="'+ item.id +'">'+ item.fullname +' </option>' );
+						});
+						}
+
+			         }
+			    }); 
+
+
+		 })
+	});
+
+
 </script>
 @endsection
