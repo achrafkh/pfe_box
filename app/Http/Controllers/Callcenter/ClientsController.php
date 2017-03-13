@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Callcenter;
 
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repo\Calendar\ICalendarRepository;
 use App\Client;
@@ -13,11 +14,11 @@ use Session;
 
 class ClientsController extends Controller
 {
-    protected $test;
+    protected $data;
     
     public function __construct(ICalendarRepository $calendar)
     {
-        $this->test = $calendar;
+        $this->data = $calendar;
     }
     public function index()
     {
@@ -26,12 +27,10 @@ class ClientsController extends Controller
 
     public function show(Client $client)
     {
-        $calendar = $this->test->getClientCalender($client->id);
+        $calendar = $this->data->getClientCalender($client->id);
         $showrooms = Showroom::get();
-        $commercials = User::whereHas('role', function ($query) {
-            $query->where('title', 'like', 'com');
-        })->get();
-        return view('op.showclient', compact('showrooms', 'client', 'calendar', 'commercials'));
+
+        return view('op.showclient', compact('showrooms', 'client', 'calendar'));
     }
 
     public function create()

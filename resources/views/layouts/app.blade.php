@@ -26,7 +26,7 @@
 
     <div id="wrapper">
 
-      @include('partials.navbar')
+      @include('partials.nav.navbar_'.Auth::user()->role->title)
 
         <div id="page-wrapper">
 

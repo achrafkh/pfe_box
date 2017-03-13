@@ -3,8 +3,9 @@
 namespace App\Http\Middleware\Custom;
 
 use Closure;
+use Auth;
 
-class IsMarketer
+class Rolemiddleware
 {
     /**
      * Handle an incoming request.
@@ -13,12 +14,11 @@ class IsMarketer
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $role)
     {
-        if ($request->user()->role->title != 'mark') {
+        if (Auth::user()->role->title != $role) {
             return redirect('/'.$request->user()->role->title);
         }
-
         return $next($request);
     }
 }

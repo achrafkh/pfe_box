@@ -11,14 +11,6 @@
 |
 */
 
-Route::get('/fb', 'TestController@test');
-Route::get('/fb2', 'TestController@test2');
-
-Route::get('test', 'TestController@index')->name('test');
-
-
-
-
 // Authentication Routes...
     Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginview');
     Route::post('login', 'Auth\LoginController@login')->name('login');
@@ -30,7 +22,7 @@ Route::get('test', 'TestController@index')->name('test');
 
 
 //  Routes des Operateurs...
-    Route::middleware('auth', 'IsCallcenter')->namespace('Callcenter')->prefix('op')->group(function () {
+    Route::middleware(['auth', 'role:op'])->namespace('Callcenter')->prefix('op')->group(function () {
         Route::get('/', 'DashboardController@index');
         Route::get('/clients', 'ClientsController@index')->name('op');
         Route::get('/client/create', 'ClientsController@create')->name('addClientForm');
@@ -50,12 +42,13 @@ Route::get('test', 'TestController@index')->name('test');
     });
 
 //  Routes des Commerciaux...
-    Route::middleware('auth', 'IsCommercial')->namespace('Commercial')->prefix('com')->group(function () {
-        Route::get('/', 'DashboardController@index');
+    Route::middleware(['auth', 'role:com'])->namespace('Commercial')->prefix('com')->group(function () {
+        Route::get('/', 'DashboardController@index')->name('com');
+        Route::get('/appointments', 'AppointmentsController@index')->name('apps');
     });
 
 
 //  Routes des Marketeurs..
-    Route::middleware('auth', 'IsMarketer')->namespace('Marketer')->prefix('mark')->group(function () {
+    Route::middleware(['auth', 'role:mark'])->namespace('Marketer')->prefix('mark')->group(function () {
         Route::get('/', 'DashboardController@index');
     });

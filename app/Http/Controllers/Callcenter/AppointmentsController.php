@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Callcenter;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateAppointmentRequest;
 use App\Http\Controllers\Controller;
 use App\Appointment;
 use Session;
@@ -11,18 +12,19 @@ use App\User;
 
 class AppointmentsController extends Controller
 {
-    public function setAppointment(Request $request)
+    public function setAppointment(CreateAppointmentRequest $request)
     {
         $appointment = new Appointment;
 
         $appointment->title = $request->title;
         $appointment->status = 'pending';
-        $appointment->notes = $request->note;
+        $appointment->notes = $request->notes;
         $appointment->showroom_id = $request->showroom_id;
         $appointment->client_id = $request->client_id;
-        $appointment->start_at = $request->day . ' ' . $request->start_time;
-        $appointment->end_at = $request->day . ' ' . $request->end_time;
+        $appointment->start_at = $request->day . ' ' . $request->start_at;
+        $appointment->end_at = $request->day . ' ' . $request->end_at;
         $status = $appointment->save();
+        
 
         if ($status && $request->ajax()) {
             $data["status"] = true;
@@ -41,12 +43,12 @@ class AppointmentsController extends Controller
 
     public function updateAppointment(Request $request)
     {
+        //return response()->json($request->all());
         $appointment = Appointment::find($request->id);
         $appointment->title = $request->title;
         $appointment->notes = $request->notes;
         $appointment->client_id = $request->client_id;
         $appointment->showroom_id = $request->showroom_id;
-        $appointment->client_id = $request->client_id;
         $appointment->start_at = $request->day . ' ' . $request->start_time;
         $appointment->end_at = $request->day . ' ' . $request->end_time;
         $status = $appointment->update();

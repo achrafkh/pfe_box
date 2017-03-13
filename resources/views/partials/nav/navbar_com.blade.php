@@ -8,7 +8,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ Auth::user()->role }}">WHATEVER</a>
+                <a class="navbar-brand" href="{{ Auth::user()->role }}">{{ config('app.name', 'Laravel') }}</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -115,15 +115,10 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse" id="nav">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
-                        <a href="{{ url('/'. Auth::user()->role->title) }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                        <a href="{{ route('com') }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                     </li>
-
                     <li class="">
-                        <a href="{{ route('op') }}"><i class="fa fa-fw fa-user"></i> Manage Clients</a>
-                    </li>
-
-                    <li class="">
-                        <a href="{{ url('/appointments') }}"><i class="fa fa-fw fa-calendar"></i> Manage Appointments</a>
+                        <a href="{{ url('com/appointments') }}"><i class="fa fa-fw fa-calendar"></i> Manage Appointments</a>
                     </li>
 
                     {{-- <li>
