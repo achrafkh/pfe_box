@@ -51,5 +51,5 @@
 
 //  Routes des Marketeurs..
     Route::middleware(['auth', 'role:mark'])->namespace('Marketer')->prefix('mark')->group(function () {
-        Route::get('/', 'DashboardController@index');
+        Route::get('/', 'DashboardController@index')->name('mark');
     });

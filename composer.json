@@ -10,8 +10,7 @@
         "facebook/graph-sdk": "*",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.4.*",
-        "laravel/tinker": "~1.0",
-        "maddhatter/laravel-fullcalendar": "^1.2"
+        "laravel/tinker": "~1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
