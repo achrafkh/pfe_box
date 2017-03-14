@@ -12,9 +12,10 @@ const { mix } = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .js('resources/assets/js/showclient.js', 'public/js')
-   .js('resources/assets/js/showroom.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+   .js('resources/assets/js/op/showclient.js', 'public/js/op')
+   .js('resources/assets/js/com/showroom.js', 'public/js/com')
+   .sass('resources/assets/sass/app.scss', 'public/css')
+   .autoload({});
 
 
 //       .scripts([

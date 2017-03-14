@@ -91,12 +91,9 @@ color: #999;
 </div>
 @endsection
 @section('js')
-
-<script src="{{ asset('js/calendar.js') }}"></script>
-
 <script>
 var evs = {!! json_encode($calendar) !!};
 var errors = {!! json_encode($errors->first()) !!};
 </script>
-<script src="{{ asset('js/showroom.js') }}"></script>
+<script src="{{ asset('js/com/showroom.js') }}"></script>
 @endsection

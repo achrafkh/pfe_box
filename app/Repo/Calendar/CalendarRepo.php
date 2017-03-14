@@ -23,7 +23,7 @@ class CalendarRepo implements ICalendarRepository
         ]);
 
         $appointments->load('client');
-        return $this->prepareOutput($appointments);
+        return $this->prepareOutputWithClient($appointments);
     }
 
     public function getAgentCalender($agent_id)
@@ -34,6 +34,26 @@ class CalendarRepo implements ICalendarRepository
         return $this->prepareOutput($appointments);
     }
 
+
+    public function prepareOutputWithClient($app)
+    {
+        $data = $app->map(function ($item) {
+            return [
+                    'id'  => $item->id,
+                    'title'  => $item->title,
+                    'showroom_id'  => $item->showroom_id,
+                    'client_id'  => $item->client_id,
+                    'start'  => $item->start_at,
+                    'end'    => $item->end_at,
+                    'allDay' => false,
+                    'notes'     => $item->notes,
+                    'color'  => ($item->status == 'done') ? '#10c390' : '#1751c3',
+                    'client' => isset($item->client) ? $item->client->toarray() : null,
+                    ];
+        });
+
+        return $data->toarray();
+    }
 
     public function prepareOutput($app)
     {
@@ -48,7 +68,6 @@ class CalendarRepo implements ICalendarRepository
                     'allDay' => false,
                     'notes'     => $item->notes,
                     'color'  => ($item->status == 'done') ? '#10c390' : '#1751c3',
-                    'client' => isset($item->client) ? $item->client->toarray() : null,
                     ];
         });
 

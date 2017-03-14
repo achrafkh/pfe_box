@@ -211,14 +211,11 @@ border-top: 0;
 </div>
 @endsection
 @section('js')
-
-<script src="{{ asset('js/calendar.js') }}"></script>
-
 <script>
 var evs = {!! json_encode($calendar) !!};
 var errors = {!! json_encode($errors->first()) !!};
 console.log(errors);
 
 </script>
-<script src="{{ asset('js/showclient.js') }}"></script>
+<script src="{{ asset('js/op/showclient.js') }}"></script>
 @endsection

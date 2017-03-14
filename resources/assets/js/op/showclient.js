@@ -1,5 +1,3 @@
-require('fullcalendar');
-
 $(window).load(function() {
 
     var calendar = $('#calendar').fullCalendar({
