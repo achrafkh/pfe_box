@@ -21,6 +21,8 @@ class CalendarRepo implements ICalendarRepository
         $appointments = Appointment::where('showroom_id', $showroom_id)->get([
             'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
         ]);
+
+        $appointments->load('client');
         return $this->prepareOutput($appointments);
     }
 
@@ -46,6 +48,7 @@ class CalendarRepo implements ICalendarRepository
                     'allDay' => false,
                     'notes'     => $item->notes,
                     'color'  => ($item->status == 'done') ? '#10c390' : '#1751c3',
+                    'client' => isset($item->client) ? $item->client->toarray() : null,
                     ];
         });
 

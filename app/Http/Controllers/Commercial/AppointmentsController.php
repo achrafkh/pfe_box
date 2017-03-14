@@ -17,7 +17,6 @@ class AppointmentsController extends Controller
     {
         $calendar = $this->data->getShowRoomCalender($request->user()->id);
 
-      
         return view('com.appointments', compact('calendar'));
     }
 }

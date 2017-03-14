@@ -39481,7 +39481,7 @@ $(window).load(function () {
                 dataType: 'json',
                 data: { 'id': id, 'start': start, 'end': end },
                 success: function success(data) {
-                    console.log(data);
+                    //
                 }
             });
         },
