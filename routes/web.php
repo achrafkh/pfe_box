@@ -39,6 +39,7 @@
         Route::post('/setappointment', 'AppointmentsController@setAppointment')->name('setAppointment');
         Route::post('/updateappointment', 'AppointmentsController@updateAppointment')->name('updateAppointment');
         Route::post('/checkavailable', 'AppointmentsController@checkAvailable');
+        Route::post('/updateapptime', 'AppointmentsController@updateTime');
     });
 
 //  Routes des Commerciaux...

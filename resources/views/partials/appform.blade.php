@@ -2,7 +2,7 @@
 
 <input type="hidden" class="form-control" id="client_id-{{ $action }}" name="client_id" value="{{ $client->id }} ">
 @if($action == 'update')
-	<input type="hidden" class="form-control" id="appid" name="id" value="">
+	<input type="hidden" class="form-control" id="id" name="id" value="">
 @endif
 <div class="form-group">
 	<label for="note">Title:</label>

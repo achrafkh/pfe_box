@@ -49,8 +49,14 @@ class AppointmentsController extends Controller
         $appointment->notes = $request->notes;
         $appointment->client_id = $request->client_id;
         $appointment->showroom_id = $request->showroom_id;
-        $appointment->start_at = $request->day . ' ' . $request->start_time;
-        $appointment->end_at = $request->day . ' ' . $request->end_time;
+        if ($request->has('day')) {
+            $appointment->start_at = $request->day . ' ' . $request->start_time;
+            $appointment->end_at = $request->day . ' ' . $request->end_time;
+        } else {
+            $appointment->start_at = $request->start;
+            $appointment->end_at = $request->end;
+        }
+        
         $status = $appointment->update();
 
         if ($status && $request->ajax()) {
@@ -77,5 +83,19 @@ class AppointmentsController extends Controller
         $response['status'] = "success";
         $response['coms'] = $commercials->toarray();
         return response()->json($response);
+    }
+
+    public function updateTime(Request $request)
+    {
+        $app = Appointment::find($request->id)->update([
+            'start_at' => $request->start,
+            'end_at'   => $request->end,
+            ]);
+
+
+        if (!$app) {
+            return response()->json(false);
+        }
+        return response()->json(true);
     }
 }
