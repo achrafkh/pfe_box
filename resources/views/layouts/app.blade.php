@@ -12,6 +12,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <meta id="crsf_token" name="_token" content="{{ csrf_token() }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -52,7 +53,14 @@
     <script src="{{ asset('js/app.js') }}"></script>
     @yield('js')
     <script type="text/javascript">
-        var loc = window.location.pathname;
+    // $(function() {
+    //   $.ajaxSetup({
+    //     headers: {
+    //       'X-CSRF-Token': $('#crsf_token').attr('content')
+    //     }
+    //   });
+    // });
+            var loc = window.location.pathname;
         $('#nav').find('a').each(function() {
             $(this).toggleClass('active', $(this).attr('href') == loc);
         });

@@ -46,6 +46,8 @@
     Route::middleware(['auth', 'role:com'])->namespace('Commercial')->prefix('com')->group(function () {
         Route::get('/', 'DashboardController@index')->name('com');
         Route::get('/appointments', 'AppointmentsController@index')->name('apps');
+        Route::post('/updatestatus', 'AppointmentsController@updateStatus')->name('updateStatus');
+        Route::post('/getevents', 'AppointmentsController@getEvents')->name('getEvents');
     });
 
 

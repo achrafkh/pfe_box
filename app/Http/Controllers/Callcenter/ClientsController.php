@@ -30,6 +30,7 @@ class ClientsController extends Controller
         $calendar = $this->data->getClientCalender($client->id);
         $showrooms = Showroom::get();
 
+        
         return view('op.showclient', compact('showrooms', 'client', 'calendar'));
     }
 

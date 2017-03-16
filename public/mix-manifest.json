@@ -2,5 +2,6 @@
   "/js/app.js": "/js/app.js",
   "/css/app.css": "/css/app.css",
   "/js/op/showclient.js": "/js/op/showclient.js",
-  "/js/com/showroom.js": "/js/com/showroom.js"
+  "/js/com/showroom.js": "/js/com/showroom.js",
+  "/js/charting.js": "/js/charting.js"
 }

@@ -23,6 +23,7 @@ class CalendarRepo implements ICalendarRepository
         ]);
 
         $appointments->load('client');
+        
         return $this->prepareOutputWithClient($appointments);
     }
 
@@ -32,6 +33,14 @@ class CalendarRepo implements ICalendarRepository
             'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
         ]);
         return $this->prepareOutput($appointments);
+    }
+
+    public function getAll()
+    {
+        $appointments = Appointment::get([
+            'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
+        ]);
+        return $this->prepareOutputWithClient($appointments);
     }
 
 
@@ -45,6 +54,7 @@ class CalendarRepo implements ICalendarRepository
                     'client_id'  => $item->client_id,
                     'start'  => $item->start_at,
                     'end'    => $item->end_at,
+                    'status'    => $item->status,
                     'allDay' => false,
                     'notes'     => $item->notes,
                     'color'  => ($item->status == 'done') ? '#10c390' : '#1751c3',
@@ -65,6 +75,7 @@ class CalendarRepo implements ICalendarRepository
                     'client_id'  => $item->client_id,
                     'start'  => $item->start_at,
                     'end'    => $item->end_at,
+                    'status'    => $item->status,
                     'allDay' => false,
                     'notes'     => $item->notes,
                     'color'  => ($item->status == 'done') ? '#10c390' : '#1751c3',

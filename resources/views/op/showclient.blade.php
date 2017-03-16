@@ -129,8 +129,9 @@ border-top: 0;
 
 @endsection
 @section('content2')
-<link href="/css/calendar/fullcalendar.css" rel="stylesheet">
-<link href="/css/calendar/fullcalendar.print.css" rel="stylesheet" media="print">
+<link href="{{ asset('/css/calendar/fullcalendar.css') }}" rel="stylesheet">
+<link href="{{ asset('/css/calendar/fullcalendar.print.css') }}" rel="stylesheet" media="print">
+
 
 <div class="container">
 	<div class="row" id="accordion">
@@ -213,6 +214,7 @@ border-top: 0;
 @section('js')
 <script>
 var evs = {!! json_encode($calendar) !!};
+
 var errors = {!! json_encode($errors->first()) !!};
 console.log(errors);
 
