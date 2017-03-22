@@ -11,21 +11,31 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Role::class)->create(['title'=>'op'])->each(function ($u) {
-            $u->users()->save(factory(App\User::class)->make(['username' => 'operateur']));
-        });
+        $op = factory(App\Role::class)->create([
+            'title'=>'op',
+        ]);
+
+        $op->users()->save(factory(App\User::class)->make(['username' => 'operateur']));
 
 
-        factory(App\Role::class)->create(['title'=>'com'])->each(function ($u) {
-            $u->users()->save(factory(App\User::class)->make(['username' => 'commercial']));
-        });
+        $com = factory(App\Role::class)->create([
+            'title'=>'com',
+        ]);
 
-        factory(App\Role::class)->create(['title'=>'mark'])->each(function ($u) {
-            $u->users()->save(factory(App\User::class)->make(['username' => 'marketeur']));
-        });
-                
-        factory(App\Role::class)->create(['title'=>'admin'])->each(function ($u) {
-            $u->users()->save(factory(App\User::class)->make(['username' => 'superadmin']));
-        });
+        $com->users()->save(factory(App\User::class)->make(['username' => 'commercial']));
+
+
+        $mark = factory(App\Role::class)->create([
+            'title'=>'mark',
+        ]);
+
+        $mark->users()->save(factory(App\User::class)->make(['username' => 'marketeur']));
+
+
+        $superadmin = factory(App\Role::class)->create([
+            'title'=>'admin',
+        ]);
+
+        $superadmin->users()->save(factory(App\User::class)->make(['username' => 'superadmin']));
     }
 }
