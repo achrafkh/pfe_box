@@ -37,7 +37,7 @@ class CalendarRepo implements ICalendarRepository
 
     public function getAll()
     {
-        $appointments = Appointment::get([
+        $appointments = Appointment::with('client')->get([
             'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
         ]);
         return $this->prepareOutputWithClient($appointments);

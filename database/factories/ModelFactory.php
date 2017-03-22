@@ -10,6 +10,7 @@
 | database. Just tell the factory how a default model should look.
 |
 */
+use Carbon\Carbon;
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\User::class, function (Faker\Generator $faker) {
@@ -51,5 +52,21 @@ $factory->define(App\Client::class, function (Faker\Generator $faker) {
         'city'      => $faker->city,
         'state'     => $faker->state,
         'birthdate' => $faker->date($format = 'Y-m-d', $max = '-20 years'),
+    ];
+});
+
+$factory->define(App\Appointment::class, function (Faker\Generator $faker) {
+    $startDate = Carbon::createFromTimeStamp($faker->dateTimeBetween('-30 weeks', '+30 weeks')->getTimestamp());
+    $endDate = Carbon::createFromFormat('Y-m-d H:i:s', $startDate)->addHour();
+    
+    return [
+        'title' => $faker->name,
+        //'status'  =>  $faker->randomElement(array('done', 'rescheduled', 'pending')),
+        'status'  => 'pending',
+        'notes'     => $faker->paragraph($nbSentences = 3, $variableNbSentences = true),
+        'client_id'     => $faker->numberBetween(1, 55),
+        'showroom_id'   => $faker->numberBetween(1, 10),
+        'start_at'      => Carbon::now(),
+        'end_at'     => $endDate,
     ];
 });

@@ -26,10 +26,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            $app = Appointment::where('end_at', '<', Carbon::now())->where('status', 'pending')->get();
-            $app->each->update(['status' => 'rescheduled']);
-        })->everyMinute();
+        // $schedule->call(function () {
+        //     $app = Appointment::where('end_at', '<', Carbon::now()->addWeek())->where('status', 'pending')->get();
+        //     $app->each->update(['status' => 'rescheduled']);
+        // })->Daily();
     }
 
     /**

@@ -51,20 +51,15 @@
     <!-- /#wrapper -->
 
     <script src="{{ asset('js/app.js') }}"></script>
-    @yield('js')
+    
     <script type="text/javascript">
-    // $(function() {
-    //   $.ajaxSetup({
-    //     headers: {
-    //       'X-CSRF-Token': $('#crsf_token').attr('content')
-    //     }
-    //   });
-    // });
             var loc = window.location.pathname;
         $('#nav').find('a').each(function() {
             $(this).toggleClass('active', $(this).attr('href') == loc);
         });
     </script>
+
+    @yield('js')
 </body>
 
 </html>

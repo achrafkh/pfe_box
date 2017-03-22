@@ -4,83 +4,94 @@
 
 <link href="{{ asset('css/morris.css') }}" rel="stylesheet">
  <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Dashboard <small>Overview</small>
-                        </h1>
-                        {{-- <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-dashboard"></i> User 
-                            </li>
-                        </ol> --}}
-                    </div>
-                </div>
-        <div class="col-md-7 col-lg-8 col-sm-12 col-xs-12">
-          <div class="white-box">
-            <h3 class="box-title">Chart</h3>
-            
-            <div id="morris-area-chart" style="height: 370px;"></div>
-          </div>
-        </div>
+<div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">
+    Dashboard <small>Overview</small>
+    </h1>
+  </div>
+</div>
+<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+<div class="col-md-3 col-lg-3"><h3>Finished apps % </h3> <p>{{ number_format($rd1,2)}} %</p></div>
+<div class="col-md-3 col-lg-3"><h3>This month apps/ All time apps</h3> <p>{{ number_format($rd2,2)}} %</p></div>
+<div class="col-md-3 col-lg-3"><h3>App average per Client</h3> <p>{{ round($rd3)}}</p></div>
+<div class="col-md-3 col-lg-3"><h3>Txx d croi</h3> <p>{{ number_format($rd4,2)}} %</p></div>
+</div>
+
+<div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+  
+  <h3 class="box-title">Appointments by Date </h3>
+  
+  <div id="stats-container" style="height: 370px;"></div>
+  
+</div>
+<div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+  
+  <h3 class="box-title">Appointments by Count </h3>
+  
+  <div id="morris-donut-chart" style="height: 370px;"></div>
+</div>
+       
+
+
 @endsection
 @section('js')
 <script src="{{ asset('js/charting.js') }}"></script>
+<script src="//cdn.jsdelivr.net/spinjs/1.3.0/spin.min.js"></script>
 
 <script type="text/javascript">
-
-Morris.Area({
-        element: 'morris-area-chart',
-        data: [{
-            period: '2010',
-            iphone: 50,
-            ipad: 80,
-            itouch: 20
-        }, {
-            period: '2011',
-            iphone: 130,
-            ipad: 100,
-            itouch: 80
-        }, {
-            period: '2012',
-            iphone: 80,
-            ipad: 60,
-            itouch: 70
-        }, {
-            period: '2013',
-            iphone: 70,
-            ipad: 200,
-            itouch: 140
-        }, {
-            period: '2014',
-            iphone: 180,
-            ipad: 150,
-            itouch: 140
-        }, {
-            period: '2015',
-            iphone: 105,
-            ipad: 100,
-            itouch: 80
-        },
-         {
-            period: '2016',
-            iphone: 250,
-            ipad: 150,
-            itouch: 200
-        }],
-        xkey: 'period',
-        ykeys: ['iphone', 'ipad', 'itouch'],
-        labels: ['iPhone', 'iPad', 'iPod Touch'],
-        pointSize: 3,
-        fillOpacity: 0,
-        pointStrokeColors:['#00bfc7', '#fb9678', '#9675ce'],
-        behaveLikeLine: true,
-        gridLineColor: '#e0e0e0',
-        lineWidth: 3,
-        hideHover: 'auto',
-        lineColors: ['#00bfc7', '#fb9678', '#9675ce'],
-        resize: true
-        
+var donut = {!! json_encode($donut) !!};
+    Morris.Donut({
+        element: 'morris-donut-chart',
+        data: donut,
+        resize: true,
+        colors:['#99d683', '#13dafe', '#6164c1']
     });
-</script>
+
+    $(function () {
+        var spinTarget = document.getElementById('stats-container');
+        function requestData( chart) {
+            var spinner = new Spinner().spin(spinTarget);
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: "/mark/api"
+            })
+                .done(function (data) {
+                    for (i = 0; i < data.length; ++i) {
+                        data[i].week = moment().day("Monday").week(data[i].date).format('MMM Do');
+                    }
+                    chart.setData(data);
+                })
+                .fail(function () {
+                    alert("error occured");
+                })
+                .always(function () {
+                    spinner.stop();
+                });
+        }
+        var chart = Morris.Bar({
+            element: 'stats-container',
+            data: [0, 0], 
+              xkey: 'week',
+              ykeys: ['done','pending','rescheduled'],
+              labels: ['Done', 'Still Pending', 'Rescheduled'],
+              fillOpacity: 0.6,
+              hideHover: 'auto',
+              behaveLikeLine: true,
+              resize: true,
+              pointFillColors:['#ffffff'],
+              pointStrokeColors: ['black'],
+              barColors: ["#1AB244", "#1531B2","#B21516"],
+              xLabelMargin: 2
+
+
+        });
+
+        requestData(chart);
+    });
+
+    </script>
+
 @endsection
+
