@@ -26,6 +26,7 @@ class UpdateClientRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => 'exists:clients,id',
             'firstname' => 'required|min:3',
             'lastname'  => 'required|min:3',
             'phone'     => 'required|numeric|min:8|unique:clients,phone,'. $this->id,
