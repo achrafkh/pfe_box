@@ -62,13 +62,13 @@ Route::get('/getdb', function () {
         $connectstr_dbpassword = preg_replace("/^.*Password=(.+?)$/", "\\1", $value);
     }
 
-    echo "host:" $connectstr_dbhost;
+    echo "host: " .$connectstr_dbhost;
     echo "<br>";
-    echo "host:" $connectstr_dbname;
+    echo "db name: " .$connectstr_dbname;
     echo "<br>";
-    echo "host:" $connectstr_dbusername;
+    echo "user: " .$connectstr_dbusername;
     echo "<br>";
-    echo "host:" $connectstr_dbpassword;
+    echo "pwd: " .$connectstr_dbpassword;
     echo "<br>";
 
 });

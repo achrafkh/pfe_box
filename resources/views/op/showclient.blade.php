@@ -27,40 +27,40 @@
 			<div class="user-btm-box" style="margin-top: -15%;">
 				<!-- .row -->
 				<div class="row text-center m-t-10" >
-					<div class="col-md-6 b-r"><strong>Name</strong><p>Genelia Deshmukh</p></div>
-					<div class="col-md-6"><strong>Designation</strong><p>Designer</p></div>
+					<div class="col-md-6 b-r"><strong>Name</strong><p>{{ucfirst($client->firstname) . ' ' . $client->lastname}}</p></div>
+					<div class="col-md-6"><strong>Birth</strong><p>{{$client->birthdate}}</p></div>
 				</div>
 				<!-- /.row -->
 				<hr>
 				<!-- .row -->
 				<div class="row text-center m-t-10">
-					<div class="col-md-6 b-r"><strong>Email ID</strong><p>genelia@gmail.com</p></div>
-					<div class="col-md-6"><strong>Phone</strong><p>+123 456 789</p></div>
+					<div class="col-md-6 b-r"><strong>Email ID</strong><p>{{$client->email}}</p></div>
+					<div class="col-md-6"><strong>Phone</strong><p>{{$client->phone}}</p></div>
 				</div>
 				<!-- /.row -->
 				<hr>
 				<!-- .row -->
 				<div class="row text-center m-t-10">
-					<div class="col-md-12"><strong>Address</strong><p>E104, Dharti-2, Chandlodia Ahmedabad<br/> Gujarat, India.</p></div>
+					<div class="col-md-12"><strong>Address</strong><p>{{$client->address}}.</p></div>
 					
 				</div>
 				<hr>
 				<!-- /.row -->
 				
 				<!-- Start Donut chart  -->
-				<h3 class="box-title">Leads by Source</h3>
+				<h3 class="box-title text-center"><strong>Values :</strong></h3>
 				<div id="morris-donut-chart" class="ecomm-donute" style="height: 250px;"></div>
 				<ul class="list-inline m-t-30 text-center">
 					<li class="p-r-20">
-						<h5 class="text-muted"><i class="fa fa-circle" style="color: #fb9678;"></i> Ads</h5>
+						<h5 class="text-muted"><i class="fa fa-circle" style="color: rgb(153, 214, 131);"></i> Done</h5>
 						<h4 class="m-b-0">8500</h4>
 					</li>
 					<li class="p-r-20">
-						<h5 class="text-muted"><i class="fa fa-circle" style="color: #01c0c8;"></i> Tredshow</h5>
+						<h5 class="text-muted"><i class="fa fa-circle" style="color: #01c0c8;"></i> rescheduled</h5>
 						<h4 class="m-b-0">3630</h4>
 					</li>
 					<li>
-						<h5 class="text-muted"> <i class="fa fa-circle" style="color: #4F5467;"></i> Web</h5>
+						<h5 class="text-muted"> <i class="fa fa-circle" style="color: rgb(97, 100, 193);"></i> Pending</h5>
 						<h4 class="m-b-0">4870</h4>
 					</li>
 				</ul>
@@ -82,16 +82,16 @@
 				<div class="tab-pane active" id="profile">
 					<div class="row">
 						<div class="col-md-3 col-xs-6 b-r"> <strong>Full Name</strong> <br>
-							<p class="text-muted">Johnathan Deo</p>
+							<p class="text-muted">{{ucfirst($client->firstname) . ' ' . $client->lastname}}</p>
 						</div>
 						<div class="col-md-3 col-xs-6 b-r"> <strong>Mobile</strong> <br>
-							<p class="text-muted">(123) 456 7890</p>
+							<p class="text-muted">{{$client->phone}}</p>
 						</div>
 						<div class="col-md-3 col-xs-6 b-r"> <strong>Email</strong> <br>
-							<p class="text-muted">johnathan@admin.com</p>
+							<p class="text-muted">{{$client->email}}</p>
 						</div>
 						<div class="col-md-3 col-xs-6"> <strong>Location</strong> <br>
-							<p class="text-muted">London</p>
+							<p class="text-muted">{{$client->city .'-' . $client->state}}</p>
 						</div>
 					</div>
 					<hr>
