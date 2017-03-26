@@ -363,26 +363,20 @@ $(window).load(function() {
             });
         },
         eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc) {
-            var UpdatedEvent = {
-                _id: event._id,
-                id: event.id,
-                client_id: event.client_id,
-                title: event.title,
-                showroom_id: event.showroom_id,
-                start: moment(event.start, ["MM-DD-YYYY", "YYYY-MM-DD"]),
-                end: moment(event.end, ["MM-DD-YYYY", "YYYY-MM-DD"]),
-                allDay: false,
-                notes: event.notes,
-                color: '#1751c3',
-            };
-            console.log(UpdatedEvent);
+			var start = event.start.format('YYYY-MM-DD HH:MM:SS');
+            var end = event.end.format('YYYY-MM-DD HH:MM:SS');
+            var id = event.id;
             $.ajax({
-                url: '/op/updateappointment',
+                url: '/op/updateapptime',
                 type: 'post',
                 dataType: 'json',
-                data: UpdatedEvent,
+                data: {
+                    'id': id,
+                    'start': start,
+                    'end': end
+                },
                 success: function(data) {
-                    console.log(data)
+                    console.log(data);
                 },
             });
         },

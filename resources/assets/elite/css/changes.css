@@ -62,3 +62,14 @@ position: fixed;
 z-index: 99999;
 background: #fff
 }
+
+@media (min-width: 1549px) {
+	#page-wrapper {
+	    margin-right: 0;
+	}
+}
+@media (min-width: 51px) {
+	#page-wrapper {
+	    margin-right: 0;
+	}
+}

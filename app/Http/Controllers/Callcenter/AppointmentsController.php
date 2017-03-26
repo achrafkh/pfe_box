@@ -43,7 +43,7 @@ class AppointmentsController extends Controller
 
     public function updateAppointment(Request $request)
     {
-        //return response()->json($request->all());
+        return response()->json($request->all());
         $appointment = Appointment::find($request->id);
         $appointment->title = $request->title;
         $appointment->notes = $request->notes;
