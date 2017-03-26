@@ -249,8 +249,8 @@
 </div>
 
 <div id="client-alert" class="myadmin-alert myadmin-alert-top-right">
-<a href="#" class="closed">&times;</a>
-<p id="msg"></p>
+  <a href="#" class="closed">&times;</a>
+  <p id="msg"></p>
 </div>
 
 
@@ -279,9 +279,14 @@ var table = $('#example').DataTable({
 });
 </script>
 <script type="text/javascript">
+
 (function() {
+
     $('#newClient').wizard({
+
         onInit: function() {
+           
+          $(this).parents(".myadmin-alert").fadeToggle(350);
             $('#validation').formValidation({
                 framework: 'bootstrap',
                 fields: {
@@ -345,6 +350,7 @@ var table = $('#example').DataTable({
                 }
             });
         },
+
         validator: function() {
             var fv = $('#validation').data('formValidation');
             var $this = $(this);
@@ -357,25 +363,39 @@ var table = $('#example').DataTable({
             return true;
         },
         onFinish: function() {
-            $.post("/op/client/create", $("#validation").serialize()).done(function(response) {
-                console.log(response);
-                $('#close-create-client').click();
-                if(response){
+
+            $.ajax({
+                url: '/op/client/create',
+                type: 'post',
+                dataType: 'json',
+                data: $("#validation").serialize(),
+                success: function(response) { 
+                  $('#close-create-client').click();
+                   if(response){
                     $("#msg").text('Added Successfully');
                     $("#client-alert").addClass('alert-success');
-                } else {
-                    $("#msg").text('Something Went Wrong');
-                    $("#client-alert").addClass('alert-danger');
-                }
-
-
-                $("#client-alert").fadeToggle(350);
-            }).error(function(response) { 
+                  } else {
+                      $("#msg").text('Something Went Wrong');
+                      $("#client-alert").addClass('alert-danger');
+                  }
+                  $("#client-alert").fadeToggle(350);
+                  //
+                },
+                error: function(response) { 
                   $('#close-create-client').click();
                   $("#msg").text('Something Went Wrong');
                   $("#client-alert").addClass('alert-danger');
                   $("#client-alert").fadeToggle(350);
-             });
+                }
+
+              });
+
+            if($("#client-alert").hasClass( "alert-success" )){
+              $("#client-alert").removeClass('alert-success');
+            }
+            if($("#client-alert").hasClass( "alert-danger" )){
+              $("#client-alert").removeClass('alert-danger');
+            }
         }
     });
 })();

@@ -320,7 +320,6 @@ $(window).load(function() {
                     data: $('#create-appointment').serialize(),
                     success: function(data) {
                         $("#create-appointment").trigger('reset');
-                        console.log(data);
                         var NewEvent = {
                             id: data.event.id,
                             title: data.event.title,
@@ -328,7 +327,7 @@ $(window).load(function() {
                             showroom_id: data.event.showroom_id,
 
                             start: moment(data.event.start_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
-                            end: moment(data.event.start_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
+                            end: moment(data.event.end_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
                             allDay: false,
                             notes: data.event.notes,
                             color: '#1751c3',
@@ -336,7 +335,7 @@ $(window).load(function() {
                         calendar.fullCalendar('renderEvent', NewEvent, false);
                     },
                     error: function(errors) {
-                        console.log(errors.responseText);
+                        //
                     }
                 });
                 calendar.fullCalendar('unselect');
@@ -345,40 +344,37 @@ $(window).load(function() {
             });
         },
         eventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
-            var start = event.start.format('YYYY-MM-DD HH:MM:SS');
-            var end = event.end.format('YYYY-MM-DD HH:MM:SS');
-            var id = event.id;
             $.ajax({
                 url: '/op/updateapptime',
                 type: 'post',
                 dataType: 'json',
                 data: {
-                    'id': id,
-                    'start': start,
-                    'end': end
+                    'id': event.id,
+                    'start': event.start.format('YYYY-MM-DD HH:MM:SS'),
+                    'end': event.end.format('YYYY-MM-DD HH:MM:SS')
                 },
                 success: function(data) {
                     console.log(data);
                 },
             });
+            return false;
         },
         eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc) {
-			var start = event.start.format('YYYY-MM-DD HH:MM:SS');
-            var end = event.end.format('YYYY-MM-DD HH:MM:SS');
-            var id = event.id;
+        	var start = event.start.format('YYYY-MM-DD HH:MM:SS');
             $.ajax({
                 url: '/op/updateapptime',
                 type: 'post',
                 dataType: 'json',
                 data: {
-                    'id': id,
+                    'id': event.id,
                     'start': start,
-                    'end': end
+                    'end': event.end  != null ? event.end.format('YYYY-MM-DD HH:MM:SS') : start ,
                 },
                 success: function(data) {
                     console.log(data);
                 },
             });
+            return false;
         },
         eventClick: function(calEvent, jsEvent, view) {
             var evid = calEvent._id;
@@ -419,6 +415,7 @@ $(window).load(function() {
                 $('#close-update').click();
             });
             calendar.fullCalendar('unselect');
+            return false;
         },
         editable: true,
         events: evs,

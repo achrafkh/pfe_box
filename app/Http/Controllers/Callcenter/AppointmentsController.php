@@ -14,6 +14,8 @@ class AppointmentsController extends Controller
 {
     public function setAppointment(CreateAppointmentRequest $request)
     {
+
+
         $appointment = new Appointment;
 
         $appointment->title = $request->title;
@@ -25,7 +27,6 @@ class AppointmentsController extends Controller
         $appointment->end_at = $request->day . ' ' . $request->end_at;
         $status = $appointment->save();
         
-
         if ($status && $request->ajax()) {
             $data["status"] = true;
             $data["event"]  = $appointment->toarray();

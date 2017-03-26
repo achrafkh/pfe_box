@@ -19,8 +19,8 @@ Route::get('/login', function () {
 });
 //  Routes des Operateurs...
 Route::middleware(['auth', 'role:op'])->namespace('Callcenter')->prefix('op')->group(function () {
-    Route::get('/', 'DashboardController@index');
-    Route::get('/clients', 'ClientsController@index')->name('op');
+    /*Route::get('/', 'DashboardController@index');*/
+    Route::get('/', 'ClientsController@index')->name('op');
     Route::get('/client/create', 'ClientsController@create')->name('addClientForm');
 
     Route::post('/client/create', 'ClientsController@store')->name('createClient');
