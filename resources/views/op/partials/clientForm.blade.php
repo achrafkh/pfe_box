@@ -23,7 +23,7 @@
 <div class="form-group">
 	<label for="example-email" class="col-md-12">Email</label>
 	<div class="col-md-12">
-		<input id="email" type="text" class="form-control form-control-line" name="email" required value="{{ $client->email }}">
+		<input id="email" type="email" class="form-control form-control-line" name="email" required value="{{ $client->email }}">
 		@if ($errors->has('email'))
 		<span class="help-block">
 			<p class="text-danger">{{ $errors->first('email') }}</p>
@@ -55,24 +55,10 @@
 <div class="form-group">
 	<label class="col-sm-12">Select City</label>
 	<div class="col-sm-12">
-		<select class="form-control form-control-line" name="city">
-			<option>London</option>
-			<option>India</option>
-			<option>Usa</option>
-			<option>Canada</option>
-			<option>Thailand</option>
-		</select>
-	</div>
-</div>
-<div class="form-group">
-	<label class="col-sm-12">Select State</label>
-	<div class="col-sm-12">
-		<select class="form-control form-control-line" name="state">
-			<option>London</option>
-			<option>India</option>
-			<option>Usa</option>
-			<option>Canada</option>
-			<option>Thailand</option>
+		<select class="form-control form-control-line" name="city" id="city_id">
+			@foreach($cities as $city)
+			<option value="{{ $city }}">{{ $city }}</option>
+			@endforeach
 		</select>
 	</div>
 </div>

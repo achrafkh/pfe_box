@@ -2,8 +2,8 @@
 @section('css-top')
 <link href="{{ asset('css/calendar/fullcalendar.css') }}" rel="stylesheet">
 <link href="{{ asset('css/morris.css') }}" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/clockpicker/0.0.7/bootstrap-clockpicker.css">
+<link rel="stylesheet" type="text/css" href="{{asset('css/libs/bootstrap-datepicker.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('css/libs/bootstrap-clockpicker.css')}}">
 @endsection
 @section('breadcumbs')
 <div class="row bg-title">
@@ -52,16 +52,16 @@
 				<div id="morris-donut-chart" class="ecomm-donute" style="height: 250px;"></div>
 				<ul class="list-inline m-t-30 text-center">
 					<li class="p-r-20">
-						<h5 class="text-muted"><i class="fa fa-circle" style="color: rgb(153, 214, 131);"></i> Done</h5>
-						<h4 class="m-b-0">8500</h4>
+						<h5 class="text-muted"><i class="fa fa-circle" style="color: rgb(153, 214, 131);"></i>Done</h5>
+						<h4 id="Done" class="m-b-0">0</h4>
 					</li>
 					<li class="p-r-20">
-						<h5 class="text-muted"><i class="fa fa-circle" style="color: #01c0c8;"></i> rescheduled</h5>
-						<h4 class="m-b-0">3630</h4>
+						<h5 class="text-muted"><i class="fa fa-circle" style="color: #01c0c8;"></i>rescheduled</h5>
+						<h4 id="resc" class="m-b-0">0</h4>
 					</li>
 					<li>
 						<h5 class="text-muted"> <i class="fa fa-circle" style="color: rgb(97, 100, 193);"></i> Pending</h5>
-						<h4 class="m-b-0">4870</h4>
+						<h4 id="pending" class="m-b-0">0</h4>
 					</li>
 				</ul>
 				<!-- end Donut chart -->
@@ -91,7 +91,7 @@
 							<p class="text-muted">{{$client->email}}</p>
 						</div>
 						<div class="col-md-3 col-xs-6"> <strong>Location</strong> <br>
-							<p class="text-muted">{{$client->city .'-' . $client->state}}</p>
+							<p class="text-muted">{{$client->city}}</p>
 						</div>
 					</div>
 					<hr>
@@ -254,8 +254,8 @@
 @endsection
 @section('js')
 <script src="{{ asset('js/charting.js') }}"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clockpicker/0.0.7/bootstrap-clockpicker.js"></script>
+<script type="text/javascript" src="{{asset('js/libs/bootstrap-datepicker.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/libs/bootstrap-clockpicker.js')}}"></script>
 
 <script type="text/javascript">
 var evs = {!! json_encode($calendar) !!};
@@ -263,17 +263,23 @@ var errors = {!! json_encode($errors->first()) !!};
 var donut = {!! json_encode($donut) !!};
 var userdate = {!! json_encode($client->birthdate) !!};
 
+$('#pending').text(donut[2].value);
+$('#resc').text(donut[1].value);
+$('#done').text(donut[0].value);
 
-
-
-Morris.Donut({
-    element: 'morris-donut-chart',
-    data: donut,
-    resize: true,
-    colors: ['#99d683', '#13dafe', '#6164c1']
-});
-
+if(donut[0].value || donut[1].value || donut[2].value)
+{
+	Morris.Donut({
+	    element: 'morris-donut-chart',
+	    data: donut,
+	    resize: true,
+	    colors: ['#99d683', '#13dafe', '#6164c1']
+	});
+} else {
+	$('#morris-donut-chart').html('<h1 style="margin-top:40%;">Not enough data to Render The Chart</h1>').addClass('text-center');
+}
 $(window).load(function() {
+	 $("#city_id").val('{{ $client->city }}');
 
 	 if (errors.length > 0) {
         $('.nav li').removeClass('active');

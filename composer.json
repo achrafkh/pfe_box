@@ -10,7 +10,8 @@
         "facebook/graph-sdk": "*",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.4.*",
-        "laravel/tinker": "~1.0"
+        "laravel/tinker": "~1.0",
+        "pragmarx/countries": "^0.1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -33,7 +33,6 @@ class UpdateClientRequest extends FormRequest
             'address'   => 'required|min:5',
             'email'     => 'required|unique:clients,email,'. $this->id,
             'city'      => 'required',
-            'state'     => 'required',
             'birthdate' => 'required|before:'.Carbon::now(),
         ];
     }

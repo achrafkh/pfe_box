@@ -18,6 +18,13 @@ mix.copy('node_modules/raphael/raphael.js', 'resources/assets/js/libs')
    .copy('node_modules/fullcalendar/dist/fullcalendar.css', 'public/css/calendar')
    .copy('node_modules/fullcalendar/dist/fullcalendar.print.css', 'public/css/calendar')
 
+   .copy('node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.css', 'public/css/libs')
+   .copy('node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', 'public/js/libs')
+
+
+   .copy('node_modules/clockpicker/dist/bootstrap-clockpicker.css', 'public/css/libs')
+   .copy('node_modules/clockpicker/dist/bootstrap-clockpicker.js', 'public/js/libs')
+   
    // .js('resources/assets/js/op/showclient.js', 'public/js/op')
    // .js('resources/assets/js/com/showroom.js', 'public/js/com')
 

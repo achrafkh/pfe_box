@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Callcenter;
 
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Repo\Calendar\ICalendarRepository;
-use App\Client;
-use App\User;
-use App\Showroom;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Appointment;
-use Session;
 use Carbon\Carbon;
+use App\Showroom;
+use App\Client;
+use Countries;
+use App\User;
+use Session;
+
 
 class ClientsController extends Controller
 {
@@ -25,18 +27,21 @@ class ClientsController extends Controller
     public function index()
     {
         $apps = Appointment::where('start_at', '>=', Carbon::now()->subWeek())->get();
+        $cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('name','postal');
+        $clients = Client::get();
 
         $stats['week-total'] = $apps->count();
         $stats['week-success'] = $apps->where('status', 'done')->count();
         $stats['week-rescheduled'] = $apps->where('status', 'rescheduled')->count();
         $stats['success'] =  ($stats['week-success'] / $stats['week-total']) * 100;
 
-        return view('op.index')->with('users', Client::get())->with('stats', $stats);
+        return view('op.index', compact('clients', 'cities', 'apps', 'stats'));
     }
 
     public function show(Client $client)
     {
         $calendar = $this->data->getClientCalender($client->id);
+        $cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('name','postal');
 
         $data =  Appointment::where('client_id', $client->id)->get();
 
@@ -47,7 +52,7 @@ class ClientsController extends Controller
         $showrooms = Showroom::get();
 
         
-        return view('op.showclient', compact('showrooms', 'client', 'calendar', 'donut'));
+        return view('op.showclient', compact('showrooms', 'client', 'calendar', 'donut','cities'));
     }
 
     public function create()
@@ -58,11 +63,14 @@ class ClientsController extends Controller
 
     public function store(CreateClientRequest $request)
     {
-        if (!Client::create($request->all())) {
-            return response()->json(false);
+        $response['status'] = false;
+        $response['data'] = null;
+        if (!$response['data'] = Client::create($request->all())) {
+            return response()->json($response);
         }
-
-        return response()->json(true);
+        $response['status'] = true;
+        
+        return response()->json($response);
     }
 
     public function edit(Client $client)

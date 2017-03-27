@@ -5,17 +5,19 @@ namespace App\Http\Controllers\Callcenter;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateAppointmentRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use App\Appointment;
 use Session;
 use Illuminate\Support\Collection;
 use App\User;
+use App\Mail\newAppointment;
+use App\Mail\newAppointmentClient;
+use App\Client;
 
 class AppointmentsController extends Controller
 {
     public function setAppointment(CreateAppointmentRequest $request)
     {
-
-
         $appointment = new Appointment;
 
         $appointment->title = $request->title;
@@ -26,20 +28,25 @@ class AppointmentsController extends Controller
         $appointment->start_at = $request->day . ' ' . $request->start_at;
         $appointment->end_at = $request->day . ' ' . $request->end_at;
         $status = $appointment->save();
-        
-        if ($status && $request->ajax()) {
-            $data["status"] = true;
-            $data["event"]  = $appointment->toarray();
+
+        if (!$status) {
+            $data["status"] = false;
+            $data["event"]  = []; 
             return response()->json($data);
         }
 
-        if (!$status) {
-            Session::flash('error', 'Something went Wrong');
-            return redirect()->back();
-        }
+        $data["status"] = true;
+        $data["event"]  = $appointment->toarray(); 
 
-        Session::flash('success', 'Added successfully');
-        return redirect()->back();
+        $client = Client::find($appointment->client_id);
+        $users = User::where('showroom_id',$appointment->showroom_id)->get();
+
+        //mail to agents
+        Mail::to($users)->queue(new newAppointment($client,$appointment));
+        //mail to Client
+        Mail::to($client)->queue(new newAppointmentClient($appointment));
+
+        return response()->json($data);
     }
 
     public function updateAppointment(Request $request)

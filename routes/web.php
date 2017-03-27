@@ -9,6 +9,19 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/countries', function () {
+
+    $test= Countries::where('name.common', 'Tunisia')->first()->states->where('postal','MN')->region;
+    dd($test);
+  
+    $data =   Countries::where('name.common', 'Tunisia')->first()->states->pluck('name','postal');
+    foreach($data as $key => $item) 
+    {
+        echo html_entity_decode($key) .' - '.html_entity_decode($item) . '<br>';
+    }
+});
+
+
 
 // Authentication Routes...
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginview');

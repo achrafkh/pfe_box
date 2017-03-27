@@ -19,6 +19,7 @@
 @endsection
 @section('css')
 <link href="{{ asset('css/datatables.css') }}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="{{asset('css/libs/bootstrap-datepicker.css')}}">
 @endsection
 @section('css-top')
 <link rel="stylesheet" href="/css/libs/wizard.css">
@@ -34,11 +35,11 @@
               <h5 class="text-muted vb">Total Clients</h5>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
-              <h3 class="counter text-right m-t-15 text-danger">{{ $stats['week-total'] }}</h3>
+              <h3 class="counter text-right m-t-15 text-danger">{{ $clients->count() }}</h3>
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="progress">
-                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">{{ $stats['success']}}% Complete (success)</span> </div>
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> <span class="sr-only">{{ $stats['success']}}% Complete (success)</span> </div>
               </div>
             </div>
           </div>
@@ -46,14 +47,14 @@
         <div class="col-lg-3 col-sm-6 row-in-br  b-r-none">
           <div class="col-in row">
             <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
-              <h5 class="text-muted vb">Week Appointments</h5>
+              <h5 class="text-muted vb">Appointments</h5>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
               <h3 class="counter text-right m-t-15 text-megna">10</h3>
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="progress">
-                <div class="progress-bar progress-bar-megna" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">{{ number_format($stats['success'],2)}} % Complete (success)</span> </div>
+                <div class="progress-bar progress-bar-megna" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> <span class="sr-only">{{ number_format($stats['success'],2)}} % Complete (success)</span> </div>
               </div>
             </div>
           </div>
@@ -68,7 +69,7 @@
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="progress">
-                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
+                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> <span class="sr-only">40% Complete (success)</span> </div>
               </div>
             </div>
           </div>
@@ -76,14 +77,14 @@
         <div class="col-lg-3 col-sm-6  b-0">
           <div class="col-in row">
             <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe016;"></i>
-              <h5 class="text-muted vb">Confirmed Apps</h5>
+              <h5 class="text-muted vb">Confirmed</h5>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
               <h3 class="counter text-right m-t-15 text-success">431</h3>
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="progress">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">100% Complete (success)</span> </div>
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> <span class="sr-only">100% Complete (success)</span> </div>
               </div>
             </div>
           </div>
@@ -111,18 +112,20 @@
               <th>Phone Number</th>
               <th>Address</th>
               <th>City</th>
-              <th>Action</th>
+              <th>Created at</th>
+              <th class="no-sort">Action</th>
             </tr>
           </thead>
           <tbody>
-            @foreach($users as $user)
+            @foreach($clients as $client)
             <tr>
-              <td>{{  $user->firstname .' ' . $user->lastname }} </td>
-              <td>{{  $user->email }}</td>
-              <td>{{  $user->phone }}</td>
-              <td>{{  $user->address }}</td>
-              <td>{{  $user->city }}</td>
-              <td class="text-center"><a href="{{ url('/op/client',$user->id) }}" class="btn btn-info waves-effect waves-light m-t-10">View</a></td>
+              <td>{{  $client->firstname .' ' . $client->lastname }} </td>
+              <td>{{  $client->email }}</td>
+              <td>{{  $client->phone }}</td>
+              <td>{{  $client->address }}</td>
+              <td>{{  $client->city }}</td>
+              <td>{{  $client->created_at }}</td>
+              <td class="text-center"><a href="{{ url('/op/client',$client->id) }}" class="btn btn-info waves-effect waves-light m-t-10">View</a></td>
             </tr>
             @endforeach
           </tbody>
@@ -202,23 +205,9 @@
                         <label class="col-sm-12">Select City</label>
                         <div class="col-sm-12">
                           <select class="form-control form-control-line" name="city">
-                            <option>London</option>
-                            <option>India</option>
-                            <option>Usa</option>
-                            <option>Canada</option>
-                            <option>Thailand</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="col-sm-12">Select State</label>
-                        <div class="col-sm-12">
-                          <select class="form-control form-control-line" name="state">
-                            <option>London</option>
-                            <option>India</option>
-                            <option>Usa</option>
-                            <option>Canada</option>
-                            <option>Thailand</option>
+                           @foreach($cities as $city)
+                            <option value="{{ $city }}">{{ $city }}</option>
+                          @endforeach
                           </select>
                         </div>
                       </div>
@@ -226,7 +215,7 @@
                         <label class="col-md-12">Birth Date</label>
                         <div class="col-md-12">
                           <div class="input-group">
-                            <input id="datepicker-autoclose" type="date" class="form-control mydatepicker" placeholder="yyyy/mm/dd" name="birthdate"  required> <span class="input-group-addon"><i class="icon-calender"></i></span>
+                            <input id="datepicker-autoclose" type="text" class="form-control mydatepicker" placeholder="yyyy/mm/dd" name="birthdate"  required> <span class="input-group-addon"><i class="icon-calender"></i></span>
                           </div>
 
                         </div>
@@ -261,143 +250,167 @@
 <link rel="stylesheet" href="{{ asset('/css/libs/formValidation.min.css') }}">
 <script src="{{ asset('js/libs/formvalidation/formValidation.min.js') }} "></script>
 <script src="{{ asset('js/libs/formvalidation/bootstrap.min.js') }} "></script>
+
+<script type="text/javascript" src="{{asset('js/libs/bootstrap-datepicker.min.js')}}"></script>
+
 <script>
-$(document).ready(function() {
-$('#myTable').DataTable();
-$(document).ready(function() {
-var table = $('#example').DataTable({
-"columnDefs": [{
-"visible": false,
-"targets": 2
-}, ],
-"order": [
-[2, 'asc']
-],
-"displayLength": 25,
-});
-});
-});
-</script>
-<script type="text/javascript">
 
-(function() {
+    $(document).ready(function() {
+        var datepicker = jQuery('#datepicker-autoclose').datepicker({
+            autoclose: true,
+            todayHighlight: false,
+            format: 'yyyy/mm/dd',
+        });
 
-    $('#newClient').wizard({
+        var table = $('#myTable').DataTable({
+            "columnDefs": [{
+                "targets": 'no-sort',
+                "orderable": false,
+            }],
+            "order": [
+                [2, 'asc']
+            ],
+            "displayLength": 25,
+        });
+        function addRow(data) {
+          console.log(data);
 
-        onInit: function() {
-           
-          $(this).parents(".myadmin-alert").fadeToggle(350);
-            $('#validation').formValidation({
-                framework: 'bootstrap',
-                fields: {
-                    firstname: {
-                        validators: {
-                            notEmpty: {
-                                message: 'The First name is required'
-                            },
-                            stringLength: {
-                                min: 3,
-                                max: 30,
-                                message: 'The First name must be more than 6 and less than 30 characters long'
-                            },
-                            regexp: {
-                                regexp: /^[a-zA-Z0-9_\.]+$/,
-                                message: 'The First name can only consist of alphabetical, number, dot and underscore'
-                            }
-                        }
-                    },
-                    lastname: {
-                        validators: {
-                            notEmpty: {
-                                message: 'The Last name is required'
-                            },
-                            stringLength: {
-                                min: 3,
-                                max: 30,
-                                message: 'The Last name must be more than 6 and less than 30 characters long'
-                            },
-                            regexp: {
-                                regexp: /^[a-zA-Z0-9_\.]+$/,
-                                message: 'The Last name can only consist of alphabetical, number, dot and underscore'
-                            }
-                        }
-                    },
-                    email: {
-                        validators: {
-                            notEmpty: {
-                                message: 'The email address is required'
-                            },
-                            emailAddress: {
-                                message: 'The input is not a valid email address'
-                            }
-                        }
-                    },
+          var link = '<a href="/op/client/' + data.id + '" class="btn btn-info waves-effect waves-light m-t-10">View</a>';
+          var rowNode = table.row.add( [
+                    data.firstname +' '+ data.lastname,
+                    data.email,
+                    data.phone,
+                    data.address,
+                    data.city,
+                    data.created_at,
+                    link,
+                ] ).draw( false ).node();
 
-                    phone: {
-
-                        validators: {
-                            digits: true,
-                            notEmpty: {
-                                message: 'The Phone Number is required'
-                            },
-                            stringLength: {
-                                min: 8,
-                                max: 15,
-                                message: 'Use a valid phone Number'
-                            },
-                        }
-                    } 
-                }
-            });
-        },
-
-        validator: function() {
-            var fv = $('#validation').data('formValidation');
-            var $this = $(this);
-            // Validate the container
-            fv.validateContainer($this);
-            var isValidStep = fv.isValidContainer($this);
-            if (isValidStep === false || isValidStep === null) {
-                return false;
-            }
-            return true;
-        },
-        onFinish: function() {
-
-            $.ajax({
-                url: '/op/client/create',
-                type: 'post',
-                dataType: 'json',
-                data: $("#validation").serialize(),
-                success: function(response) { 
-                  $('#close-create-client').click();
-                   if(response){
-                    $("#msg").text('Added Successfully');
-                    $("#client-alert").addClass('alert-success');
-                  } else {
-                      $("#msg").text('Something Went Wrong');
-                      $("#client-alert").addClass('alert-danger');
-                  }
-                  $("#client-alert").fadeToggle(350);
-                  //
-                },
-                error: function(response) { 
-                  $('#close-create-client').click();
-                  $("#msg").text('Something Went Wrong');
-                  $("#client-alert").addClass('alert-danger');
-                  $("#client-alert").fadeToggle(350);
-                }
-
-              });
-
-            if($("#client-alert").hasClass( "alert-success" )){
-              $("#client-alert").removeClass('alert-success');
-            }
-            if($("#client-alert").hasClass( "alert-danger" )){
-              $("#client-alert").removeClass('alert-danger');
-            }
+            $(rowNode)
+                .css('background-color', 'red')
+                .animate({
+                    color: 'black'
+                });
         }
+        $('#newClient').wizard({
+
+            onInit: function() {
+
+                $(this).parents(".myadmin-alert").fadeToggle(350);
+                $('#validation').formValidation({
+                    framework: 'bootstrap',
+                    fields: {
+                        firstname: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The First name is required'
+                                },
+                                stringLength: {
+                                    min: 3,
+                                    max: 30,
+                                    message: 'The First name must be more than 6 and less than 30 characters long'
+                                },
+                                regexp: {
+                                    regexp: /^([ \u00c0-\u01ffa-zA-Z'\-])+$/,
+                                    message: 'The First name can only consist of alphabetical, number, dot and underscore'
+                                }
+                            }
+                        },
+                        lastname: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The Last name is required'
+                                },
+                                stringLength: {
+                                    min: 3,
+                                    max: 30,
+                                    message: 'The Last name must be more than 6 and less than 30 characters long'
+                                },
+                                regexp: {
+                                    regexp: /^([ \u00c0-\u01ffa-zA-Z'\-])+$/,
+                                    message: 'The Last name can only consist of alphabetical, number, dot and underscore'
+                                }
+                            }
+                        },
+                        email: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The email address is required'
+                                },
+                                emailAddress: {
+                                    message: 'The input is not a valid email address'
+                                }
+                            }
+                        },
+
+                        phone: {
+
+                            validators: {
+                                digits: true,
+                                notEmpty: {
+                                    message: 'The Phone Number is required'
+                                },
+                                stringLength: {
+                                    min: 8,
+                                    max: 15,
+                                    message: 'Use a valid phone Number'
+                                },
+                            }
+                        }
+                    }
+                });
+            },
+
+            validator: function() {
+                var fv = $('#validation').data('formValidation');
+                var $this = $(this);
+                // Validate the container
+                fv.validateContainer($this);
+                var isValidStep = fv.isValidContainer($this);
+                if (isValidStep === false || isValidStep === null) {
+                    return false;
+                }
+                return true;
+            },
+            onFinish: function() {
+
+                $.ajax({
+                    url: '/op/client/create',
+                    type: 'post',
+                    dataType: 'json',
+                    data: $("#validation").serialize(),
+                    success: function(response) {
+                        $('#close-create-client').click();
+                        if (response.status) {
+                            $("#msg").text('Added Successfully');
+                            $("#client-alert").addClass('alert-success');
+
+                            addRow(response.data)
+                        } else {
+                            $("#msg").text('Something Went Wrong');
+                            $("#client-alert").addClass('alert-danger');
+                        }
+                        $("#client-alert").fadeToggle(350);
+                        //
+                    },
+                    error: function(response) {
+                        $('#close-create-client').click();
+                        $("#msg").text('Something Went Wrong');
+                        $("#client-alert").addClass('alert-danger');
+                        $("#client-alert").fadeToggle(350);
+                    }
+
+                });
+
+                if ($("#client-alert").hasClass("alert-success")) {
+                    $("#client-alert").removeClass('alert-success');
+                }
+                if ($("#client-alert").hasClass("alert-danger")) {
+                    $("#client-alert").removeClass('alert-danger');
+                }
+            }
+
+        });
     });
-})();
 </script>
 @endsection

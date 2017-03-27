@@ -21,7 +21,6 @@ class CreateClientsTable extends Migration
             $table->string('phone')->unique();
             $table->string('address');
             $table->string('city');
-            $table->string('state');
             $table->date('birthdate');
             $table->timestamps();
         });

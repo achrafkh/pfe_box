@@ -19,6 +19,8 @@
     "raphael": "*"
   },
   "dependencies": {
+    "bootstrap-datepicker": "^1.6.4",
+    "clockpicker": "0.0.7",
     "jquery-ui": "^1.12.1",
     "npm-font-open-sans": "^1.0.3"
   }

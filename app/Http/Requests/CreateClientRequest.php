@@ -29,9 +29,8 @@ class CreateClientRequest extends FormRequest
             'lastname'  => 'required|min:3',
             'phone'     => 'required|numeric|unique:clients|min:8',
             'address'   => 'required|min:5',
-            'email'     => 'required|unique:clients',
+            'email'     => 'required|email|unique:clients',
             'city'      => 'required',
-            'state'     => 'required',
             'birthdate' => 'required|before:'.Carbon::now(),
         ];
     }
