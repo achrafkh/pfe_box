@@ -3,11 +3,11 @@
 <input type="hidden" class="form-control" id="client_id-{{ $action }}" name="client_id" value="{{ $client->id }} ">
 <div class="form-group">
 	<label for="note">Title:</label>
-	<input type="text" class="form-control" name="title" id="title-{{ $action }}">
+	<input type="text" class="form-control" name="title" id="title-{{ $action }}" value="">
 </div>
 <div class="form-group">
 	<label for="note">Note:</label>
-	<textarea class="form-control" name="notes" id="notes-{{ $action }}"></textarea>
+	<textarea class="form-control" name="notes" id="notes-{{ $action }}" value=""></textarea>
 </div>
 <div class="form-group start-date">
 	<label class="control-label" for="start-date">Day</label>

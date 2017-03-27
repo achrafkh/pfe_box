@@ -33,7 +33,7 @@
 			</div>
 			@if(Auth::user()->hasRole('op'))
 			<ul class="sidebar-menu">
-				<li><a href="{{ url('/op')}} ">Manage Clients</a></li>
+				<li><a href="{{ url('/op')}} ">Manage Clients  </a></li>
 			</ul>
 			@endif
 			@if(Auth::user()->hasRole('com'))

@@ -51,7 +51,6 @@ class AppointmentsController extends Controller
 
     public function updateAppointment(Request $request)
     {
-        return response()->json($request->all());
         $appointment = Appointment::find($request->id);
         $appointment->title = $request->title;
         $appointment->notes = $request->notes;
@@ -64,22 +63,20 @@ class AppointmentsController extends Controller
             $appointment->start_at = $request->start;
             $appointment->end_at = $request->end;
         }
-        
-        $status = $appointment->update();
 
-        if ($status && $request->ajax()) {
-            $data["status"] = true;
-            $data["event"]  = $appointment->toarray();
+        $status = $appointment->update();
+        
+         if (!$status) {
+            $data["status"] = false;
+            $data["event"]  = []; 
             return response()->json($data);
         }
 
-        if (!$status) {
-            Session::flash('error', 'Something went Wrong');
-            return redirect()->back();
-        }
+        $data["status"] = true;
+        $data["event"]  = $appointment->toarray(); 
 
-        Session::flash('success', 'Added successfully');
-        return redirect()->back();
+        return response()->json($data);
+
     }
 
     public function checkAvailable(Request $request)

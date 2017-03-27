@@ -38,6 +38,10 @@ class User extends Authenticatable
 
     public function hasRole($role)
     {
-        return (boolean) $this->role->title == $role;
+        if($this->role->title != $role)
+        {
+            return false;
+        }
+        return true;
     }
 }

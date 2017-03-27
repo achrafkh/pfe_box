@@ -18,9 +18,7 @@
 <!-- .row -->
 @endsection
 @section('css-top')
-<link href="/plugins/bower_components/toast-master/css/jquery.toast.css" rel="stylesheet">
-<!-- morris CSS -->
-<link href="/plugins/bower_components/morrisjs/morris.css" rel="stylesheet">
+<link href="{{ asset('css/morris.css') }}" rel="stylesheet">
 @endsection
 @section('css')
 
@@ -28,17 +26,14 @@
 
 @section('js')
 
-<script src="/plugins/bower_components/waypoints/lib/jquery.waypoints.js"></script>
-<script src="/plugins/bower_components/counterup/jquery.counterup.min.js"></script>
-<!--Morris JavaScript -->
-<script src="/plugins/bower_components/raphael/raphael-min.js"></script>
-<script src="/plugins/bower_components/morrisjs/morris.js"></script>
+<script src="{{ asset('js/charting.js') }}"></script>
 
-<script src="/js/dashboard1.js"></script>
 <!-- Sparkline chart JavaScript -->
-<script src="/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
-<script src="/plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script>
-<script src="/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
+<script src="/js/libs/jquery.sparkline.min.js"></script>
+
+<script src="{{ asset('js/jquery.counterup.min.js') }}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="/js/dashboard1.js"></script>
 <script type="text/javascript">
 
 
@@ -198,7 +193,7 @@ $(document).ready(function() {
 
 
 
-@section('content3')
+@section('content4')
 <div class="row">
         <div class="col-md-12 col-lg-12 col-sm-12">
           <div class="white-box">
@@ -292,9 +287,9 @@ $(document).ready(function() {
 @endsection
 
 
-@section('content4')
+@section('content3')
  <div class="row">
-        <div class="col-md-8 col-lg-9 col-sm-12 col-xs-12 pull-right">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 pull-right">
           <div class="white-box">
             <h3 class="box-title">Sales Difference</h3>
             <ul class="list-inline text-right">
@@ -306,34 +301,6 @@ $(document).ready(function() {
               </li>
             </ul>
             <div id="morris-area-chart2" style="height: 370px;"></div>
-          </div>
-        </div>
-        <div class="col-md-4 col-lg-3 col-sm-6 col-xs-12">
-          <div class="white-box m-b-15">
-            <h3 class="box-title">Sales Difference</h3>
-            <div class="row">
-              <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                <h1 class="text-info">$647</h1>
-                <p class="text-muted">APRIL 2017</p>
-                <b>(150 Sales)</b> </div>
-              <div class="col-md-6 col-sm-6 col-xs-6">
-                <div id="sparkline2dash" class="text-center"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 col-lg-3 col-sm-6 col-xs-12">
-          <div class="white-box bg-purple m-b-15">
-            <h3 class="text-white box-title">VISIT STATASTICS</h3>
-            <div class="row">
-              <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                <h1 class="text-white">$347</h1>
-                <p class="light_op_text">APRIL 2017</p>
-                <b class="text-white">(150 Sales)</b> </div>
-              <div class="col-md-6 col-sm-6 col-xs-6">
-                <div id="sales1" class="text-center"></div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

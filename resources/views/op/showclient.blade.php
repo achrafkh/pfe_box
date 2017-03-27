@@ -401,21 +401,20 @@ $(window).load(function() {
                     dataType: 'json',
                     data: $('#edit-appointment').serialize(),
                     success: function(data) {
-                        console.log(data);
                         $("#edit-appointment").trigger('reset');
                         var UpdatedEvent = {
                             _id: evid,
-                            id: data.event.id,
-                            title: data.event.title,
-                            client_id: event.client_id,
-                            showroom_id: event.showroom_id,
-                            start: moment(data.event.start_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
-                            end: moment(data.event.end_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
+                            id: data.id,
+                            title: data.title,
+                            client_id: data.client_id,
+                            showroom_id: data.showroom_id,
+                            start: moment(data.start_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
+                            end: moment(data.end_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
                             allDay: false,
-                            notes: data.event.notes,
+                            notes: data.notes,
                             color: '#1751c3',
                         };
-                        calendar.fullCalendar('removeEvents', evid);
+                        calendar.fullCalendar('removeEvent', evid);
                         calendar.fullCalendar('renderEvent', UpdatedEvent, false);
                     }
                 });

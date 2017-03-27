@@ -268,9 +268,9 @@
                 "orderable": false,
             }],
             "order": [
-                [2, 'asc']
+                [6, 'asc']
             ],
-            "displayLength": 25,
+            "displayLength": 10,
         });
         function addRow(data) {
           console.log(data);
@@ -373,14 +373,13 @@
                 return true;
             },
             onFinish: function() {
-
+              $('#close-create-client').click();
                 $.ajax({
                     url: '/op/client/create',
                     type: 'post',
                     dataType: 'json',
                     data: $("#validation").serialize(),
                     success: function(response) {
-                        $('#close-create-client').click();
                         if (response.status) {
                             $("#msg").text('Added Successfully');
                             $("#client-alert").addClass('alert-success');
