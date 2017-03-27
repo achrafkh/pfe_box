@@ -27,6 +27,15 @@ class CalendarRepo implements ICalendarRepository
         return $this->prepareOutputWithClient($appointments);
     }
 
+        public function getShowRoomCalenderObj($showroom_id)
+    {
+        $appointments = Appointment::where('showroom_id', $showroom_id)->get([
+            'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
+        ]);
+
+        return $appointments;
+    }
+
     public function getAgentCalender($agent_id)
     {
         $appointments = Appointment::where('user_id', $agent_id)->get([
@@ -43,6 +52,13 @@ class CalendarRepo implements ICalendarRepository
         return $this->prepareOutputWithClient($appointments);
     }
 
+        public function getAllObj()
+    {
+        $appointments = Appointment::with('client')->get([
+            'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
+        ]);
+        return $appointments;
+    }
 
     public function prepareOutputWithClient($app)
     {

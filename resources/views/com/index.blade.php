@@ -34,37 +34,37 @@
 		<div class="row">
 			<div class="col-lg-3 col-sm-3 col-xs-12">
 				<div class="white-box">
-					<h3 class="box-title">NEW CLIENTS</h3>
+					<h3 class="box-title">Agents N:</h3>
 					<ul class="list-inline two-part">
 						<li><i class="icon-people text-info"></i></li>
-						<li class="text-right"><span class="counter">23</span></li>
+						<li class="text-right"><span class="counter" id="total-agents">{{$data['agents']}}</span></li>
 					</ul>
 				</div>
 			</div>
 			<div class="col-lg-3 col-sm-3 col-xs-12">
 				<div class="white-box">
-					<h3 class="box-title">NEW Projects</h3>
+					<h3 class="box-title">Pending Appointments</h3>
 					<ul class="list-inline two-part">
 						<li><i class="icon-folder text-purple"></i></li>
-						<li class="text-right"><span class="counter">169</span></li>
+						<li class="text-right"><span class="counter" id="pending-apps">{{$data['pending']}}</span></li>
 					</ul>
 				</div>
 			</div>
 			<div class="col-lg-3 col-sm-3 col-xs-12">
 				<div class="white-box">
-					<h3 class="box-title">Open Projects</h3>
+					<h3 class="box-title">Rescheduled Appointments</h3>
 					<ul class="list-inline two-part">
 						<li><i class="icon-folder-alt text-danger"></i></li>
-						<li class="text-right"><span class="">311</span></li>
+						<li class="text-right"><span class="" id="resc-apps">{{$data['resc']}}</span></li>
 					</ul>
 				</div>
 			</div>
 			<div class="col-lg-3 col-sm-3 col-xs-12">
 				<div class="white-box">
-					<h3 class="box-title">NEW Invoices</h3>
+					<h3 class="box-title">Finished Appointments</h3>
 					<ul class="list-inline two-part">
 						<li><i class="ti-wallet text-success"></i></li>
-						<li class="text-right"><span class="">117</span></li>
+						<li class="text-right"><span class="" id="done-apps">{{$data['done']}}</span></li>
 					</ul>
 				</div>
 			</div>
@@ -78,10 +78,11 @@
 	<div class="panel panel-default">
 		<div class="panel-heading"><div class="form-group">
 			<label for="status" style="width:auto;display:inline-block;"><strong>View ShowRoom Calendar : </strong></label><span class="highlight"></span> <span class="bar"></span>
-			<select class="form-control" id="showroom" required="" style="width:50%;display:inline-block;">
-				<option value="pending">dsqds</option>
-				<option value="done">sqdqd</option>
-				<option value="rescheduled">sqdqsd</option>
+			<select class="form-control" id="showroom-select" required="" style="width:50%;display:inline-block;">
+			<option value="all">All</option>
+			@foreach($showrooms as $showroom)
+				<option value="{{ $showroom->id }}">{{ $showroom->city }}</option>
+			@endforeach
 			</select>
 			
 			<div class="panel-action" style="display:inline-block;"><a href="panels-wells.html#" data-perform="panel-collapse"><i class="ti-minus"></i></a> <a href="panels-wells.html#" data-perform="panel-dismiss"><i class="ti-close"></i></a></div></div>
@@ -149,7 +150,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" id="close-update" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-info " id="edit-app">Save changes</button>
+				<button type="button" class="btn btn-info " id="submit-status">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -162,17 +163,18 @@
 
 @section('js')
 
- 
-{{--
-var errors = {!! json_encode($errors->first()) !!};
-</script>
-<script src="{{ asset('js/com/showroom.js') }}"></script> --}}
-
-
-
 <script type="text/javascript">
 var evs = {!! json_encode($calendar) !!};
-/*
+var errors = {!! json_encode($errors->first()) !!};
+
+
+function SetStats(stats){
+	$( "#pending-apps" ).text(stats.pending);
+	$( "#resc-apps" ).text(stats.resc);
+	$( "#done-apps" ).text(stats.done);
+	$( "#total-agents" ).text(stats.agents);
+}
+
 $( "#showroom-select" ).change(function() {
 	$.ajax({
 	    url: '/com/getevents',
@@ -182,12 +184,12 @@ $( "#showroom-select" ).change(function() {
 	        'showroom_id': $("#showroom-select").val()
 	    },
 	    success: function(data) {
-	        console.log(data);
+	    	SetStats(data.stats)
 	        $('#calendar').fullCalendar('removeEvents');
-	        $("#calendar").fullCalendar('addEventSource', data);
+	        $("#calendar").fullCalendar('addEventSource', data.events);
 	    }
 	});
- });*/
+ });
  $(window).load(function() {
     var calendar = $('#calendar').fullCalendar({
         header: {
