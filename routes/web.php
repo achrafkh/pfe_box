@@ -48,8 +48,8 @@ Route::middleware(['auth', 'role:op'])->namespace('Callcenter')->prefix('op')->g
 });
 //  Routes des Commerciaux...
 Route::middleware(['auth', 'role:com'])->namespace('Commercial')->prefix('com')->group(function () {
-    Route::get('/', 'DashboardController@index')->name('com');
-    Route::get('/appointments', 'AppointmentsController@index')->name('apps');
+    Route::get('/a', 'DashboardController@index')->name('com');
+    Route::get('/', 'AppointmentsController@index')->name('apps');
     Route::post('/updatestatus', 'AppointmentsController@updateStatus')->name('updateStatus');
     Route::post('/getevents', 'AppointmentsController@getEvents')->name('getEvents');
 });

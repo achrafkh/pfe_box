@@ -20,7 +20,7 @@ class AppointmentsController extends Controller
         $calendar = $this->data->getAll();
         $showrooms = Showroom::get();
 
-        return view('com.appointments', compact('calendar', 'showrooms'));
+        return view('com.index', compact('calendar', 'showrooms'));
     }
 
     public function updateStatus(Request $request)

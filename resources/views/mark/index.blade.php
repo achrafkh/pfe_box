@@ -33,7 +33,7 @@
 
 <script src="{{ asset('js/jquery.counterup.min.js') }}"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
-<script src="/js/dashboard1.js"></script>
+<script src="//cdn.jsdelivr.net/spinjs/1.3.0/spin.min.js"></script>
 <script type="text/javascript">
 
 
@@ -65,7 +65,115 @@ $(document).ready(function() {
         sparklineLogin();
 
 });
-</script>
+
+/*var donut = {!! json_encode($donut) !!};
+    Morris.Donut({
+        element: 'morris-donut-chart',
+        data: donut,
+        resize: true,
+        colors:['#99d683', '#13dafe', '#6164c1']
+    });*/
+
+Morris.Area({
+        element: 'morris-area-chart2',
+        data: [{
+            period: '2010',
+            SiteA: 0,
+            SiteB: 0,
+            
+        }, {
+            period: '2011',
+            SiteA: 130,
+            SiteB: 100,
+            
+        }, {
+            period: '2012',
+            SiteA: 80,
+            SiteB: 60,
+            
+        }, {
+            period: '2013',
+            SiteA: 70,
+            SiteB: 200,
+            
+        }, {
+            period: '2014',
+            SiteA: 180,
+            SiteB: 150,
+            
+        }, {
+            period: '2015',
+            SiteA: 105,
+            SiteB: 90,
+            
+        },
+         {
+            period: '2016',
+            SiteA: 250,
+            SiteB: 150,
+           
+        }],
+        xkey: 'period',
+        ykeys: ['SiteA', 'SiteB'],
+        labels: ['Site A', 'Site B'],
+        pointSize: 0,
+        fillOpacity: 0.4,
+        pointStrokeColors:['#5e6d88', '#01c0c8'],
+        behaveLikeLine: true,
+        gridLineColor: 'rgba(255, 255, 255, 0.1)',
+        lineWidth: 0,
+        gridTextColor: '#96a2b4',
+        smooth: false,
+        hideHover: 'auto',
+        lineColors: ['#5e6d88', '#01c0c8'],
+        resize: true
+        
+    });
+
+    $(function () {
+        var spinTarget = document.getElementById('stats-container');
+        function requestData( chart) {
+            var spinner = new Spinner().spin(spinTarget);
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: "/mark/api"
+            })
+                .done(function (data) {
+                    for (i = 0; i < data.length; ++i) {
+                        data[i].week = moment().day("Monday").week(data[i].date).format('MMM Do');
+                    }
+                    chart.setData(data);
+                })
+                .fail(function () {
+                    alert("error occured");
+                })
+                .always(function () {
+                    spinner.stop();
+                });
+        }
+        var chart = Morris.Bar({
+            element: 'stats-container',
+            data: [0, 0], 
+              xkey: 'week',
+              ykeys: ['done','pending','rescheduled'],
+              labels: ['Done', 'Still Pending', 'Rescheduled'],
+              fillOpacity: 0.6,
+              hideHover: 'auto',
+              behaveLikeLine: true,
+              resize: true,
+              pointFillColors:['#ffffff'],
+              pointStrokeColors: ['black'],
+              barColors: ["#1AB244", "#1531B2","#B21516"],
+              xLabelMargin: 2
+
+
+        });
+
+        requestData(chart);
+    });
+
+    </script>
 @endsection
 
 @section('content1')
@@ -157,7 +265,7 @@ $(document).ready(function() {
                 <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>iPod</h5>
               </li>
             </ul>
-            <div id="morris-area-chart" style="height: 370px;"></div>
+            <div id="morris-area-chart2" style="height: 370px;"></div>
           </div>
         </div>
         <div class="col-md-4 col-lg-3 col-sm-6 col-xs-12">
@@ -190,9 +298,6 @@ $(document).ready(function() {
         </div>
       </div>
 @endsection
-
-
-
 @section('content4')
 <div class="row">
         <div class="col-md-12 col-lg-12 col-sm-12">
@@ -300,7 +405,7 @@ $(document).ready(function() {
                 <h5><i class="fa fa-circle m-r-5" style="color: #fdc006;"></i>Site B View</h5>
               </li>
             </ul>
-            <div id="morris-area-chart2" style="height: 370px;"></div>
+            <div id="stats-container" style="height: 370px;"></div>
           </div>
         </div>
       </div>
