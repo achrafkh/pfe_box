@@ -164,7 +164,7 @@ Morris.Area({
               resize: true,
               pointFillColors:['#ffffff'],
               pointStrokeColors: ['black'],
-              barColors: ["#1AB244", "#1531B2","#B21516"],
+              barColors: ['#fecd36', '#AB8CE4', '#01c0c8'],
               xLabelMargin: 2
 
 

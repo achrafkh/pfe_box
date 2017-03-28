@@ -54,7 +54,7 @@ class DashboardController extends Controller
             DB::raw("Count(case status when 'done' then 1 else null end) as done"),
             DB::raw("Count(case status when 'rescheduled' then 1 else null end) as rescheduled"),
             ])
-            ->take(4)->toJson();
+            ->take(5)->toJson();
         });
         
 
