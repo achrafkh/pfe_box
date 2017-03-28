@@ -29,7 +29,7 @@ class CalendarRepo implements ICalendarRepository
 
         public function getShowRoomCalenderObj($showroom_id)
     {
-        $appointments = Appointment::where('showroom_id', $showroom_id)->get([
+        $appointments = Appointment::with('client')->where('showroom_id', $showroom_id)->get([
             'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
         ]);
 
