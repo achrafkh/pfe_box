@@ -28,14 +28,14 @@
 <div class="row">
   <div class="col-md-12 col-lg-12 col-sm-12">
     <div class="white-box">
-      <div class="row row-in">
+      <div class="row row-in"><h4 class="page-title text-center" style="font-size:150%;color:#77797B;">Weekly Reports</h4><hr>
         <div class="col-lg-3 col-sm-6 row-in-br">
           <div class="col-in row">
             <div class="col-md-6 col-sm-6 col-xs-6"> <i data-icon="E" class="linea-icon linea-basic" ></i>
               <h5 class="text-muted vb">Total Clients</h5>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
-              <h3 class="counter text-right m-t-15 text-danger">{{ $clients->count() }}</h3>
+              <h3 class="counter text-right m-t-15 text-danger">{{ $clients->where('created_at','>',Carbon\Carbon::now()->subWeek())->count() }}</h3>
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="progress">
@@ -50,11 +50,11 @@
               <h5 class="text-muted vb">Appointments</h5>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
-              <h3 class="counter text-right m-t-15 text-megna">10</h3>
+              <h3 class="counter text-right m-t-15 text-megna">{{ $stats['week-total']}}</h3>
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="progress">
-                <div class="progress-bar progress-bar-megna" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> <span class="sr-only">{{ number_format($stats['success'],2)}} % Complete (success)</span> </div>
+                <div class="progress-bar progress-bar-megna" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{ $stats['week-total']}}%"> <span class="sr-only">{{$stats['week-total']}} % Complete (success)</span> </div>
               </div>
             </div>
           </div>
@@ -62,10 +62,10 @@
         <div class="col-lg-3 col-sm-6 row-in-br">
           <div class="col-in row">
             <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
-              <h5 class="text-muted vb">NEW INVOICES</h5>
+              <h5 class="text-muted vb">Reschedules</h5>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
-              <h3 class="counter text-right m-t-15 text-primary">157</h3>
+              <h3 class="counter text-right m-t-15 text-primary">{{ $stats['week-rescheduled']}}</h3>
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="progress">
@@ -77,10 +77,10 @@
         <div class="col-lg-3 col-sm-6  b-0">
           <div class="col-in row">
             <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe016;"></i>
-              <h5 class="text-muted vb">Confirmed</h5>
+              <h5 class="text-muted vb">Success %</h5>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
-              <h3 class="counter text-right m-t-15 text-success">431</h3>
+              <h3 class="counter text-right m-t-15 text-success">{{ number_format($stats['success'],1)}}%</h3>
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="progress">
@@ -147,8 +147,8 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="white-box">
-              <h3 class="box-title m-b-0">Validation</h3>
-              <p class="text-muted m-b-30 font-13"> This is the Validation wizard with validation.</p>
+             {{--  <h3 class="box-title m-b-0">Validation</h3>
+              <p class="text-muted m-b-30 font-13"> This is the Validation wizard with validation.</p> --}}
               <div id="newClient" class="wizard">
                 <ul class="wizard-steps" role="tablist">
                   <li class="active" role="tab">
@@ -166,14 +166,14 @@
                   <div class="wizard-content">
                     <div class="wizard-pane active" role="tabpanel">
                       <div class="form-group">
-                        <label class="col-xs-3 control-label">First name</label>
-                        <div class="col-xs-5">
+                        <label class="col-xs-3 col-md-2 control-label pull-left">First name : </label>
+                        <div class="col-xs-9 col-md-10">
                           <input type="text" class="form-control" name="firstname" />
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="col-xs-3 control-label">Last name</label>
-                        <div class="col-xs-5">
+                        <label class="col-xs-3 col-md-2 control-label">Last name : </label>
+                        <div class="col-xs-9 col-md-10">
                           <input type="text" class="form-control" name="lastname" />
                         </div>
                       </div>
@@ -181,29 +181,29 @@
                     </div>
                     <div class="wizard-pane" role="tabpanel">
                       <div class="form-group">
-                        <label class="col-xs-3 control-label">Email address</label>
-                        <div class="col-xs-5">
+                        <label class="col-xs-3 col-md-2 control-label">Email address : </label>
+                        <div class="col-xs-9 col-md-10">
                           <input type="text" class="form-control" name="email" />
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="col-xs-3 control-label">Phone Number</label>
-                        <div class="col-xs-5">
+                        <label class="col-xs-3 col-md-2 control-label">Phone Number:</label>
+                        <div class="col-xs-9 col-md-10">
                           <input type="text" class="form-control" name="phone" />
                         </div>
                       </div>
                     </div>
                     <div class="wizard-pane" role="tabpanel">
                       <div class="form-group">
-                        <label class="col-md-12">Address</label>
-                        <div class="col-md-12">
+                        <label class="col-xs-3 col-md-2">Address : </label>
+                        <div class="col-xs-9 col-md-10">
                           <input id="address" type="tel" class="form-control form-control-line" name="address" required autofocus>
                           
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="col-sm-12">Select City</label>
-                        <div class="col-sm-12">
+                        <label class="col-xs-3 col-sm-2">Select City : </label>
+                        <div class="col-xs-9 col-sm-10">
                           <select class="form-control form-control-line" name="city">
                            @foreach($cities as $city)
                             <option value="{{ $city }}">{{ $city }}</option>
@@ -212,8 +212,8 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="col-md-12">Birth Date</label>
-                        <div class="col-md-12">
+                        <label class="col-xs-3 col-md-2">Birth Date : </label>
+                        <div class="col-xs-9 col-md-10">
                           <div class="input-group">
                             <input id="datepicker-autoclose" type="text" class="form-control mydatepicker" placeholder="yyyy/mm/dd" name="birthdate"  required> <span class="input-group-addon"><i class="icon-calender"></i></span>
                           </div>
@@ -256,6 +256,7 @@
 <script>
 
     $(document).ready(function() {
+     
         var datepicker = jQuery('#datepicker-autoclose').datepicker({
             autoclose: true,
             todayHighlight: false,
@@ -344,7 +345,6 @@
                         },
 
                         phone: {
-
                             validators: {
                                 digits: true,
                                 notEmpty: {
@@ -354,6 +354,13 @@
                                     min: 8,
                                     max: 15,
                                     message: 'Use a valid phone Number'
+                                },
+                            }
+                        },
+                         birthdate: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'BirthDate is required'
                                 },
                             }
                         }
@@ -397,10 +404,16 @@
                         $("#msg").text('Something Went Wrong');
                         $("#client-alert").addClass('alert-danger');
                         $("#client-alert").fadeToggle(350);
-                    }
-
+                    },
                 });
 
+                $("#validation").trigger('reset'); 
+                $( ".wizard-back" ).click();
+                $( ".wizard-back" ).click();
+                 $("#newClient > ul > li:nth-child(2)").removeClass().removeClass('current').addClass('disabled');
+                $('li.active').addClass('current');
+                $("#validation").data('formValidation').resetForm();
+                
                 if ($("#client-alert").hasClass("alert-success")) {
                     $("#client-alert").removeClass('alert-success');
                 }
