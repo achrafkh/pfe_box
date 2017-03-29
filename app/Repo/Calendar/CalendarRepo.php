@@ -73,7 +73,7 @@ class CalendarRepo implements ICalendarRepository
                     'status'    => $item->status,
                     'allDay' => false,
                     'notes'     => $item->notes,
-                    'color'  => ($item->status == 'done') ? '#10c390' : '#1751c3',
+                    'color'  => ($item->status == 'done') ? '#99D683' : (($item->status == 'pending') ? '#6164c1':'#FB9678'),
                     'client' => isset($item->client) ? $item->client->toarray() : null,
                     ];
         });
@@ -94,7 +94,7 @@ class CalendarRepo implements ICalendarRepository
                     'status'    => $item->status,
                     'allDay' => false,
                     'notes'     => $item->notes,
-                    'color'  => ($item->status == 'done') ? '#10c390' : '#1751c3',
+                    'color'  => ($item->status == 'done') ? '#99D683' : (($item->status == 'pending') ?'#6164c1':'#FB9678'),
                     ];
         });
 

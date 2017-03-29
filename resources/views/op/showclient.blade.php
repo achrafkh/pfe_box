@@ -28,7 +28,7 @@
 				<!-- .row -->
 				<div class="row text-center m-t-10" >
 					<div class="col-md-6 b-r"><strong>Name</strong><p>{{ucfirst($client->firstname) . ' ' . $client->lastname}}</p></div>
-					<div class="col-md-6"><strong>Birth</strong><p>{{$client->birthdate}}</p></div>
+					<div class="col-md-6"><strong>Birthdate</strong><p>{{$client->birthdate}}</p></div>
 				</div>
 				<!-- /.row -->
 				<hr>
@@ -56,7 +56,7 @@
 						<h4 id="Done" class="m-b-0">0</h4>
 					</li>
 					<li class="p-r-20">
-						<h5 class="text-muted"><i class="fa fa-circle" style="color: #01c0c8;"></i>rescheduled</h5>
+						<h5 class="text-muted"><i class="fa fa-circle" style="color: #FB9678;"></i>rescheduled</h5>
 						<h4 id="resc" class="m-b-0">0</h4>
 					</li>
 					<li>
@@ -196,7 +196,11 @@
 </div>
 @endsection
 @section('content2')
-<style type="text/css">.fc th.fc-widget-header{background: #03A9F3;}</style>
+<style type="text/css">.fc th.fc-widget-header{background: #03A9F3;}.fc-unthemed .fc-today {background:  #dadbf1 !important;}</style>
+<style type="text/css">
+
+
+</style>
 <div class="row">
 	<div class="panel panel-default">
 		<div class="panel-heading">View Calendar
@@ -264,34 +268,34 @@ var errors = {!! json_encode($errors->first()) !!};
 var donut = {!! json_encode($donut) !!};
 var userdate = {!! json_encode($client->birthdate) !!};
 
-$('#pending').text(donut[2].value);
-$('#resc').text(donut[1].value);
-$('#done').text(donut[0].value);
 
-if(donut[0].value || donut[1].value || donut[2].value)
-{
-	Morris.Donut({
-	    element: 'morris-donut-chart',
-	    data: donut,
-	    resize: true,
-	    colors: ['#99d683', '#13dafe', '#6164c1']
-	});
+
+if (donut[0].value || donut[1].value || donut[2].value) {
+	$('#pending').text(donut[2].value);
+	$('#resc').text(donut[1].value);
+	$('#done').text(donut[0].value);
+    Morris.Donut({
+        element: 'morris-donut-chart',
+        data: donut,
+        resize: true,
+        colors: ['#99d683', '#FB9678','#6164c1']
+    });
 } else {
-	$('#morris-donut-chart').html('<h1 style="margin-top:40%;">Not enough data to Render The Chart</h1>').addClass('text-center');
+    $('#morris-donut-chart').html('<h1 style="margin-top:40%;">Not enough data to Render The Chart</h1>').addClass('text-center');
 }
 $(window).load(function() {
-	 $("#city_id").val('{{ $client->city }}');
+    $("#city_id").val('{{ $client->city }}');
 
-	 if (errors.length > 0) {
+    if (errors.length > 0) {
         $('.nav li').removeClass('active');
         $('#cont div').removeClass('active');
         $('#edit-tab').addClass('active');
         $('#edit').addClass('active');
     }
 
-	   $('.clockpicker').clockpicker({
-            donetext: 'Done', 
-        });
+    $('.clockpicker').clockpicker({
+        donetext: 'Done',
+    });
 
 
     var datepicker = jQuery('#datepicker-autoclose').datepicker({
@@ -302,7 +306,7 @@ $(window).load(function() {
     datepicker.datepicker('update', userdate);
 
 
-        var modaldatepicker = jQuery('.thedatepicker').datepicker({
+    var modaldatepicker = jQuery('.thedatepicker').datepicker({
         autoclose: true,
         todayHighlight: false,
         format: 'yyyy/mm/dd',
@@ -320,19 +324,37 @@ $(window).load(function() {
             modaldatepicker.datepicker('update', moment(start).format('YYYY-MM-DD'));
             $('#fc_create').click();
             $("#create-app").unbind('click').bind("click", function() {
+                var form = $('#create-appointment');
+                var myform = form.serializeArray();
+                /*            	myform.push(
+                			        {name: 'age',      value: 25},
+                			        {name: 'sex',      value: 'M'},
+                			        {name: 'weight',   value: 200}
+                			      );*/
                 $.ajax({
                     url: '/op/setappointment',
                     type: 'post',
                     dataType: 'json',
-                    data: $('#create-appointment').serialize(),
+                    statusCode: {
+                        422: function(response) {
+                            $.each(response.responseJSON, function(key, value) {
+                                var id = "#" + form.attr('id') + " p[name=" + key + "E]";
+                                $(id).css('margin-top', '10px').text(value);
+                            });
+                            return false;
+                        }
+                    },
+                    data: myform,
+
                     success: function(data) {
+                        console.log(data);
+
                         $("#create-appointment").trigger('reset');
                         var NewEvent = {
                             id: data.event.id,
                             title: data.event.title,
                             client_id: data.event.client_id,
                             showroom_id: data.event.showroom_id,
-
                             start: moment(data.event.start_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
                             end: moment(data.event.end_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
                             allDay: false,
@@ -340,13 +362,13 @@ $(window).load(function() {
                             color: '#1751c3',
                         };
                         calendar.fullCalendar('renderEvent', NewEvent, false);
+                        $('#close-create').click();
                     },
                     error: function(errors) {
                         //
                     }
                 });
                 calendar.fullCalendar('unselect');
-                $('#close-create').click();
                 return false;
             });
         },
@@ -367,7 +389,7 @@ $(window).load(function() {
             return false;
         },
         eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc) {
-        	var start = event.start.format('YYYY-MM-DD HH:MM:SS');
+            var start = event.start.format('YYYY-MM-DD HH:MM:SS');
             $.ajax({
                 url: '/op/updateapptime',
                 type: 'post',
@@ -375,7 +397,7 @@ $(window).load(function() {
                 data: {
                     'id': event.id,
                     'start': start,
-                    'end': event.end  != null ? event.end.format('YYYY-MM-DD HH:MM:SS') : start ,
+                    'end': event.end != null ? event.end.format('YYYY-MM-DD HH:MM:SS') : start,
                 },
                 success: function(data) {
                     console.log(data);
@@ -395,11 +417,22 @@ $(window).load(function() {
 
             $('#fc_edit').click();
             $("#edit-app").unbind('click').bind("click", function() {
+                var form = $('#edit-appointment');
                 $.ajax({
                     url: '/op/updateappointment',
                     type: 'post',
                     dataType: 'json',
-                    data: $('#edit-appointment').serialize(),
+                    statusCode: {
+                        422: function(response) {
+                            $.each(response.responseJSON, function(key, value) {
+                                var id = "#" + form.attr('id') + " p[name=" + key + "E]";
+                                $(id).css('margin-top', '10px').text(value);
+
+                            });
+                            return false;
+                        }
+                    },
+                    data: form.serialize(),
                     success: function(data) {
                         $("#edit-appointment").trigger('reset');
                         var UpdatedEvent = {
@@ -416,9 +449,9 @@ $(window).load(function() {
                         };
                         calendar.fullCalendar('removeEvent', evid);
                         calendar.fullCalendar('renderEvent', UpdatedEvent, false);
+                        $('#close-update').click();
                     }
                 });
-                $('#close-update').click();
             });
             calendar.fullCalendar('unselect');
             return false;

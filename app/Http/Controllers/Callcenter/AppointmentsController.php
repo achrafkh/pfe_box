@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers\Callcenter;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\CreateAppointmentRequest;
+use App\Http\Requests\UpdateAppointmentRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
-use App\Appointment;
-use Session;
-use Illuminate\Support\Collection;
-use App\User;
-use App\Mail\newAppointment;
 use App\Mail\newAppointmentClient;
+use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
+use App\Mail\newAppointment;
+use App\Appointment;
 use App\Client;
+use App\User;
+use Session;
+
 
 class AppointmentsController extends Controller
 {
     public function setAppointment(CreateAppointmentRequest $request)
     {
+
         $appointment = new Appointment;
 
         $appointment->title = $request->title;
@@ -49,7 +52,7 @@ class AppointmentsController extends Controller
         return response()->json($data);
     }
 
-    public function updateAppointment(Request $request)
+    public function updateAppointment(UpdateAppointmentRequest $request)
     {
         $appointment = Appointment::find($request->id);
         $appointment->title = $request->title;
@@ -78,7 +81,7 @@ class AppointmentsController extends Controller
         return response()->json($data);
 
     }
-
+    
     public function checkAvailable(Request $request)
     {
         $commercials = User::where('showroom_id', $request->showroom_id)->whereHas('role', function ($query) {

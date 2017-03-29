@@ -43,7 +43,7 @@ Route::middleware(['auth', 'role:op'])->namespace('Callcenter')->prefix('op')->g
     Route::get('/client/{client}/edit', 'ClientsController@edit')->name('editClientForm');
     Route::post('/setappointment', 'AppointmentsController@setAppointment')->name('setAppointment');
     Route::post('/updateappointment', 'AppointmentsController@updateAppointment')->name('updateAppointment');
-    Route::post('/checkavailable', 'AppointmentsController@checkAvailable');
+    Route::get('/checkavailable', 'AppointmentsController@checkAvailable');
     Route::post('/updateapptime', 'AppointmentsController@updateTime');
 });
 //  Routes des Commerciaux...

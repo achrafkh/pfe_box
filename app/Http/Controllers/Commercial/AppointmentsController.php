@@ -53,7 +53,7 @@ class AppointmentsController extends Controller
 
         $data['status'] = true;
         $data['event'] = $app->toarray();
-        $data['event']['color'] = ($app->status == 'done') ? '#10c390' : '#1751c3';
+        $data['event']['color'] = ($app->status == 'done') ? '#99D683' : (($app->status == 'pending') ?'#6164c1': '#FB9678' );
         return response()->json($data);
     }
 
