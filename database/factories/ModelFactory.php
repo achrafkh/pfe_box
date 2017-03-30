@@ -31,9 +31,11 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Role::class, function (Faker\Generator $faker) {
     static $title;
+    static $fulltitle;
 
     return [
         'title' => $title,
+        'fulltitle' => $fulltitle,
     ];
 });
 

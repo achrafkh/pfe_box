@@ -9,18 +9,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/countries', function () {
-
-    $test= Countries::where('name.common', 'Tunisia')->first()->states->where('postal','MN')->region;
-    dd($test);
-  
-    $data =   Countries::where('name.common', 'Tunisia')->first()->states->pluck('name','postal');
-    foreach($data as $key => $item) 
-    {
-        echo html_entity_decode($key) .' - '.html_entity_decode($item) . '<br>';
-    }
-});
-
 
 
 // Authentication Routes...
@@ -58,6 +46,16 @@ Route::middleware(['auth', 'role:mark'])->namespace('Marketer')->prefix('mark')-
     Route::get('/api', 'DashboardController@getBarData');
 });
 
+
+Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->group(function () {
+    Route::get('/', 'AppointmentsController@index')->name('admin');
+    Route::post('/updatestatus', 'AppointmentsController@updateStatus');
+    Route::post('/getevents', 'AppointmentsController@getEvents');
+    Route::resource('users', 'UsersController');
+});
+
+
+
 Route::get('/getdb', function () {
     $connectstr_dbhost = '';
     $connectstr_dbname = '';
@@ -84,4 +82,5 @@ Route::get('/getdb', function () {
     echo "<br>";
 
 });
+
 

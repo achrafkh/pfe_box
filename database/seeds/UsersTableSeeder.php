@@ -13,6 +13,7 @@ class UsersTableSeeder extends Seeder
     {
         $op = factory(App\Role::class)->create([
             'title'=>'op',
+            'fulltitle' => 'CallCenter',
         ]);
 
         $op->users()->save(factory(App\User::class)->make(['username' => 'operateur']));
@@ -20,6 +21,7 @@ class UsersTableSeeder extends Seeder
 
         $com = factory(App\Role::class)->create([
             'title'=>'com',
+            'fulltitle' => 'Agent',
         ]);
 
         $com->users()->save(factory(App\User::class)->make(['username' => 'commercial']));
@@ -27,6 +29,7 @@ class UsersTableSeeder extends Seeder
 
         $mark = factory(App\Role::class)->create([
             'title'=>'mark',
+            'fulltitle' => 'Analyzer',
         ]);
 
         $mark->users()->save(factory(App\User::class)->make(['username' => 'marketeur']));
@@ -34,6 +37,7 @@ class UsersTableSeeder extends Seeder
 
         $superadmin = factory(App\Role::class)->create([
             'title'=>'admin',
+            'fulltitle' => 'Administrator',
         ]);
 
         $superadmin->users()->save(factory(App\User::class)->make(['username' => 'superadmin']));

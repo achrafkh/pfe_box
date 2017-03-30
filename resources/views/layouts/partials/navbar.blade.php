@@ -46,6 +46,12 @@
 				<li><a href="{{ url('/mark')}} ">Check Stats</a></li>
 			</ul>
 			@endif
+			@if(Auth::user()->hasRole('admin'))
+			<ul class="sidebar-menu">
+				<li><a href="{{ url('/admin/users')}} ">Manage Users</a></li>
+				<li><a href="{{ url('/admin')}} ">View Appointments</a></li>
+			</ul>
+			@endif
 			<!-- Left navbar-header end -->
 		</div>
 	</li>
