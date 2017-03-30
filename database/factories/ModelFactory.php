@@ -65,7 +65,7 @@ $factory->define(App\Appointment::class, function (Faker\Generator $faker)  {
 
 
     $startDate = Carbon::createFromTimeStamp($faker->dateTimeBetween('-10 weeks', '+5 weeks')->getTimestamp());
-    $endDate = Carbon::createFromFormat('Y-m-d H:i:s', $startDate)->addHour();
+    $endDate = Carbon::createFromFormat('Y-m-d H:i:s', $startDate)->addHours(2);
     $status = $faker->randomElement(array('done', 'rescheduled', 'pending'));
     if ($endDate > Carbon::now()) {
         $status = 'pending';
@@ -77,7 +77,7 @@ $factory->define(App\Appointment::class, function (Faker\Generator $faker)  {
         'notes'     => $faker->paragraph($nbSentences = 3, $variableNbSentences = true),
         'client_id'     => $faker->numberBetween(1, 60),
         'showroom_id'   => $faker->numberBetween(1, 10),
-        'start_at'      => $endDate,
+        'start_at'      => $startDate,
         'end_at'     => $endDate,
     ];
 });
