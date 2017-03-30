@@ -86,10 +86,8 @@
 			</select>
 			
 			<div class="panel-action" style="display:inline-block;"><a href="panels-wells.html#" data-perform="panel-collapse"><i class="ti-minus"></i></a> <a href="panels-wells.html#" data-perform="panel-dismiss"><i class="ti-close"></i></a></div></div>
-			
-			
-			
 		</div>
+		<style type="text/css">.fc th.fc-widget-header{background: #03A9F3;}.fc-unthemed .fc-today {background:  #dadbf1 !important;}</style>
 		<div class="panel-wrapper collapse in">
 			<div class="panel-body">
 				<div id="calendar"></div>

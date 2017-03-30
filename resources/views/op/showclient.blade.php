@@ -197,10 +197,6 @@
 @endsection
 @section('content2')
 <style type="text/css">.fc th.fc-widget-header{background: #03A9F3;}.fc-unthemed .fc-today {background:  #dadbf1 !important;}</style>
-<style type="text/css">
-
-
-</style>
 <div class="row">
 	<div class="panel panel-default">
 		<div class="panel-heading">View Calendar
