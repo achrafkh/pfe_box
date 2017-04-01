@@ -12,6 +12,9 @@
 */
 use Carbon\Carbon;
 
+
+$cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('name','postal')->toarray();
+
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
@@ -28,9 +31,11 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Role::class, function (Faker\Generator $faker) {
     static $title;
+    static $fulltitle;
 
     return [
         'title' => $title,
+        'fulltitle' => $fulltitle,
     ];
 });
 
@@ -42,22 +47,25 @@ $factory->define(App\Showroom::class, function (Faker\Generator $faker) {
 
 
 
-$factory->define(App\Client::class, function (Faker\Generator $faker) {
+$factory->define(App\Client::class, function (Faker\Generator $faker) use($cities) {
     return [
         'firstname' => $faker->firstName,
         'lastname'  => $faker->lastName,
         'email'     => $faker->email,
         'phone'     => $faker->e164PhoneNumber,
         'address'   => $faker->address,
-        'city'      => $faker->city,
-        'state'     => $faker->state,
+        'city'      => $faker->randomElement($cities),
         'birthdate' => $faker->date($format = 'Y-m-d', $max = '-20 years'),
     ];
 });
 
-$factory->define(App\Appointment::class, function (Faker\Generator $faker) {
+$factory->define(App\Appointment::class, function (Faker\Generator $faker)  {
+
+     
+
+
     $startDate = Carbon::createFromTimeStamp($faker->dateTimeBetween('-10 weeks', '+5 weeks')->getTimestamp());
-    $endDate = Carbon::createFromFormat('Y-m-d H:i:s', $startDate)->addHour();
+    $endDate = Carbon::createFromFormat('Y-m-d H:i:s', $startDate)->addHours(2);
     $status = $faker->randomElement(array('done', 'rescheduled', 'pending'));
     if ($endDate > Carbon::now()) {
         $status = 'pending';
@@ -69,7 +77,7 @@ $factory->define(App\Appointment::class, function (Faker\Generator $faker) {
         'notes'     => $faker->paragraph($nbSentences = 3, $variableNbSentences = true),
         'client_id'     => $faker->numberBetween(1, 60),
         'showroom_id'   => $faker->numberBetween(1, 10),
-        'start_at'      => Carbon::now(),
+        'start_at'      => $startDate,
         'end_at'     => $endDate,
     ];
 });

@@ -18,10 +18,10 @@ class CreateInvoicesTable extends Migration
 
             $table->integer('appointment_id')->unsigned();
             $table->integer('showroom_id')->unsigned();
-            
-
-            
+            $table->decimal('total', 15, 2);
+            $table->enum('status', ['pending', 'paid' , 'canceled']);
             $table->timestamps();
+
 
             $table->foreign('showroom_id')->references('id')->on('showrooms')->onDelete('cascade');
             $table->foreign('appointment_id')->references('id')->on('appointments')->onDelete('cascade');

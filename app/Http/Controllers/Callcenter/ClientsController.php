@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Callcenter;
 
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Repo\Calendar\ICalendarRepository;
-use App\Client;
-use App\User;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Appointment;
+use Carbon\Carbon;
 use App\Showroom;
+use App\Client;
+use Countries;
+use App\User;
 use Session;
+
 
 class ClientsController extends Controller
 {
@@ -22,16 +26,33 @@ class ClientsController extends Controller
     }
     public function index()
     {
-        return view('op.index')->with('clients', Client::paginate(8));
+        $apps = Appointment::where('start_at', '>=', Carbon::now()->subWeek())->get();
+        $cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('name','postal');
+        $clients = Client::get();
+
+        $stats['week-total'] = $apps->count();
+        $stats['week-success'] = $apps->where('status', 'done')->count();
+        $stats['week-rescheduled'] = $apps->where('status', 'rescheduled')->count();
+        $stats['success'] =  ($stats['week-success'] / $stats['week-total']) * 100;
+
+        return view('op.index', compact('clients', 'cities', 'apps', 'stats'));
     }
 
     public function show(Client $client)
     {
         $calendar = $this->data->getClientCalender($client->id);
+        $cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('name','postal');
+
+        $data =  Appointment::where('client_id', $client->id)->get();
+
+        $donut[] = ["label" => "done","value" => $data->where("status", "done")->count()];
+        $donut[] = ["label" => "rescheduled","value" => $data->where("status", "rescheduled")->count()];
+        $donut[] = ["label" => "pending","value" => $data->where("status", "pending")->count()];
+
         $showrooms = Showroom::get();
 
         
-        return view('op.showclient', compact('showrooms', 'client', 'calendar'));
+        return view('op.showclient', compact('showrooms', 'client', 'calendar', 'donut','cities'));
     }
 
     public function create()
@@ -42,12 +63,14 @@ class ClientsController extends Controller
 
     public function store(CreateClientRequest $request)
     {
-        if (!Client::create($request->all())) {
-            Session::flash('error', 'Something went Wrong');
+        $response['status'] = false;
+        $response['data'] = null;
+        if (!$response['data'] = Client::create($request->all())) {
+            return response()->json($response);
         }
-
-        Session::flash('success', 'Created successfully');
-        return redirect()->route('op');
+        $response['status'] = true;
+        
+        return response()->json($response);
     }
 
     public function edit(Client $client)
@@ -62,7 +85,7 @@ class ClientsController extends Controller
             Session::flash('error', 'Something went Wrong');
         }
         Session::flash('success', 'Updated Successfully');
-        return redirect()->route('op');
+        return redirect()->route('showClient', $request->id);
     }
     
     public function delete(Client $client)

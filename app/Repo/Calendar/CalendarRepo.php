@@ -27,6 +27,15 @@ class CalendarRepo implements ICalendarRepository
         return $this->prepareOutputWithClient($appointments);
     }
 
+        public function getShowRoomCalenderObj($showroom_id)
+    {
+        $appointments = Appointment::with('client')->where('showroom_id', $showroom_id)->get([
+            'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
+        ]);
+
+        return $appointments;
+    }
+
     public function getAgentCalender($agent_id)
     {
         $appointments = Appointment::where('user_id', $agent_id)->get([
@@ -37,12 +46,19 @@ class CalendarRepo implements ICalendarRepository
 
     public function getAll()
     {
-        $appointments = Appointment::with('client')->get([
+        $appointments = Appointment::with('client','invoice')->get([
             'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
         ]);
         return $this->prepareOutputWithClient($appointments);
     }
 
+        public function getAllObj()
+    {
+        $appointments = Appointment::with('client','invoice')->get([
+            'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
+        ]);
+        return $appointments;
+    }
 
     public function prepareOutputWithClient($app)
     {
@@ -57,8 +73,30 @@ class CalendarRepo implements ICalendarRepository
                     'status'    => $item->status,
                     'allDay' => false,
                     'notes'     => $item->notes,
-                    'color'  => ($item->status == 'done') ? '#10c390' : '#1751c3',
+                    'color'  => ($item->status == 'done') ? '#99D683' : (($item->status == 'pending') ? '#6164c1':'#FB9678'),
                     'client' => isset($item->client) ? $item->client->toarray() : null,
+                    ];
+        });
+
+        return $data->toarray();
+    }
+
+        public function prepareOutputWithAll($app)
+    {
+        $data = $app->map(function ($item) {
+            return [
+                    'id'  => $item->id,
+                    'title'  => $item->title,
+                    'showroom_id'  => $item->showroom_id,
+                    'client_id'  => $item->client_id,
+                    'start'  => $item->start_at,
+                    'end'    => $item->end_at,
+                    'status'    => $item->status,
+                    'allDay' => false,
+                    'notes'     => $item->notes,
+                    'color'  => ($item->status == 'done') ? '#99D683' : (($item->status == 'pending') ? '#6164c1':'#FB9678'),
+                    'client' => isset($item->client) ? $item->client->toarray() : null,
+                    'invoice' => isset($item->invoice) ? $item->invoice->toarray() : null,
                     ];
         });
 
@@ -78,7 +116,7 @@ class CalendarRepo implements ICalendarRepository
                     'status'    => $item->status,
                     'allDay' => false,
                     'notes'     => $item->notes,
-                    'color'  => ($item->status == 'done') ? '#10c390' : '#1751c3',
+                    'color'  => ($item->status == 'done') ? '#99D683' : (($item->status == 'pending') ?'#6164c1':'#FB9678'),
                     ];
         });
 

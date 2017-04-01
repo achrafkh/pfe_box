@@ -24,12 +24,12 @@ class UpdateAppointmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'title_update'         => 'required|min:3',
-            'notes_update'         => 'min:6',
-            'client_id_update'     => 'required|numeric',
-            'showroom_id_update'   => 'required|numeric',
-            'start_time_update'      => 'required|before:end_at|date',
-            'end_time_update'        => 'required|after:start_at|date',
+            'title'         => 'required|min:3',
+            'notes'         => 'min:6',
+            'client_id'     => 'required|numeric',
+            'showroom_id'   => 'required|numeric',
+            'start_at'      => 'required',
+            'end_at'        => 'required',
         ];
     }
 }
