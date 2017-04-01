@@ -13,7 +13,6 @@ use App\Showroom;
 use App\InvoiceLine;
 use Illuminate\Support\Collection;
 
-
 class InvoicesController extends Controller
 {
     /**
@@ -26,12 +25,12 @@ class InvoicesController extends Controller
         $keyword = $request->get('search');
         $perPage = 25;
 
-       if (!empty($keyword)) {
-            $users = Invoice::with('appointment.client','showroom')->where('status', 'LIKE', "%$keyword%")
+        if (!empty($keyword)) {
+            $users = Invoice::with('appointment.client', 'showroom')->where('status', 'LIKE', "%$keyword%")
                 ->orWhere('total', 'LIKE', "%$keyword%")
                 ->paginate($perPage);
         } else {
-            $invoices = Invoice::with('appointment.client','showroom')->paginate($perPage);
+            $invoices = Invoice::with('appointment.client', 'showroom')->paginate($perPage);
         }
 
         return view('invoices.index', compact('invoices'));
@@ -42,10 +41,10 @@ class InvoicesController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create(Showroom $showroom,Appointment $appointment)
+    public function create(Showroom $showroom, Appointment $appointment)
     {
         $appointment->load('client');
-        return view('invoices.create',compact('showroom','appointment'));
+        return view('invoices.create', compact('showroom', 'appointment'));
     }
 
     /**
@@ -57,7 +56,6 @@ class InvoicesController extends Controller
      */
     public function store(Request $request)
     {
-        
         $app = Appointment::with('client')->find($request->appointment_id);
         
         $inputs = $request->all();
@@ -65,7 +63,6 @@ class InvoicesController extends Controller
         $total = 0;
         $i = count($request->quantity);
         for ($x = 0; $x < $i; $x++) {
-
             $invoiceline = new InvoiceLine;
             $invoiceline->description = $inputs['desc'][$x];
             $invoiceline->quantity = $inputs['quantity'][$x];
@@ -88,7 +85,7 @@ class InvoicesController extends Controller
 
 
 
-       // 
+       //
         Session::flash('flash_message', 'Invoice added!');
 
         return redirect('invoice/'.$request->showroom_id.'/'.$request->appointment_id);
@@ -103,7 +100,7 @@ class InvoicesController extends Controller
      */
     public function show($id)
     {
-        $invoice = Invoice::findOrFail($id);
+        $invoice = Invoice::with('items')->findOrFail($id);
 
         return view('invoices.show', compact('invoice'));
     }
@@ -117,7 +114,9 @@ class InvoicesController extends Controller
      */
     public function edit($id)
     {
-        $invoice = Invoice::findOrFail($id);
+        $invoice = Invoice::with('items')->findOrFail($id);
+
+        //dd($invoice->toarray());
 
         return view('invoices.edit', compact('invoice'));
     }
@@ -132,13 +131,29 @@ class InvoicesController extends Controller
      */
     public function update($id, Request $request)
     {
+        $inputs = $request->all();
+        $items = new Collection();
+        $total = 0;
+        $i = count($request->quantity);
+        for ($x = 0; $x < $i; $x++) {
+            $invoiceline = new InvoiceLine;
+            $invoiceline->description = $inputs['desc'][$x];
+            $invoiceline->quantity = $inputs['quantity'][$x];
+            $invoiceline->price = $inputs['price'][$x];
+            $items->push($invoiceline);
+            
+            $total += ($invoiceline->quantity * $invoiceline->price);
+        }
         
-        $requestData = $request->all();
-        
-        $invoice = Invoice::findOrFail($id);
-        $invoice->update($requestData);
 
-        Session::flash('flash_message', 'Invoice updated!');
+        $invoice = Invoice::findOrFail($id);
+        $data = $request->only('appointment_id', 'showroom_id', 'status');
+        $data['total'] = $total;
+
+        $invoice->update($data);
+        $invoice->items()->delete();
+        $invoice->items()->saveMany($items);
+
 
         return redirect('invoices');
     }
@@ -160,11 +175,10 @@ class InvoicesController extends Controller
     }
 
 
-    public function showInvoice(Showroom $showroom,Appointment $appointment)
+    public function showInvoice(Showroom $showroom, Appointment $appointment)
     {
-        $appointment->load('invoice.items','client');
+        $appointment->load('invoice.items', 'client');
 
-        return view('invoices.invoice',compact('appointment','showroom'));
+        return view('invoices.invoice', compact('appointment', 'showroom'));
     }
-
 }

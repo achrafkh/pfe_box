@@ -16,7 +16,7 @@ class Rolemiddleware
      */
     public function handle($request, Closure $next, $role)
     {
-        if (Auth::user()->role->title != $role) {
+        if (Auth::user()->role->title != $role && Auth::user()->role->title != 'admin') {
             return redirect('/'.$request->user()->role->title);
         }
         return $next($request);

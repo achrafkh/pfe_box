@@ -14,7 +14,7 @@
 </div>
 @endsection
 @section('content1')
-    <div class="container">
+
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
@@ -76,7 +76,7 @@
                         <a id="add_row" class="btn btn-info pull-left">Add Row</a>
                         <a id='delete_row' class="pull-left btn btn-danger" style="margin-left:1%;">Delete Row</a>
                         <div class="pull-right">
-                            {!! Form::submit(isset($submitButtonText) ? $submitButtonText : 'Create', ['class' => 'btn btn-primary']) !!}
+                            {!! Form::submit('Create', ['class' => 'btn btn-primary']) !!}
                         </div>
 
                         {!! Form::close() !!}
@@ -85,7 +85,7 @@
                 </div>
             </div>
         </div>
-    </div>
+   
 @endsection
 
 @section('js')

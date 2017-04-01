@@ -14,17 +14,15 @@
 </div>
 @endsection
 @section('content1')
-<div class="container">
+
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">Invoices</div>
                 <div class="panel-body">
-                    <a href="{{ url('/invoices/create') }}" class="btn btn-success btn-sm" title="Add New invoice">
-                        <i class="fa fa-plus" aria-hidden="true"></i> Add New
-                    </a>
+                @if((bool) $invoices->count())
                     {!! Form::open(['method' => 'GET', 'url' => '/invoices', 'class' => 'navbar-form navbar-right', 'role' => 'search'])  !!}
-                    <div class="input-group">
+                    <div class="input-group" style="margin-top: -5%;">
                         <input type="text" class="form-control" name="search" placeholder="Search...">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="submit">
@@ -33,10 +31,9 @@
                         </span>
                     </div>
                     {!! Form::close() !!}
-                    <br/>
-                    <br/>
+                    <br /><br />
                     <hr>
-
+                
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -44,7 +41,7 @@
                                     <th>Invoice #</th>
                                     <th>Client</th>
                                     <th>Showroom</th>
-                                    <th>Date</th>²
+                                    <th>Date</th>
                                     <th>Status</th>
                                     <th>Total</th>
                                     <th>Actions</th>
@@ -61,6 +58,8 @@
                                         
                                         @if($item->status == 'paid')
                                             <td><div class="label label-table label-success">{{ $item->status }}</div></td>
+                                        @elseif($item->status == 'pending')
+                                            <td><div class="label label-table label-primary">{{ $item->status }}</div></td>
                                         @else
                                             <td><div class="label label-table label-danger">{{ $item->status }}</div></td>
                                         @endif
@@ -87,13 +86,14 @@
                             </tbody>
                         </table>
                     </div>
-
+                @else
+                <div class="alert alert-warning">Currently There are no invoices . </div>
+                @endif
                     <div class="pagination-wrapper"> {!! $invoices->appends(['search' => Request::get('search')])->render() !!} </div>
                     
                 </div>
             </div>
         </div>
-    </div>
 </div>
 @endsection
 
