@@ -35,7 +35,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
-        public function showroom()
+    
+    public function showroom()
     {
         return $this->belongsTo(Showroom::class);
     }

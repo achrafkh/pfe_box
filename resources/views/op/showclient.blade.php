@@ -73,7 +73,7 @@
 			<!-- .tabs -->
 			<ul class="nav nav-tabs tabs customtab">
 				<li class="active tab"><a href="{{url('op/client/'.$client->id)}}#profile" data-toggle="tab"> <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Profile</span> </a> </li>
-				<li class="tab"><a href="{{url('op/client/'.$client->id)}}#invoices" data-toggle="tab"> <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Invoices History</span> </a> </li>
+				{{-- <li class="tab"><a href="{{url('op/client/'.$client->id)}}#invoices" data-toggle="tab"> <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Invoices History</span> </a> </li> --}}
 				<li class="tab" id="edit-tab"><a href="{{url('op/client/'.$client->id)}}#edit" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="fa fa-cog"></i></span> <span class="hidden-xs">Edit Details</span> </a> </li>
 			</ul>
 			<!-- /.tabs -->
@@ -98,39 +98,9 @@
 					<p class="m-t-30">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
 					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries </p>
 					<p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-					<h4 class="font-bold m-t-30">Skill Set</h4>
+					<h4 class="font-bold m-t-30">Client Invoices</h4>
 					<hr>
-					<h5>Wordpress <span class="pull-right">80%</span></h5>
-					<div class="progress">
-						<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:80%;"> <span class="sr-only">50% Complete</span> </div>
-					</div>
-					<h5>HTML 5 <span class="pull-right">90%</span></h5>
-					<div class="progress">
-						<div class="progress-bar progress-bar-custom" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width:90%;"> <span class="sr-only">50% Complete</span> </div>
-					</div>
-					<h5>jQuery <span class="pull-right">50%</span></h5>
-					<div class="progress">
-						<div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;"> <span class="sr-only">50% Complete</span> </div>
-					</div>
-					<h5>Photoshop <span class="pull-right">70%</span></h5>
-					<div class="progress">
-						<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%;"> <span class="sr-only">50% Complete</span> </div>
-					</div>
-				</div>
-				<!-- /.tabs1 -->
-				<!-- .tabs2 -->
-				<div class="tab-pane" id="edit">
-					<form class="form-horizontal form-material" role="form" method="POST" action="{{ route('updateClient') }}">
-						<input type="hidden" name="id" value="{{ $client->id }} ">
-						
-						@include('op.partials.clientForm')
-					</form>
-				</div>
-				<!-- /.tabs2 -->
-				<!-- tabs3 -->
-				<div class="tab-pane" id="invoices">
 					<div class="row">
-						<h3 class="box-title m-b-0">Recent Invoices</h3>
 						<div class="table-responsive">
 							<table class="table">
 								<thead>
@@ -189,6 +159,20 @@
 						</div>
 					</div>
 				</div>
+				<!-- /.tabs1 -->
+				<!-- .tabs2 -->
+				<div class="tab-pane" id="edit">
+					<form class="form-horizontal form-material" role="form" method="POST" action="{{ route('updateClient') }}">
+						<input type="hidden" name="id" value="{{ $client->id }} ">
+						
+						@include('op.partials.clientForm')
+					</form>
+				</div>
+				<!-- /.tabs2 -->
+				<!-- tabs3 -->
+{{-- 				<div class="tab-pane" id="invoices">
+					
+				</div> --}}
 				<!-- /.tabs3 -->
 			</div>
 		</div>
@@ -359,11 +343,13 @@ $(window).load(function() {
                         };
                         calendar.fullCalendar('renderEvent', NewEvent, false);
                         $('#close-create').click();
+                       
                     },
                     error: function(errors) {
                         //
                     }
                 });
+                 
                 calendar.fullCalendar('unselect');
                 return false;
             });

@@ -133,7 +133,6 @@
 						<!-- .row -->
 						<div class="row text-center m-t-10">
 							<div class="col-md-12"><strong>Address</strong><p>Rue 118 Charles degaule.</p></div>
-							
 						</div>
 						<hr>
 						<!-- /.row -->
@@ -147,6 +146,10 @@
 				</form>
 			</div>
 			<div class="modal-footer">
+			
+				<a href="" class="btn btn-primary pull-left hidden" id="view-invoice">Invoices</a>
+				<a href="" class="btn btn-danger pull-left hidden" id="create-invoice">Create Invoice</a>
+			
 				<button type="button" class="btn btn-default" id="close-update" data-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-info " id="submit-status">Save changes</button>
 			</div>
@@ -197,16 +200,36 @@ $( "#showroom-select" ).change(function() {
         },
 
         eventClick: function(calEvent, jsEvent, view) {
+
+        	if ( !$('#view-invoice').hasClass( "hidden" ) ) {
+        		$('#view-invoice').addClass('hidden');
+        	}
+        	console.log(calEvent);
             $('#client-name').text(calEvent.client.firstname +' '+ calEvent.client.lastname);
             $('#client-email').text(calEvent.client.email);
             $('#client-address').text(calEvent.client.address);
             $('#client-phone').text(calEvent.client.phone);
             $('#app-date').text(calEvent.start.format('YYYY-MM-DD HH:MM:SS'));
             $('#status option[value="' + calEvent.status + '"]').prop('selected', true);
+
+            if(calEvent.status == 'done' && calEvent.invoice == null)
+            {
+            	var appid = calEvent.id;
+            	var showid = calEvent.showroom_id;
+
+            	var url = "/invoice/"+showid+"/"+appid+'/create';
+
+            	$('#create-invoice').attr("href", url).removeClass('hidden');
+            }
+            if(calEvent.invoice != null)
+            {
+            	var appid = calEvent.id;
+            	var showid = calEvent.showroom_id;
+
+            	var url = "/invoice/"+showid+"/"+appid;
+            	$('#view-invoice').attr("href", url).removeClass('hidden');
+            }
             var evid = calEvent._id;
-
-
-
             $('#show').click();
 
             $("#submit-status").unbind('click').bind("click", function() {

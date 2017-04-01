@@ -46,7 +46,7 @@ class CalendarRepo implements ICalendarRepository
 
     public function getAll()
     {
-        $appointments = Appointment::with('client')->get([
+        $appointments = Appointment::with('client','invoice')->get([
             'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
         ]);
         return $this->prepareOutputWithClient($appointments);
@@ -54,7 +54,7 @@ class CalendarRepo implements ICalendarRepository
 
         public function getAllObj()
     {
-        $appointments = Appointment::with('client')->get([
+        $appointments = Appointment::with('client','invoice')->get([
             'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
         ]);
         return $appointments;
@@ -75,6 +75,28 @@ class CalendarRepo implements ICalendarRepository
                     'notes'     => $item->notes,
                     'color'  => ($item->status == 'done') ? '#99D683' : (($item->status == 'pending') ? '#6164c1':'#FB9678'),
                     'client' => isset($item->client) ? $item->client->toarray() : null,
+                    ];
+        });
+
+        return $data->toarray();
+    }
+
+        public function prepareOutputWithAll($app)
+    {
+        $data = $app->map(function ($item) {
+            return [
+                    'id'  => $item->id,
+                    'title'  => $item->title,
+                    'showroom_id'  => $item->showroom_id,
+                    'client_id'  => $item->client_id,
+                    'start'  => $item->start_at,
+                    'end'    => $item->end_at,
+                    'status'    => $item->status,
+                    'allDay' => false,
+                    'notes'     => $item->notes,
+                    'color'  => ($item->status == 'done') ? '#99D683' : (($item->status == 'pending') ? '#6164c1':'#FB9678'),
+                    'client' => isset($item->client) ? $item->client->toarray() : null,
+                    'invoice' => isset($item->invoice) ? $item->invoice->toarray() : null,
                     ];
         });
 

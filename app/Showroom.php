@@ -6,15 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Showroom extends Model
 {
+    protected $fillable = [
+        'city',
+    ];
     public function users()
     {
         return $this->hasMany(User::class);
     }
 
-    public function commercials()
+    public function invoices()
     {
-        return $this->users()->whereHas('role', function ($query) {
-            $query->where('title', 'like', 'com');
-        });
+        return $this->hasMany(Invoice::class);
     }
 }

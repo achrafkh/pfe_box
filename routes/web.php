@@ -10,7 +10,10 @@
 |
 */
 
-
+Route::resource('invoices', 'InvoicesController');
+Route::get('invoice/{showroom}/{appointment}','InvoicesController@showInvoice');
+Route::get('invoice/{showroom}/{appointment}/create','InvoicesController@create');
+Route::post('invoice/create','InvoicesController@store');
 // Authentication Routes...
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginview');
 Route::post('login', 'Auth\LoginController@login')->name('login');

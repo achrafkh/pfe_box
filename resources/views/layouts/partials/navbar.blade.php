@@ -39,6 +39,7 @@
 			@if(Auth::user()->hasRole('com'))
 			<ul class="sidebar-menu">
 				<li><a href="{{ url('/com')}} ">Manage Appointments</a></li>
+				<li><a href="{{ url('/invoices')}} ">Manage Invoices</a></li>
 			</ul>
 			@endif
 			@if(Auth::user()->hasRole('mark'))
@@ -50,6 +51,7 @@
 			<ul class="sidebar-menu">
 				<li><a href="{{ url('/admin/users')}} ">Manage Users</a></li>
 				<li><a href="{{ url('/admin')}} ">View Appointments</a></li>
+				<li><a href="{{ url('/invoices')}} ">View Invoices</a></li>
 			</ul>
 			@endif
 			<!-- Left navbar-header end -->

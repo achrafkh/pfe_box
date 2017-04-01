@@ -19,7 +19,9 @@ class AppointmentsController extends Controller
     public function index(Request $request)
     {
         $events = $this->data->getAllObj();
-        $calendar = $this->data->prepareOutputWithClient($events);
+        $calendar = $this->data->prepareOutputWithAll($events);
+
+
         $showrooms = Showroom::get();
 
         $data['done'] = $events->where('status','done')->count();
@@ -68,7 +70,7 @@ class AppointmentsController extends Controller
             $data['stats']['resc'] = $events->where('status','rescheduled')->count();
             $data['stats']['pending'] = $events->where('status','pending')->count();
             $data['stats']['agents'] = User::where('showroom_id',$request->showroom_id)->count();
-            $data['events'] = $this->data->prepareOutputWithClient($events);
+            $data['events'] = $this->data->prepareOutputWithAll($events);
 
             return response()->json($data);
         }
@@ -78,7 +80,7 @@ class AppointmentsController extends Controller
         $data['stats']['resc'] = $events->where('status','rescheduled')->count();
         $data['stats']['pending'] = $events->where('status','pending')->count();
         $data['stats']['agents'] = User::where('showroom_id',$request->showroom_id)->count();
-        $data['events'] = $this->data->prepareOutputWithClient($events);
+        $data['events'] = $this->data->prepareOutputWithAll($events);
 
         return response()->json($data);
     }
