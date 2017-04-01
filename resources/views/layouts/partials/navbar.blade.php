@@ -44,14 +44,15 @@
 			@endif
 			@if(Auth::user()->hasRole('mark'))
 			<ul class="sidebar-menu">
-				<li><a href="{{ url('/mark')}} ">Check Stats</a></li>
+				<li><a href="{{ url('/mark')}} ">Check Statistiques</a></li>
 			</ul>
 			@endif
 			@if(Auth::user()->hasRole('admin'))
 			<ul class="sidebar-menu">
+				<li><a href="{{ url('/admin/dashboard')}} ">Dashboard</a></li>
 				<li><a href="{{ url('/admin/users')}} ">Manage Users</a></li>
-				<li><a href="{{ url('/admin')}} ">View Appointments</a></li>
-				<li><a href="{{ url('/invoices')}} ">View Invoices</a></li>
+				<li><a href="{{ url('/admin/appointments')}} ">Manage Appointments</a></li>
+				<li><a href="{{ url('/invoices')}} ">Manage Invoices</a></li>
 			</ul>
 			@endif
 			<!-- Left navbar-header end -->

@@ -9,8 +9,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
 // Authentication Routes...
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginview');
 Route::post('login', 'Auth\LoginController@login')->name('login');
@@ -48,7 +46,8 @@ Route::middleware(['auth', 'role:mark'])->namespace('Marketer')->prefix('mark')-
 
 
 Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->group(function () {
-    Route::get('/', 'AppointmentsController@index')->name('admin');
+    Route::get('/', 'DashboardController@index')->name('adminDashboard');
+    Route::get('/appointments', 'AppointmentsController@index')->name('admin');
     Route::post('/updatestatus', 'AppointmentsController@updateStatus');
     Route::post('/getevents', 'AppointmentsController@getEvents');
     Route::resource('users', 'UsersController');

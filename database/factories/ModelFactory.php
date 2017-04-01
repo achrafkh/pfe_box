@@ -12,17 +12,20 @@
 */
 use Carbon\Carbon;
 
-
-$cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('name','postal')->toarray();
+$cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('name', 'postal')->toarray();
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
     static $login;
+    $showroomId = $faker->numberBetween(1, 10);
 
     return [
         'fullname' => $faker->name,
         'email' => $faker->email,
+        'showroom_id' => $showroomId,
         'username' => $login,
         'password' => $password ?: $password = bcrypt('010203'),
     ];
@@ -47,7 +50,7 @@ $factory->define(App\Showroom::class, function (Faker\Generator $faker) {
 
 
 
-$factory->define(App\Client::class, function (Faker\Generator $faker) use($cities) {
+$factory->define(App\Client::class, function (Faker\Generator $faker) use ($cities) {
     return [
         'firstname' => $faker->firstName,
         'lastname'  => $faker->lastName,
@@ -59,11 +62,7 @@ $factory->define(App\Client::class, function (Faker\Generator $faker) use($citie
     ];
 });
 
-$factory->define(App\Appointment::class, function (Faker\Generator $faker)  {
-
-     
-
-
+$factory->define(App\Appointment::class, function (Faker\Generator $faker) {
     $startDate = Carbon::createFromTimeStamp($faker->dateTimeBetween('-10 weeks', '+5 weeks')->getTimestamp());
     $endDate = Carbon::createFromFormat('Y-m-d H:i:s', $startDate)->addHours(2);
     $status = $faker->randomElement(array('done', 'rescheduled', 'pending'));
