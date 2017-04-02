@@ -12,11 +12,11 @@
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4",
+        "fzaninotto/faker": "~1.4",
         "pragmarx/countries": "^0.1.0"
     },
     "require-dev": {
         "appzcoder/crud-generator": "^2.0",
-        "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~5.7"
     },
