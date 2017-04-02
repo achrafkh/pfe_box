@@ -4,6 +4,7 @@
 <link href="{{ asset('css/morris.css') }}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{{asset('css/libs/bootstrap-datepicker.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('css/libs/bootstrap-clockpicker.css')}}">
+
 @endsection
 @section('breadcumbs')
 <div class="row bg-title">
@@ -201,7 +202,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 				<h4 class="modal-title">Create Appointment</h4>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" id="create-spinner">
 				<form id="create-appointment" class="form-horizontal calender" role="form">
 					@include('op.partials.appointment-modal',['showrooms' => $showrooms,'action' => 'create'])
 				</form>
@@ -220,7 +221,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 				<h4 class="modal-title">Update Appointment</h4>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" id="update-spinner">
 				<form id="edit-appointment" class="form-horizontal calender" role="form">
 					<input type="hidden" class="form-control" id="id" name="id" value="">
 					@include('op.partials.appointment-modal',['showrooms' => $showrooms,'action' => 'update'])
@@ -241,6 +242,7 @@
 <script src="{{ asset('js/charting.js') }}"></script>
 <script type="text/javascript" src="{{asset('js/libs/bootstrap-datepicker.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/libs/bootstrap-clockpicker.js')}}"></script>
+<script src="//cdn.jsdelivr.net/spinjs/1.3.0/spin.min.js"></script>
 
 <script type="text/javascript">
 var evs = {!! json_encode($calendar) !!};
@@ -248,6 +250,9 @@ var errors = {!! json_encode($errors->first()) !!};
 var donut = {!! json_encode($donut) !!};
 var userdate = {!! json_encode($client->birthdate) !!};
 
+var spinTarget1 = document.getElementById('create-spinner');
+var spinTarget2 = document.getElementById('update-spinner');
+       
 
 
 if (donut[0].value || donut[1].value || donut[2].value) {
@@ -304,9 +309,13 @@ $(window).load(function() {
             modaldatepicker.datepicker('update', moment(start).format('YYYY-MM-DD'));
             $('#fc_create').click();
             $("#create-app").unbind('click').bind("click", function() {
+            	var form = $('#create-appointment');
+            	var myform = form.serializeArray();
             	$("#create-app").attr("disabled",true);
-                var form = $('#create-appointment');
-                var myform = form.serializeArray();
+            	$("#create-appointment :input").prop("disabled", true);
+            	var spinner = new Spinner().spin(spinTarget1);
+                
+                
                 /*            	myform.push(
                 			        {name: 'age',      value: 25},
                 			        {name: 'sex',      value: 'M'},
@@ -318,6 +327,8 @@ $(window).load(function() {
                     dataType: 'json',
                     statusCode: {
                         422: function(response) {
+                        	$("#create-appointment :input").prop("disabled", false);
+                        	spinner.stop();
                         	$("#create-app").attr("disabled",false);
                             $.each(response.responseJSON, function(key, value) {
                                 var id = "#" + form.attr('id') + " p[name=" + key + "E]";
@@ -344,12 +355,16 @@ $(window).load(function() {
                             color: '#1751c3',
                         };
                         calendar.fullCalendar('renderEvent', NewEvent, false);
+                        spinner.stop();
                         $('#close-create').click();
                         $("#create-app").attr("disabled",false);
+                        $("#create-appointment :input").prop("disabled", false);
                        
                     },
                     error: function(errors) {
                         console.log(errors);
+                        $("#create-appointment :input").prop("disabled", false);
+                        spinner.stop();
                         $("#create-app").attr("disabled",false);
                     }
                 });
@@ -401,14 +416,19 @@ $(window).load(function() {
 
             $('#fc_edit').click();
             $("#edit-app").unbind('click').bind("click", function() {
+            	var form = $('#edit-appointment').serialize();
+            	$("#edit-appointment :input").prop("disabled", true);
+            	var spinner2 = new Spinner().spin(spinTarget2);
             	$("#edit-app").attr("disabled",true);
-                var form = $('#edit-appointment');
+                
                 $.ajax({
                     url: '/op/updateappointment',
                     type: 'post',
                     dataType: 'json',
                     statusCode: {
                         422: function(response) {
+                        	$("#edit-appointment :input").prop("disabled", false);
+                        	spinner2.stop();
                         	$("#edit-app").attr("disabled",false);
                             $.each(response.responseJSON, function(key, value) {
                                 var id = "#" + form.attr('id') + " p[name=" + key + "E]";
@@ -418,7 +438,7 @@ $(window).load(function() {
                             return false;
                         }
                     },
-                    data: form.serialize(),
+                    data: form,
                     success: function(data) {
                         $("#edit-appointment").trigger('reset');
                         var UpdatedEvent = {
@@ -435,13 +455,18 @@ $(window).load(function() {
                         };
                         calendar.fullCalendar('removeEvent', evid);
                         calendar.fullCalendar('renderEvent', UpdatedEvent, false);
+                        spinner2.stop();
                         $('#close-update').click();
                         $("#edit-app").attr("disabled",false);
+                        $("#edit-appointment :input").prop("disabled", false);
+                    },
+                    error: function(errors){
+                    	$("#edit-appointment :input").prop("disabled", false);
+                    	spinner2.stop();
                     }
                 });
             });
             calendar.fullCalendar('unselect');
-            return false;
         },
         editable: true,
         events: evs,
