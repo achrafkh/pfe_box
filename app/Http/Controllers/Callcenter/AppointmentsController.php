@@ -15,12 +15,10 @@ use App\Client;
 use App\User;
 use Session;
 
-
 class AppointmentsController extends Controller
 {
     public function setAppointment(CreateAppointmentRequest $request)
     {
-
         $appointment = new Appointment;
 
         $appointment->title = $request->title;
@@ -34,18 +32,18 @@ class AppointmentsController extends Controller
 
         if (!$status) {
             $data["status"] = false;
-            $data["event"]  = []; 
+            $data["event"]  = [];
             return response()->json($data);
         }
 
         $data["status"] = true;
-        $data["event"]  = $appointment->toarray(); 
+        $data["event"]  = $appointment->toarray();
 
         $client = Client::find($appointment->client_id);
-        $users = User::where('showroom_id',$appointment->showroom_id)->get();
+        $users = User::where('showroom_id', $appointment->showroom_id)->get();
 
         //mail to agents
-        Mail::to($users)->queue(new newAppointment($client,$appointment));
+        Mail::to($users)->queue(new newAppointment($client, $appointment));
         //mail to Client
         Mail::to($client)->queue(new newAppointmentClient($appointment));
 
@@ -69,17 +67,16 @@ class AppointmentsController extends Controller
 
         $status = $appointment->update();
         
-         if (!$status) {
+        if (!$status) {
             $data["status"] = false;
-            $data["event"]  = []; 
+            $data["event"]  = [];
             return response()->json($data);
         }
 
         $data["status"] = true;
-        $data["event"]  = $appointment->toarray(); 
+        $data["event"]  = $appointment->toarray();
 
         return response()->json($data);
-
     }
     
     public function checkAvailable(Request $request)

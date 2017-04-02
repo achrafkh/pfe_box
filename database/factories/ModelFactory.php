@@ -20,7 +20,11 @@ $cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('na
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
     static $login;
-    $showroomId = $faker->numberBetween(1, 10);
+    $showroomId = null;
+    if ($login == 'commercial') {
+        $showroomId = $faker->numberBetween(1, 10);
+    }
+    
 
     return [
         'fullname' => $faker->name,

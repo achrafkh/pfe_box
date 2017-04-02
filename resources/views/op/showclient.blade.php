@@ -304,6 +304,7 @@ $(window).load(function() {
             modaldatepicker.datepicker('update', moment(start).format('YYYY-MM-DD'));
             $('#fc_create').click();
             $("#create-app").unbind('click').bind("click", function() {
+            	$("#create-app").attr("disabled",true);
                 var form = $('#create-appointment');
                 var myform = form.serializeArray();
                 /*            	myform.push(
@@ -317,6 +318,7 @@ $(window).load(function() {
                     dataType: 'json',
                     statusCode: {
                         422: function(response) {
+                        	$("#create-app").attr("disabled",false);
                             $.each(response.responseJSON, function(key, value) {
                                 var id = "#" + form.attr('id') + " p[name=" + key + "E]";
                                 $(id).css('margin-top', '10px').text(value);
@@ -343,15 +345,15 @@ $(window).load(function() {
                         };
                         calendar.fullCalendar('renderEvent', NewEvent, false);
                         $('#close-create').click();
+                        $("#create-app").attr("disabled",false);
                        
                     },
                     error: function(errors) {
-                        //
+                        console.log(errors);
+                        $("#create-app").attr("disabled",false);
                     }
                 });
-                 
                 calendar.fullCalendar('unselect');
-                return false;
             });
         },
         eventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
@@ -399,6 +401,7 @@ $(window).load(function() {
 
             $('#fc_edit').click();
             $("#edit-app").unbind('click').bind("click", function() {
+            	$("#edit-app").attr("disabled",true);
                 var form = $('#edit-appointment');
                 $.ajax({
                     url: '/op/updateappointment',
@@ -406,6 +409,7 @@ $(window).load(function() {
                     dataType: 'json',
                     statusCode: {
                         422: function(response) {
+                        	$("#edit-app").attr("disabled",false);
                             $.each(response.responseJSON, function(key, value) {
                                 var id = "#" + form.attr('id') + " p[name=" + key + "E]";
                                 $(id).css('margin-top', '10px').text(value);
@@ -432,6 +436,7 @@ $(window).load(function() {
                         calendar.fullCalendar('removeEvent', evid);
                         calendar.fullCalendar('renderEvent', UpdatedEvent, false);
                         $('#close-update').click();
+                        $("#edit-app").attr("disabled",false);
                     }
                 });
             });
