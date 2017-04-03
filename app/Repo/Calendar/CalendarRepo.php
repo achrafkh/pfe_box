@@ -27,9 +27,9 @@ class CalendarRepo implements ICalendarRepository
         return $this->prepareOutputWithClient($appointments);
     }
 
-        public function getShowRoomCalenderObj($showroom_id)
+    public function getShowRoomCalenderObj($showroom_id)
     {
-        $appointments = Appointment::with('client')->where('showroom_id', $showroom_id)->get([
+        $appointments = Appointment::with('client', 'invoice')->where('showroom_id', $showroom_id)->get([
             'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
         ]);
 
@@ -46,15 +46,15 @@ class CalendarRepo implements ICalendarRepository
 
     public function getAll()
     {
-        $appointments = Appointment::with('client','invoice')->get([
+        $appointments = Appointment::with('client', 'invoice')->get([
             'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
         ]);
         return $this->prepareOutputWithClient($appointments);
     }
 
-        public function getAllObj()
+    public function getAllObj()
     {
-        $appointments = Appointment::with('client','invoice')->get([
+        $appointments = Appointment::with('client', 'invoice')->get([
             'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
         ]);
         return $appointments;
@@ -81,7 +81,7 @@ class CalendarRepo implements ICalendarRepository
         return $data->toarray();
     }
 
-        public function prepareOutputWithAll($app)
+    public function prepareOutputWithAll($app)
     {
         $data = $app->map(function ($item) {
             return [

@@ -15,6 +15,10 @@ use Illuminate\Support\Collection;
 
 class InvoicesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:com')->except('showInvoice');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -71,21 +75,15 @@ class InvoicesController extends Controller
             
             $total += ($invoiceline->quantity * $invoiceline->price);
         }
-
-       
-
         $invoice                    = new Invoice;
         $invoice->status            = $request->status;
         $invoice->appointment_id    = $request->appointment_id;
         $invoice->showroom_id       = $app->showroom_id;
         $invoice->total             = $total;
-        //dd($invoice);
+
         $invoice->save();
         $invoice->items()->saveMany($items);
 
-
-
-       //
         Session::flash('flash_message', 'Invoice added!');
 
         return redirect('invoice/'.$request->showroom_id.'/'.$request->appointment_id);

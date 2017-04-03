@@ -176,6 +176,7 @@ function SetStats(stats){
 	$( "#total-agents" ).text(stats.agents);
 }
 
+
 $( "#showroom-select" ).change(function() {
 	$.ajax({
 	    url: '/com/getevents',
@@ -201,16 +202,23 @@ $( "#showroom-select" ).change(function() {
 
         eventClick: function(calEvent, jsEvent, view) {
 
+        	    
+
         	if ( !$('#view-invoice').hasClass( "hidden" ) ) {
         		$('#view-invoice').addClass('hidden');
         	}
-        	console.log(calEvent);
+        	if ( !$('#create-invoice').hasClass( "hidden" ) ) {
+        		$('#create-invoice').addClass('hidden');
+        	}
+
             $('#client-name').text(calEvent.client.firstname +' '+ calEvent.client.lastname);
             $('#client-email').text(calEvent.client.email);
             $('#client-address').text(calEvent.client.address);
             $('#client-phone').text(calEvent.client.phone);
             $('#app-date').text(calEvent.start.format('YYYY-MM-DD HH:MM:SS'));
             $('#status option[value="' + calEvent.status + '"]').prop('selected', true);
+
+            console.log(calEvent);
 
             if(calEvent.status == 'done' && calEvent.invoice == null)
             {
@@ -244,12 +252,14 @@ $( "#showroom-select" ).change(function() {
                     dataType: 'json',
                     data: data,
                     success: function(data) {
+
                         var UpdatedEvent = {
                             _id: evid,
                             id: data.event.id,
                             title: data.event.title,
-                            client_id: event.client_id,
-                            showroom_id: event.showroom_id,
+                            client_id: data.event.client_id,
+                            showroom_id: data.event.showroom_id,
+                            status: $('#status').val(),
                             start: data.event.start_at,
                             end: data.event.end_at,
                             allDay: false,

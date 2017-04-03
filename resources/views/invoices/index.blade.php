@@ -52,7 +52,7 @@
                                     @foreach($invoices as $item)
                                     <tr>
                                         <td>{{ $item->id }}</td>
-                                        <td>{{ $item->appointment->client->firstname .' '.$item->appointment->client->lastname }}</td>
+                                        <td><a href="{{ url(Auth::user()->role->title . '/client/'.$item->appointment->client->id)}}" style="text-decoration: none;">{{ $item->appointment->client->firstname . ' '. $item->appointment->client->lastname  }}</a></td>
                                         <td>{{ $item->showroom->city }}</td>
                                         <td><span class="text-muted"><i class="fa fa-clock-o"></i>{{ $item->created_at->format('l jS \\of F Y ') }}</span> </td>
                                         

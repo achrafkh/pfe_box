@@ -13,9 +13,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
    </head>
    <body>
       <!-- Preloader -->
-      <div class="preloader">
+      {{-- <div class="preloader">
          <div class="cssload-speeding-wheel"></div>
-      </div>
+      </div> --}}
       <div id="wrapper">
          <!-- Top Navigation -->
          @include('layouts.partials.topbar')
@@ -52,6 +52,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       @endif
       
       <script type="text/javascript">
+
       if(msgs){
       $("#alerttopright").fadeToggle(350);
       }

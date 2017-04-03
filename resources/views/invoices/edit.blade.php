@@ -20,11 +20,6 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Edit invoice #{{ $invoice->id }}</div>
                 <div class="panel-body">
-                    <a href="{{ url('/invoices') }}" title="Back"><button class="btn btn-warning btn-xs"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
-                    <br />
-                    <br />
-                    
-                    
                     {!! Form::open(['url' => '/invoices/'.$invoice->id,'method' => 'PUT' , 'class' => 'form-horizontal', 'files' => true]) !!}
                     <input type="hidden" name="appointment_id" value="{{ $invoice->appointment_id }}">
                     <input type="hidden" name="showroom_id" value="{{ $invoice->showroom_id }}">

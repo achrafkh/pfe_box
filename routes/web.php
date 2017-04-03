@@ -19,7 +19,7 @@ Route::get('/login', function () {
 //  Routes des Operateurs...
 Route::middleware(['auth', 'role:op'])->namespace('Callcenter')->prefix('op')->group(function () {
     /*Route::get('/', 'DashboardController@index');*/
-    Route::get('/', 'ClientsController@index')->name('op');
+    Route::get('/dashboard', 'ClientsController@index')->name('op');
     Route::get('/client/create', 'ClientsController@create')->name('addClientForm');
 
     Route::post('/client/create', 'ClientsController@store')->name('createClient');
@@ -34,26 +34,28 @@ Route::middleware(['auth', 'role:op'])->namespace('Callcenter')->prefix('op')->g
 });
 //  Routes des Commerciaux...
 Route::middleware(['auth', 'role:com'])->namespace('Commercial')->prefix('com')->group(function () {
-    Route::get('/', 'AppointmentsController@index')->name('com');
+    Route::get('/clients', 'ClientsController@index')->name('ClientsCom');
+    Route::get('/client/{client}', 'ClientsController@show')->name('showClientCom');
+    Route::get('/appointments', 'AppointmentsController@index')->name('com');
     Route::post('/updatestatus', 'AppointmentsController@updateStatus')->name('updateStatus');
     Route::post('/getevents', 'AppointmentsController@getEvents')->name('getEvents');
 });
 //  Routes des Marketeurs..
 Route::middleware(['auth', 'role:mark'])->namespace('Marketer')->prefix('mark')->group(function () {
-    Route::get('/', 'DashboardController@index')->name('mark');
+    Route::get('/dashboard', 'DashboardController@index')->name('mark');
     Route::get('/api', 'DashboardController@getBarData');
 });
 
 
 Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->group(function () {
-    Route::get('/', 'DashboardController@index')->name('adminDashboard');
+    Route::get('/dashboard', 'DashboardController@index')->name('adminDashboard');
     Route::get('/appointments', 'AppointmentsController@index')->name('admin');
     Route::post('/updatestatus', 'AppointmentsController@updateStatus');
     Route::post('/getevents', 'AppointmentsController@getEvents');
     Route::resource('users', 'UsersController');
 });
 
-Route::middleware(['auth', 'role:com'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::resource('invoices', 'InvoicesController');
     Route::get('invoice/{showroom}/{appointment}', 'InvoicesController@showInvoice');
     Route::get('invoice/{showroom}/{appointment}/create', 'InvoicesController@create');

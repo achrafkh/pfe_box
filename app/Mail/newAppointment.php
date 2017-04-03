@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Appointment;
 use App\Client;
 
-class newAppointment extends Mailable
+class newAppointment extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -21,7 +21,7 @@ class newAppointment extends Mailable
      *
      * @return void
      */
-    public function __construct(Client $client,Appointment $appointment)
+    public function __construct(Client $client, Appointment $appointment)
     {
         $this->client = $client;
         $this->appointment = $appointment;

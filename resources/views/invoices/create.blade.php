@@ -20,9 +20,6 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Create New invoice</div>
                     <div class="panel-body">
-                        <a href="{{ url('/invoices') }}" title="Back"><button class="btn btn-warning btn-xs"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
-                        <br />
-                        <br />
                         {!! Form::open(['url' => '/invoice/create', 'class' => 'form-horizontal', 'files' => true]) !!}
 
                         <input type="hidden" name="appointment_id" value="{{ $appointment->id }}">

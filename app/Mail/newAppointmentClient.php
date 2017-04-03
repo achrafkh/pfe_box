@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\User;
 use App\Appointment;
-class newAppointmentClient extends Mailable
+
+class newAppointmentClient extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 

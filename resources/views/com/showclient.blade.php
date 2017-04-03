@@ -74,8 +74,6 @@
 			<!-- .tabs -->
 			<ul class="nav nav-tabs tabs customtab">
 				<li class="active tab"><a href="{{url('op/client/'.$client->id)}}#profile" data-toggle="tab"> <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Profile</span> </a> </li>
-				{{-- <li class="tab"><a href="{{url('op/client/'.$client->id)}}#invoices" data-toggle="tab"> <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Invoices History</span> </a> </li> --}}
-				<li class="tab" id="edit-tab"><a href="{{url('op/client/'.$client->id)}}#edit" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="fa fa-cog"></i></span> <span class="hidden-xs">Edit Details</span> </a> </li>
 			</ul>
 			<!-- /.tabs -->
 			<div class="tab-content" id="cont">
@@ -134,6 +132,7 @@
                                         <td>TND {{ $item->total }}</td>
                                         <td>
                                             <a href="{{ url('/invoice/'. $item->showroom_id .'/'. $item->appointment_id) }}" title="View invoice"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
+                                             <a href="{{ url('/invoices/' . $item->id . '/edit') }}" title="Edit invoice"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -146,21 +145,7 @@
                 @endif
 					</div>
 				</div>
-				<!-- /.tabs1 -->
-				<!-- .tabs2 -->
-				<div class="tab-pane" id="edit">
-					<form class="form-horizontal form-material" role="form" method="POST" action="{{ route('updateClient') }}">
-						<input type="hidden" name="id" value="{{ $client->id }} ">
-						
-						@include('op.partials.clientForm')
-					</form>
-				</div>
-				<!-- /.tabs2 -->
-				<!-- tabs3 -->
-{{-- 				<div class="tab-pane" id="invoices">
-					
-				</div> --}}
-				<!-- /.tabs3 -->
+				
 			</div>
 		</div>
 	</div>
@@ -208,14 +193,10 @@
 				<h4 class="modal-title">Update Appointment</h4>
 			</div>
 			<div class="modal-body" id="update-spinner">
-				<form id="edit-appointment" class="form-horizontal calender" role="form">
-					<input type="hidden" class="form-control" id="id" name="id" value="">
-					@include('op.partials.appointment-modal',['showrooms' => $showrooms,'action' => 'update'])
-				</form>
+					@include('com.partials.appointment-modal',['showrooms' => $showrooms,'action' => 'update'])
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" id="close-update" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-info " id="edit-app">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -264,197 +245,27 @@ $(window).load(function() {
         $('#edit').addClass('active');
     }
 
-    $('.clockpicker').clockpicker({
-        donetext: 'Done',
-    });
-
-
-    var datepicker = jQuery('#datepicker-autoclose').datepicker({
-        autoclose: true,
-        todayHighlight: false,
-        format: 'yyyy/mm/dd',
-    });
-    datepicker.datepicker('update', userdate);
-
-
-    var modaldatepicker = jQuery('.thedatepicker').datepicker({
-        autoclose: true,
-        todayHighlight: false,
-        format: 'yyyy/mm/dd',
-    });
-
     var calendar = $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
-        selectable: true,
-        selectHelper: true,
-        select: function(start, end, allDay = false) {
-            modaldatepicker.datepicker('update', moment(start).format('YYYY-MM-DD'));
-            $('#fc_create').click();
-            $("#create-app").unbind('click').bind("click", function() {
-            	var form = $('#create-appointment');
-            	var myform = form.serializeArray();
-            	$("#create-app").attr("disabled",true);
-            	$("#create-appointment :input").prop("disabled", true);
-            	var spinner = new Spinner().spin(spinTarget1);
-                
-                
-                /*            	myform.push(
-                			        {name: 'age',      value: 25},
-                			        {name: 'sex',      value: 'M'},
-                			        {name: 'weight',   value: 200}
-                			      );*/
-                $.ajax({
-                    url: '/op/setappointment',
-                    type: 'post',
-                    dataType: 'json',
-                    statusCode: {
-                        422: function(response) {
-                        	$("#create-appointment :input").prop("disabled", false);
-                        	spinner.stop();
-                        	$("#create-app").attr("disabled",false);
-                            $.each(response.responseJSON, function(key, value) {
-                                var id = "#" + form.attr('id') + " p[name=" + key + "E]";
-                                $(id).css('margin-top', '10px').text(value);
-                            });
-                            return false;
-                        }
-                    },
-                    data: myform,
+        eventClick: function(calEvent, jsEvent, view) {
+            var evid = calEvent._id;
+            $('#app-title').val(calEvent.title);
+            $('#app-notes').val(calEvent.notes);
+            $('#app-date').val(moment(calEvent.start).format('YYYY:mm:dd'));
+            $('#app-start').val(moment(calEvent.start).format('HH:MM'));
+            $('#app-end').val(moment(calEvent.end).format('HH:MM'));
 
-                    success: function(data) {
-                        console.log(data);
+            console.log(calEvent);
+            $('#fc_edit').click();
+            $("#close-update").unbind('click').bind("click", function() {
 
-                        $("#create-appointment").trigger('reset');
-                        var NewEvent = {
-                            id: data.event.id,
-                            title: data.event.title,
-                            client_id: data.event.client_id,
-                            showroom_id: data.event.showroom_id,
-                            start: moment(data.event.start_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
-                            end: moment(data.event.end_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
-                            allDay: false,
-                            notes: data.event.notes,
-                            color: '#1751c3',
-                        };
-                        calendar.fullCalendar('renderEvent', NewEvent, false);
-                        spinner.stop();
-                        $('#close-create').click();
-                        $("#create-app").attr("disabled",false);
-                        $("#create-appointment :input").prop("disabled", false);
-                       
-                    },
-                    error: function(errors) {
-                        console.log(errors);
-                        $("#create-appointment :input").prop("disabled", false);
-                        spinner.stop();
-                        $("#create-app").attr("disabled",false);
-                    }
-                });
-                calendar.fullCalendar('unselect');
-            });
-        },
-        eventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
-            $.ajax({
-                url: '/op/updateapptime',
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    'id': event.id,
-                    'start': event.start.format('YYYY-MM-DD HH:MM:SS'),
-                    'end': event.end.format('YYYY-MM-DD HH:MM:SS')
-                },
-                success: function(data) {
-                    console.log(data);
-                },
-            });
-            return false;
-        },
-        eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc) {
-            var start = event.start.format('YYYY-MM-DD HH:MM:SS');
-            $.ajax({
-                url: '/op/updateapptime',
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    'id': event.id,
-                    'start': start,
-                    'end': event.end != null ? event.end.format('YYYY-MM-DD HH:MM:SS') : start,
-                },
-                success: function(data) {
-                    console.log(data);
-                    
-                },
+            	calendar.fullCalendar('unselect');
             });
             
-        },
-        eventClick: function(calEvent, jsEvent, view) {
-
-            $('#title-update').val(calEvent.title);
-            $('#notes-update').val(calEvent.notes);
-            $('#id').val(calEvent.id);
-            $('#start-time-update').val(moment(calEvent.start).format('HH:MM'));
-            $('#end-time-update').val(moment(calEvent.end).format('HH:MM'));
-
-            modaldatepicker.datepicker('update', moment(calEvent.start).format('YYYY-MM-DD'));
-
-            $('#fc_edit').click();
-            $("#edit-app").unbind('click').bind("click", function() {
-            	var form = $('#edit-appointment').serialize();
-            	$("#edit-appointment :input").prop("disabled", true);
-            	var spinner2 = new Spinner().spin(spinTarget2);
-            	$("#edit-app").attr("disabled",true);
-     
-                $.ajax({
-                    url: '/op/updateappointment',
-                    type: 'post',
-                    dataType: 'json',
-                    statusCode: {
-                        422: function(response) {
-                        	$("#edit-appointment :input").prop("disabled", false);
-                        	spinner2.stop();
-                        	$("#edit-app").attr("disabled",false);
-                            $.each(response.responseJSON, function(key, value) {
-                                var id = "#" + form.attr('id') + " p[name=" + key + "E]";
-                                $(id).css('margin-top', '10px').text(value);
-                                
-                            });
-                        }
-                    },
-                    data: form,
-                    success: function(data) {
-                        $("#edit-appointment").trigger('reset');
-                        var UpdatedEvent = {
-                            _id: data.event.id,
-                            id: data.event.id,
-                            title: data.event.title,
-                            client_id: data.event.client_id,
-                            showroom_id: data.event.showroom_id,
-                            start: moment(data.event.start_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
-                            end: moment(data.event.end_at, ["MM-DD-YYYY", "YYYY-MM-DD"]),
-                            allDay: false,
-                            notes: data.event.notes,
-                            color: '#1751c3',
-                        };
-                        console.log(UpdatedEvent);
-                        calendar.fullCalendar('removeEvents', [data.event.id]);
-                        calendar.fullCalendar('renderEvent', UpdatedEvent, false);
-                        spinner2.stop();
-                        $('#close-update').click();
-                        $("#edit-app").attr("disabled",false);
-                        $("#edit-appointment :input").prop("disabled", false);
-                        
-                    },
-                    error: function(errors){
-                    	$("#edit-appointment :input").prop("disabled", false);
-                    	spinner2.stop();
-                    }
-                });
-            });
-            calendar.fullCalendar('unselect');
         },
         editable: true,
         events: evs,

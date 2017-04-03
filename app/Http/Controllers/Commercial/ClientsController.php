@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Callcenter;
+namespace App\Http\Controllers\Commercial;
 
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
@@ -34,7 +34,7 @@ class ClientsController extends Controller
         $stats['week-rescheduled'] = $apps->where('status', 'rescheduled')->count();
         $stats['success'] =  ($stats['week-success'] / $stats['week-total']) * 100;
 
-        return view('op.index', compact('clients', 'cities', 'apps', 'stats'));
+        return view('com.clients', compact('clients', 'cities', 'apps', 'stats'));
     }
 
     public function show(Client $client)
@@ -51,48 +51,6 @@ class ClientsController extends Controller
         $showrooms = Showroom::get();
         $client->load('invoices.showroom');
         
-        return view('op.showclient', compact('showrooms', 'client', 'calendar', 'donut', 'cities'));
-    }
-
-    public function create()
-    {
-        return view('op.createclient');
-    }
-
-
-    public function store(CreateClientRequest $request)
-    {
-        $response['status'] = false;
-        $response['data'] = null;
-        if (!$response['data'] = Client::create($request->all())) {
-            return response()->json($response);
-        }
-        $response['status'] = true;
-        
-        return response()->json($response);
-    }
-
-    public function edit(Client $client)
-    {
-        return view('op.editclient', compact('client'));
-    }
-
-    public function update(UpdateClientRequest $request)
-    {
-        $client = Client::where('id', $request->id)->update($request->except('id', '_token'));
-        if (!$client) {
-            Session::flash('error', 'Something went Wrong');
-        }
-        Session::flash('success', 'Updated Successfully');
-        return redirect()->route('showClient', $request->id);
-    }
-    
-    public function delete(Client $client)
-    {
-        if (!$client->delete()) {
-            Session::flash('error', 'Something went Wrong');
-        }
-        Session::flash('success', 'Deleted Successfully');
-        return redirect()->route('op');
+        return view('com.showclient', compact('showrooms', 'client', 'calendar', 'donut', 'cities'));
     }
 }

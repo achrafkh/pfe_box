@@ -30,7 +30,7 @@
 					</address> </div>
 					<div class="pull-right text-right"> <address>
 						<h3>To,</h3>
-						<h4 class="font-bold">{{ $appointment->client->firstname . ' '. $appointment->client->lastname  }}</h4>
+						<h4 class="font-bold"><a href="{{ url(Auth::user()->role->title . '/client/'.$appointment->client->id)}}" style="text-decoration: none;">{{ $appointment->client->firstname . ' '. $appointment->client->lastname  }}</a></h4>
 						<p class="text-muted m-l-30">{{ $appointment->client->city }} <br/>
 							{{ $appointment->client->address }}, <br/>
 							{{$appointment->client->phone }}, <br/>
@@ -53,34 +53,50 @@
 							</thead>
 							<tbody>
 							<?php $total = 0; ?>
-							@foreach($appointment->invoice->items as $item)
-							<?php $total += ($item->quantity * $item->price) ?>
-								<tr>
-									<td class="text-center">1</td>
-									<td>{{ $item->description }}</td>
-									<td class="text-right">{{ $item->quantity }} </td>
-									<td class="text-right">TND {{ $item->price }} </td>
-									<td class="text-right">TND {{ ($item->quantity * $item->price) }} </td>
-								</tr>
-							@endforeach
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<div class="col-md-12">
-					<div class="pull-right m-t-30 text-right">
-						<p>Sub - Total amount: TND {{ $total }}</p>
-						<p>vat (10%) : {{ $total * 0.10 }} </p>
-						<hr>
-					<h3><b>Total :</b>TND {{ $total * 1.10 }}</h3> </div>
-					<div class="clearfix"></div>
-					<hr>
-					<div class="text-right">
-						<button id="print" class="btn btn-default btn-outline" type="button"> <span><i class="fa fa-print"></i> Print</span> </button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                            @foreach($appointment->invoice->items as $item)
+                            <?php $total += ($item->quantity * $item->price) ?>
+                                <tr>
+                                    <td class="text-center">1</td>
+                                    <td>{{ $item->description }}</td>
+                                    <td class="text-right">{{ $item->quantity }} </td>
+                                    <td class="text-right">TND {{ $item->price }} </td>
+                                    <td class="text-right">TND {{ ($item->quantity * $item->price) }} </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="pull-right m-t-30 text-right">
+                        <p>Sub - Total amount: TND {{ $total }}</p>
+                        <p>vat (10%) : {{ $total * 0.10 }} </p>
+                        <hr>
+                    <h3><b>Total :</b>TND {{ $total * 1.10 }}</h3> </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="text-right">
+                        <button id="print" class="btn btn-default btn-outline" type="button"> <span><i class="fa fa-print"></i> Print</span> </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+@endsection
+
+@section('js')
+
+<script src="/js/jquery.PrintArea.js" type="text/JavaScript"></script>
+    <script>
+    $(document).ready(function(){
+        $("#print").click(function(){
+            var mode = 'iframe'; //popup
+            var close = mode == "popup";
+            var options = { mode : mode, popClose : close};
+            $("div.printableArea").printArea( options );
+        });
+    });
+  </script>
+
 @endsection

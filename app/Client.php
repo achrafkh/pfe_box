@@ -16,4 +16,8 @@ class Client extends Model
         return $this->hasMany(Appointment::class);
     }
 
+    public function invoices()
+    {
+        return $this->hasManyThrough(Invoice::class, Appointment::class);
+    }
 }

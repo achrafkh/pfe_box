@@ -28,7 +28,7 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        return '/'.Auth::user()->role->title;
+        return '/'.Auth::user()->role->title.'/dashboard';
     }
 
     public function username()

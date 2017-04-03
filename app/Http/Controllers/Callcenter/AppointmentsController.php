@@ -42,10 +42,8 @@ class AppointmentsController extends Controller
         $client = Client::find($appointment->client_id);
         $users = User::where('showroom_id', $appointment->showroom_id)->get();
 
-        //mail to agents
-        Mail::to($users)->queue(new newAppointment($client, $appointment));
-        //mail to Client
-        Mail::to($client)->queue(new newAppointmentClient($appointment));
+        // Mail::to($users)->queue(new newAppointment($client, $appointment));
+        // Mail::to($client)->queue(new newAppointmentClient($appointment));
 
         return response()->json($data);
     }
