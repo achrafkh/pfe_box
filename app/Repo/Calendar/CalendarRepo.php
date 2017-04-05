@@ -10,10 +10,10 @@ class CalendarRepo implements ICalendarRepository
 {
     public function getClientCalender($client_id)
     {
-        $appointments = Appointment::where('client_id', $client_id)->get([
+        $appointments = Appointment::with('client', 'showroom', 'invoice')->where('client_id', $client_id)->get([
             'showroom_id','client_id','title', 'start_at', 'end_at','status','notes','id'
         ]);
-        return $this->prepareOutput($appointments);
+        return $this->prepareOutputWithAll($appointments);
     }
 
     public function getShowRoomCalender($showroom_id)
@@ -75,6 +75,7 @@ class CalendarRepo implements ICalendarRepository
                     'notes'     => $item->notes,
                     'color'  => ($item->status == 'done') ? '#99D683' : (($item->status == 'pending') ? '#6164c1':'#FB9678'),
                     'client' => isset($item->client) ? $item->client->toarray() : null,
+                    'showroom' => $item->showroom->city,
                     ];
         });
 
@@ -97,6 +98,7 @@ class CalendarRepo implements ICalendarRepository
                     'color'  => ($item->status == 'done') ? '#99D683' : (($item->status == 'pending') ? '#6164c1':'#FB9678'),
                     'client' => isset($item->client) ? $item->client->toarray() : null,
                     'invoice' => isset($item->invoice) ? $item->invoice->toarray() : null,
+                    'showroom' => $item->showroom->city,
                     ];
         });
 

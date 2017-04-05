@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Callcenter;
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Repo\Calendar\ICalendarRepository;
+use App\Repo\Charts\IChartsRepository;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Appointment;
@@ -19,9 +20,12 @@ class ClientsController extends Controller
 {
     protected $data;
     
-    public function __construct(ICalendarRepository $calendar)
+    protected $charts;
+
+    public function __construct(ICalendarRepository $calendar, IChartsRepository $charts)
     {
         $this->data = $calendar;
+        $this->charts = $charts;
     }
     public function index()
     {
@@ -44,9 +48,7 @@ class ClientsController extends Controller
        
         $data =  Appointment::where('client_id', $client->id)->get();
 
-        $donut[] = ["label" => "done","value" => $data->where("status", "done")->count()];
-        $donut[] = ["label" => "rescheduled","value" => $data->where("status", "rescheduled")->count()];
-        $donut[] = ["label" => "pending","value" => $data->where("status", "pending")->count()];
+        $donut = $this->charts->AppointmentsDonutChart($data);
 
         $showrooms = Showroom::get();
         $client->load('invoices.showroom');

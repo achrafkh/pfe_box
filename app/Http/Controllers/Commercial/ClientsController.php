@@ -50,6 +50,8 @@ class ClientsController extends Controller
 
         $showrooms = Showroom::get();
         $client->load('invoices.showroom');
+
+       // dd($calendar[0]);
         
         return view('com.showclient', compact('showrooms', 'client', 'calendar', 'donut', 'cities'));
     }

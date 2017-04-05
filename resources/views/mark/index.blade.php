@@ -36,11 +36,17 @@
 <script src="//cdn.jsdelivr.net/spinjs/1.3.0/spin.min.js"></script>
 <script type="text/javascript">
 
+var areadata = {!! json_encode($area->toarray()) !!};
+var miniDonut =  {!! json_encode($miniDonut) !!};
+
+for (i = 0; i < areadata.length; ++i) {
+    areadata[i].week = moment().day("Monday").week(areadata[i].period).format('YYYY-MM-DD');
+}
 
 $(document).ready(function() {
     
    var sparklineLogin = function() { 
-        $('#sales1').sparkline([20, 40, 30], {
+        $('#sales1').sparkline(miniDonut, {
             type: 'pie',
             height: '100',
             resize: true,
@@ -76,56 +82,20 @@ $(document).ready(function() {
 
 Morris.Area({
         element: 'morris-area-chart2',
-        data: [{
-            period: '2010',
-            SiteA: 0,
-            SiteB: 0,
-            
-        }, {
-            period: '2011',
-            SiteA: 130,
-            SiteB: 100,
-            
-        }, {
-            period: '2012',
-            SiteA: 80,
-            SiteB: 60,
-            
-        }, {
-            period: '2013',
-            SiteA: 70,
-            SiteB: 200,
-            
-        }, {
-            period: '2014',
-            SiteA: 180,
-            SiteB: 150,
-            
-        }, {
-            period: '2015',
-            SiteA: 105,
-            SiteB: 90,
-            
-        },
-         {
-            period: '2016',
-            SiteA: 250,
-            SiteB: 150,
-           
-        }],
-        xkey: 'period',
-        ykeys: ['SiteA', 'SiteB'],
-        labels: ['Site A', 'Site B'],
+        data: areadata,
+        xkey: 'week',
+        ykeys: ['total'],
+        labels: ['Sales Total'],
         pointSize: 0,
         fillOpacity: 0.4,
-        pointStrokeColors:['#5e6d88', '#01c0c8'],
+        pointStrokeColors:['#01c0c8'],
         behaveLikeLine: true,
         gridLineColor: 'rgba(255, 255, 255, 0.1)',
         lineWidth: 0,
         gridTextColor: '#96a2b4',
         smooth: false,
         hideHover: 'auto',
-        lineColors: ['#5e6d88', '#01c0c8'],
+        lineColors: ['#01c0c8'],
         resize: true
         
     });
@@ -178,73 +148,73 @@ Morris.Area({
 
 @section('content1')
 <div class="row">
-        <div class="col-md-12 col-lg-12 col-sm-12">
-          <div class="white-box">
-            <div class="row row-in">
-              <div class="col-lg-3 col-sm-6 row-in-br">
-                <div class="col-in row">
-                  <div class="col-md-6 col-sm-6 col-xs-6"> <i data-icon="E" class="linea-icon linea-basic" ></i>
-                    <h5 class="text-muted vb">MYNEW CLIENTS</h5>
-                  </div>
-                  <div class="col-md-6 col-sm-6 col-xs-6">
-                    <h3 class="counter text-right m-t-15 text-danger">23</h3>
-                  </div>
-                  <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
-                    </div>
-                  </div>
-                </div>
+  <div class="col-md-12 col-lg-12 col-sm-12">
+    <div class="white-box">
+      <div class="row row-in"><h4 class="page-title text-center" style="font-size:150%;color:#77797B;">Weekly Reports</h4><hr>
+        <div class="col-lg-3 col-sm-6 row-in-br">
+          <div class="col-in row">
+            <div class="col-md-6 col-sm-6 col-xs-6"> <i data-icon="E" class="linea-icon linea-basic" ></i>
+              <h5 class="text-muted vb">Total Clients</h5>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+              <h3 class="counter text-right m-t-15 text-danger">{{ $clients->where('created_at','>',Carbon\Carbon::now()->subWeek())->count() }}</h3>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="progress">
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> <span class="sr-only">{{ $stats['success']}}% Complete (success)</span> </div>
               </div>
-              <div class="col-lg-3 col-sm-6 row-in-br  b-r-none">
-                <div class="col-in row">
-                  <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
-                    <h5 class="text-muted vb">NEW PROJECTS</h5>
-                  </div>
-                  <div class="col-md-6 col-sm-6 col-xs-6">
-                    <h3 class="counter text-right m-t-15 text-megna">169</h3>
-                  </div>
-                  <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-megna" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
-                    </div>
-                  </div>
-                </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 row-in-br  b-r-none">
+          <div class="col-in row">
+            <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+              <h5 class="text-muted vb">Appointments</h5>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+              <h3 class="counter text-right m-t-15 text-megna">{{ $stats['week-total']}}</h3>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="progress">
+                <div class="progress-bar progress-bar-megna" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{ $stats['week-total']}}%"> <span class="sr-only">{{$stats['week-total']}} % Complete (success)</span> </div>
               </div>
-              <div class="col-lg-3 col-sm-6 row-in-br">
-                <div class="col-in row">
-                  <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
-                    <h5 class="text-muted vb">NEW INVOICES</h5>
-                  </div>
-                  <div class="col-md-6 col-sm-6 col-xs-6">
-                    <h3 class="counter text-right m-t-15 text-primary">157</h3>
-                  </div>
-                  <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
-                    </div>
-                  </div>
-                </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 row-in-br">
+          <div class="col-in row">
+            <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+              <h5 class="text-muted vb">Reschedules</h5>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+              <h3 class="counter text-right m-t-15 text-primary">{{ $stats['week-rescheduled']}}</h3>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="progress">
+                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> <span class="sr-only">40% Complete (success)</span> </div>
               </div>
-              <div class="col-lg-3 col-sm-6  b-0">
-                <div class="col-in row">
-                  <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe016;"></i>
-                    <h5 class="text-muted vb">All PROJECTS</h5>
-                  </div>
-                  <div class="col-md-6 col-sm-6 col-xs-6">
-                    <h3 class="counter text-right m-t-15 text-success">431</h3>
-                  </div>
-                  <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
-                    </div>
-                  </div>
-                </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6  b-0">
+          <div class="col-in row">
+            <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe016;"></i>
+              <h5 class="text-muted vb">Success %</h5>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+              <h3 class="counter text-right m-t-15 text-success">{{ number_format($stats['success'],1)}}%</h3>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> <span class="sr-only">100% Complete (success)</span> </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
 @endsection
 
 
@@ -253,8 +223,8 @@ Morris.Area({
       <div class="row">
         <div class="col-md-8 col-lg-9 col-sm-6 col-xs-12">
           <div class="white-box">
-             <h3 class="box-title">Yearly Sales</h3>
-            <ul class="list-inline text-right">
+             <h3 class="box-title">Last Month Sales</h3>
+           {{--  <ul class="list-inline text-right">
               <li>
                 <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>iPhone</h5>
               </li>
@@ -264,7 +234,7 @@ Morris.Area({
               <li>
                 <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>iPod</h5>
               </li>
-            </ul>
+            </ul> --}}
             <div id="morris-area-chart2" style="height: 370px;"></div>
           </div>
         </div>
@@ -273,9 +243,9 @@ Morris.Area({
             <h3 class="box-title">Total Sites Visit</h3>
             <div class="row">
               <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                <h1 class="text-warning">$678</h1>
+                <h1 class="text-warning">TND {{  $invoices->Sum('total') }}</h1>
                 <p class="text-muted">APRIL 2017</p>
-                <b>(150 Sales)</b> </div>
+                <b>({{ $invoices->total() }} Sales)</b> </div>
               <div class="col-md-6 col-sm-6 col-xs-6">
                 <div id="sales1" class="text-center"></div>
               </div>
@@ -319,73 +289,46 @@ Morris.Area({
                 <p>SALES REPORT</p>
               </div>
               <div class="col-md-6 col-sm-6 col-xs-6 ">
-                <h1 class="text-right text-success m-t-20">$3,690</h1>
+                <h1 class="text-right text-success m-t-20">TND {{ $invoices->where('status','paid')->sum('total')  }} </h1>
               </div>
             </div>
             <div class="table-responsive">
               <table class="table ">
                 <thead>
                   <tr>
-                    
-                    <th>NAME</th>
-                    <th>STATUS</th>
+                    <th>ID</th>
                     <th>DATE</th>
-                    <th>PRICE</th>
+                    <th>STATUS</th>
+                    <th>Total</th>
                   </tr>
                 </thead>
                 <tbody>
+                @foreach($invoices as $invoice)
                   <tr>
+                    <td class="txt-oflo">{{ $invoice->id }}</td>
+                    <td class="txt-oflo">{{ $invoice->created_at }} </td>
+                    @if($invoice->status == 'paid')
+                      <td><span class="label label-success label-rounded">{{ $invoice->status }}</span> </td>
+                    @elseif($invoice->status == 'canceled')
+                      <td><span class="label label-danger label-rounded">{{ $invoice->status }}</span> </td>
+                    @else
+                      <td><span class="label label-megna label-rounded">{{ $invoice->status }}</span> </td>
+                    @endif
+                    @if($invoice->status == 'paid')
+                     <td><span class="text-success">TND {{ $invoice->total }}</span></td>
+                    @elseif($invoice->status == 'canceled')
+                      <td><span class="text-danger">TND {{ $invoice->total }}</span></td>
+                    @else
+                      <td><span class="text-info">TND {{ $invoice->total }}</span></td>
+                    @endif
                     
-                    <td class="txt-oflo">Elite admin</td>
-                    <td><span class="label label-megna label-rounded">SALE</span> </td>
-                    <td class="txt-oflo">April 18</td>
-                    <td><span class="text-success">$24</span></td>
                   </tr>
-                  <tr>
-                    
-                    <td class="txt-oflo">Real Homes</td>
-                    <td><span class="label label-info label-rounded">EXTENDED</span></td>
-                    <td class="txt-oflo">April 19</td>
-                    <td><span class="text-info">$1250</span></td>
-                  </tr>
-                  <tr>
-                    
-                    <td class="txt-oflo">Medical Pro</td>
-                    <td><span class="label label-danger label-rounded">TAX</span></td>
-                    <td class="txt-oflo">April 20</td>
-                    <td><span class="text-danger">-$24</span></td>
-                  </tr>
-                  <tr>
-                    
-                    <td class="txt-oflo">Hosting press</td>
-                    <td><span class="label label-megna label-rounded">SALE</span></td>
-                    <td class="txt-oflo">April 21</td>
-                    <td><span class="text-success">$24</span></td>
-                  </tr>
-                  <tr>
-                    
-                    <td class="txt-oflo">Helping Hands</td>
-                    <td><span class="label label-success label-rounded">MEMBER</span></td>
-                    <td class="txt-oflo">April 22</td>
-                    <td><span class="text-success">$24</span></td>
-                  </tr>
-                  <tr>
-                    
-                    <td class="txt-oflo">Digital Agency</td>
-                    <td><span class="label label-megna label-rounded">SALE</span> </td>
-                    <td class="txt-oflo">April 23</td>
-                    <td><span class="text-danger">-$14</span></td>
-                  </tr>
-                  <tr>
-                    
-                    <td class="txt-oflo">Helping Hands</td>
-                    <td><span class="label label-success label-rounded">MEMBER</span></td>
-                    <td class="txt-oflo">April 22</td>
-                    <td><span class="text-success">$64</span></td>
-                  </tr>
+                  @endforeach
                 </tbody>
               </table>
-              <a href="index.html#">Check all the sales</a> </div>
+            <div class="col-md-offset-3">
+              {{ $invoices->links() }}
+             </div>
           </div>
         </div>
       </div>

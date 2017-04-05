@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind('App\Repo\facebook\IFacebookRepository', 'App\Repo\facebook\FacebookRepo');
         $this->app->bind('App\Repo\Calendar\ICalendarRepository', 'App\Repo\Calendar\CalendarRepo');
+        $this->app->bind('App\Repo\Charts\IChartsRepository', 'App\Repo\Charts\ChartsRepo');
 
         if ($this->app->environment() == 'localpc') {
             $this->app->register('Appzcoder\CrudGenerator\CrudGeneratorServiceProvider');

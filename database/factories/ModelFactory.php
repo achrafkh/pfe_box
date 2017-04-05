@@ -17,6 +17,19 @@ $cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('na
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 
+$factory->define(App\Invoice::class, function (Faker\Generator $faker) {
+    $status = $faker->randomElement(array('paid', 'canceled', 'pending'));
+    $updatedAt = Carbon::createFromTimeStamp($faker->dateTimeBetween('-10 weeks', '+5 weeks')->getTimestamp());
+    return [
+        'total' => $faker->randomFloat($nbMaxDecimals = 2, $min = 10, $max = 500),
+        'status'  => $status,
+        'showroom_id' => $faker->numberBetween(1, 10),
+        'appointment_id' => $faker->numberBetween(1, 500),
+        'updated_at' => $updatedAt,
+
+    ];
+});
+
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
     static $login;

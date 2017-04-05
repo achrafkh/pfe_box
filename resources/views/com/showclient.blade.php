@@ -193,10 +193,43 @@
 				<h4 class="modal-title">Update Appointment</h4>
 			</div>
 			<div class="modal-body" id="update-spinner">
-					@include('com.partials.appointment-modal',['showrooms' => $showrooms,'action' => 'update'])
+				<form id="edit-appointment" class="form-horizontal calender" role="form">
+					<input type="hidden" class="form-control" id="id" name="id" value="">
+					<div class="user-btm-box" style="margin-top: -8%;">
+						<!-- .row -->
+						<div class="row text-center m-t-10" >
+							<div class="col-md-6 b-r"><strong>Name</strong><p id="name"></p></div>
+							<div class="col-md-6"><strong>Birth</strong><p id="birthdate"></p></div>
+						</div>
+						<!-- /.row -->
+						<hr>
+						<!-- .row -->
+						<div class="row text-center m-t-10">
+							<div class="col-md-6 b-r"><strong>Email ID</strong><p id="email"></p></div>
+							<div class="col-md-6"><strong>Phone</strong><p id="phone"></p></div>
+						</div>
+						<hr>
+						<div class="row text-center m-t-10">
+							<div class="col-md-6 b-r"><strong>Date</strong><p id="date"></p></div>
+							<div class="col-md-6 b-r"><strong>ShowRoom</strong><p id="showroom"></p></div>
+						</div>
+						<hr>
+						
+						<!-- /.row -->
+						<label for="status"><strong>Change Status</strong></label><span class="highlight"></span> <span class="bar"></span>
+						<select class="form-control" id="status" required="">
+							<option value="pending">Pending</option>
+							<option value="done">Done</option>
+							<option value="rescheduled">Rescheduled</option>
+						</select>
+					</div>
+				</form>
 			</div>
 			<div class="modal-footer">
+				<a href="" class="btn btn-primary pull-left hidden" id="view-invoice">Invoices</a>
+				<a href="" class="btn btn-danger pull-left hidden" id="create-invoice">Create Invoice</a>
 				<button type="button" class="btn btn-default" id="close-update" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-info" id="save-status">Save</button>
 			</div>
 		</div>
 	</div>
@@ -253,19 +286,80 @@ $(window).load(function() {
         },
         eventClick: function(calEvent, jsEvent, view) {
             var evid = calEvent._id;
-            $('#app-title').val(calEvent.title);
-            $('#app-notes').val(calEvent.notes);
-            $('#app-date').val(moment(calEvent.start).format('YYYY:mm:dd'));
-            $('#app-start').val(moment(calEvent.start).format('HH:MM'));
-            $('#app-end').val(moment(calEvent.end).format('HH:MM'));
+            if ( !$('#view-invoice').hasClass( "hidden" ) ) {
+        		$('#view-invoice').addClass('hidden');
+        	}
+        	if ( !$('#create-invoice').hasClass( "hidden" ) ) {
+        		$('#create-invoice').addClass('hidden');
+        	}
 
-            console.log(calEvent);
+        	
+            $('#name').text(calEvent.client.firstname +' '+ calEvent.client.lastname);
+            $('#email').text(calEvent.client.email);
+            $('#birthdate').text(calEvent.client.birthdate);
+            $('#phone').text(calEvent.client.phone);
+            $('#showroom').text(calEvent.showroom);
+            $('#date').text(calEvent.start.format('YYYY-MM-DD HH:MM:SS'));
+            $('#status option[value="' + calEvent.status + '"]').prop('selected', true);
+
+
+            if(calEvent.status == 'done' && calEvent.invoice == null)
+            {
+            	var appid = calEvent.id;
+            	var showid = calEvent.showroom_id;
+
+            	var url = "/invoice/"+showid+"/"+appid+'/create';
+
+            	$('#create-invoice').attr("href", url).removeClass('hidden');
+            }
+            if(calEvent.invoice != null)
+            {
+            	var appid = calEvent.id;
+            	var showid = calEvent.showroom_id;
+
+            	var url = "/invoice/"+showid+"/"+appid;
+            	$('#view-invoice').attr("href", url).removeClass('hidden');
+            }
             $('#fc_edit').click();
-            $("#close-update").unbind('click').bind("click", function() {
+
+             $("#save-status").unbind('click').bind("click", function() {
+
+                var data = {
+                    id: calEvent.id,
+                    status:  $('#status').val(),
+                };
+                $.ajax({
+                    url: '/com/updatestatus',
+                    type: 'post',
+                    dataType: 'json',
+                    data: data,
+                    success: function(data) {
+
+                        var UpdatedEvent = {
+                            _id: evid,
+                            id: data.event.id,
+                            title: data.event.title,
+                            client_id: data.event.client_id,
+                            showroom_id: data.event.showroom_id,
+                            status: $('#status').val(),
+                            start: data.event.start_at,
+                            end: data.event.end_at,
+                            allDay: false,
+                            notes: data.event.notes,
+                            color: data.event.color,
+                            client: data.event.client,
+                        };
+                        calendar.fullCalendar('removeEvents', evid);
+                        calendar.fullCalendar('renderEvent', UpdatedEvent, false);
+                    }
+                });
+                $('#close-update').click();
+            });
+           $("#close-update").unbind('click').bind("click", function() {
 
             	calendar.fullCalendar('unselect');
             });
-            
+            calendar.fullCalendar('unselect');
         },
         editable: true,
         events: evs,
