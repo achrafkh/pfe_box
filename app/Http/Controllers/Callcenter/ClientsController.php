@@ -15,6 +15,7 @@ use App\Client;
 use Countries;
 use App\User;
 use Session;
+use Cache;
 
 class ClientsController extends Controller
 {
@@ -43,16 +44,31 @@ class ClientsController extends Controller
 
     public function show(Client $client)
     {
-        $calendar = $this->data->getClientCalender($client->id);
-        $cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('name', 'postal');
-       
-        $data =  Appointment::where('client_id', $client->id)->get();
+        $id = $client->id;
+        $minutes = 1;
+        $data = Cache::remember('user-apps-'.$id, $minutes, function () use ($id) {
+            return Appointment::where('client_id', $id)->get();
+        });
 
-        $donut = $this->charts->AppointmentsDonutChart($data);
-
-        $showrooms = Showroom::get();
-        $client->load('invoices.showroom');
         
+        $cities = Cache::remember('cities', $minutes, function () {
+            return Countries::where('name.common', 'Tunisia')->first()->states->pluck('name', 'postal');
+        });
+        
+        $calendar = Cache::remember('calendar-'.$id, $minutes, function () use ($id) {
+            return $this->data->getClientCalender($id);
+        });
+
+        $donut = Cache::remember('donut-'.$id, $minutes, function () use ($data) {
+            return $this->charts->AppointmentsDonutChart($data);
+        });
+
+        $showrooms = Cache::remember('showrooms', $minutes, function () use ($data) {
+            return Showroom::get();
+        });
+
+        $client->load('invoices.showroom', 'invoices.appointment.client');
+
         return view('op.showclient', compact('showrooms', 'client', 'calendar', 'donut', 'cities'));
     }
 

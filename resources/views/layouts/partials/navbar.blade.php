@@ -15,7 +15,7 @@
 			</div>
 			@if(Auth::user()->hasRole('op'))
 			<ul class="sidebar-menu nav">
-				<li><a href="{{ url('/op')}} ">Manage Clients  </a></li>
+				<li><a href="{{ url('/op/dashboard')}} ">Manage Clients </a></li>
 			</ul>
 			@endif
 			@if(Auth::user()->hasRole('com'))

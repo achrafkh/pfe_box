@@ -9,8 +9,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 // Authentication Routes...
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginview');
+
+
 Route::post('login', 'Auth\LoginController@login')->name('login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/login', function () {
