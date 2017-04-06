@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-
 use App\Repo\Calendar\ICalendarRepository;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -20,16 +19,16 @@ class AppointmentsController extends Controller
     public function index(Request $request)
     {
         $events = $this->data->getAllObj();
-        $calendar = $this->data->prepareOutputWithClient($events);
+        $calendar = $this->data->prepareOutputWithAll($events);
         $showrooms = Showroom::get();
 
-        $data['done'] = $events->where('status','done')->count();
-        $data['resc'] = $events->where('status','rescheduled')->count();
-        $data['pending'] = $events->where('status','pending')->count();
-        $data['agents'] = User::where('showroom_id','!=',null)->count();
+        $data['done'] = $events->where('status', 'done')->count();
+        $data['resc'] = $events->where('status', 'rescheduled')->count();
+        $data['pending'] = $events->where('status', 'pending')->count();
+        $data['agents'] = User::where('showroom_id', '!=', null)->count();
 
  
-        return view('admin.index', compact('calendar', 'showrooms','data'));
+        return view('admin.index', compact('calendar', 'showrooms', 'data'));
     }
 
     public function updateStatus(Request $request)
@@ -54,7 +53,7 @@ class AppointmentsController extends Controller
 
         $data['status'] = true;
         $data['event'] = $app->toarray();
-        $data['event']['color'] = ($app->status == 'done') ? '#99D683' : (($app->status == 'pending') ?'#6164c1': '#FB9678' );
+        $data['event']['color'] = ($app->status == 'done') ? '#99D683' : (($app->status == 'pending') ?'#6164c1': '#FB9678');
         return response()->json($data);
     }
 
@@ -63,22 +62,21 @@ class AppointmentsController extends Controller
     {
         $data['events'] = [];
         if ($request->showroom_id != 'all') {
-
             $events = $this->data->getShowRoomCalenderObj($request->showroom_id);
-            $data['stats']['done'] = $events->where('status','done')->count();
-            $data['stats']['resc'] = $events->where('status','rescheduled')->count();
-            $data['stats']['pending'] = $events->where('status','pending')->count();
-            $data['stats']['agents'] = User::where('showroom_id',$request->showroom_id)->count();
+            $data['stats']['done'] = $events->where('status', 'done')->count();
+            $data['stats']['resc'] = $events->where('status', 'rescheduled')->count();
+            $data['stats']['pending'] = $events->where('status', 'pending')->count();
+            $data['stats']['agents'] = User::where('showroom_id', $request->showroom_id)->count();
             $data['events'] = $this->data->prepareOutputWithClient($events);
 
             return response()->json($data);
         }
 
         $events = $this->data->getAllObj();
-        $data['stats']['done'] = $events->where('status','done')->count();
-        $data['stats']['resc'] = $events->where('status','rescheduled')->count();
-        $data['stats']['pending'] = $events->where('status','pending')->count();
-        $data['stats']['agents'] = User::where('showroom_id',$request->showroom_id)->count();
+        $data['stats']['done'] = $events->where('status', 'done')->count();
+        $data['stats']['resc'] = $events->where('status', 'rescheduled')->count();
+        $data['stats']['pending'] = $events->where('status', 'pending')->count();
+        $data['stats']['agents'] = User::where('showroom_id', $request->showroom_id)->count();
         $data['events'] = $this->data->prepareOutputWithClient($events);
 
         return response()->json($data);

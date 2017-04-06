@@ -44,16 +44,12 @@ $factory->define(App\InvoiceLine::class, function (Faker\Generator $faker) use (
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
     static $login;
-    $showroomId = null;
-    if ($login == 'commercial') {
-        $showroomId = $faker->numberBetween(1, 10);
-    }
-    
+    static $showroom_id;
 
     return [
         'fullname' => $faker->name,
         'email' => $faker->email,
-        'showroom_id' => $showroomId,
+        'showroom_id' => $showroom_id,
         'username' => $login,
         'password' => $password ?: $password = bcrypt('010203'),
     ];

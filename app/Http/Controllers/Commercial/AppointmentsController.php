@@ -20,8 +20,6 @@ class AppointmentsController extends Controller
     {
         $events = $this->data->getAllObj();
         $calendar = $this->data->prepareOutputWithAll($events);
-
-
         $showrooms = Showroom::get();
 
         $data['done'] = $events->where('status', 'done')->count();

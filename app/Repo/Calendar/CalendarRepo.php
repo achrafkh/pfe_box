@@ -54,7 +54,7 @@ class CalendarRepo implements ICalendarRepository
 
     public function getAllObj()
     {
-        $appointments = Appointment::with('client', 'invoice')->get([
+        $appointments = Appointment::with('client', 'showroom', 'invoice')->get([
             'showroom_id','client_id','id','title', 'start_at', 'end_at','status','notes'
         ]);
         return $appointments;

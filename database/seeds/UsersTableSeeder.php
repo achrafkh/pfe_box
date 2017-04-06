@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
             'fulltitle' => 'CallCenter',
         ]);
 
-        $op->users()->save(factory(App\User::class)->make(['username' => 'operateur']));
+        $op->users()->save(factory(App\User::class)->make(['username' => 'operateur','showroom_id'=> null]));
 
 
         $com = factory(App\Role::class)->create([
@@ -24,7 +24,7 @@ class UsersTableSeeder extends Seeder
             'fulltitle' => 'Agent',
         ]);
 
-        $com->users()->save(factory(App\User::class)->make(['username' => 'commercial']));
+        $com->users()->save(factory(App\User::class)->make(['username' => 'commercial','showroom_id'=> 2]));
 
 
         $mark = factory(App\Role::class)->create([
@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
             'fulltitle' => 'Analyzer',
         ]);
 
-        $mark->users()->save(factory(App\User::class)->make(['username' => 'marketeur']));
+        $mark->users()->save(factory(App\User::class)->make(['username' => 'marketeur','showroom_id'=> null]));
 
 
         $superadmin = factory(App\Role::class)->create([
@@ -40,6 +40,6 @@ class UsersTableSeeder extends Seeder
             'fulltitle' => 'Administrator',
         ]);
 
-        $superadmin->users()->save(factory(App\User::class)->make(['username' => 'superadmin']));
+        $superadmin->users()->save(factory(App\User::class)->make(['username' => 'superadmin','showroom_id'=> null]));
     }
 }
