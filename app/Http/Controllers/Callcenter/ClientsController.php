@@ -34,10 +34,7 @@ class ClientsController extends Controller
         
         $clients = Client::get();
 
-        $stats['week-total'] = $apps->count();
-        $stats['week-success'] = $apps->where('status', 'done')->count();
-        $stats['week-rescheduled'] = $apps->where('status', 'rescheduled')->count();
-        $stats['success'] =  ($stats['week-success'] / $stats['week-total']) * 100;
+        $stats = $this->charts->SimpleStats($apps);
 
         return view('op.index', compact('clients', 'apps', 'stats'));
     }

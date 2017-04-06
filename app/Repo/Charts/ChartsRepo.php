@@ -50,4 +50,14 @@ class ChartsRepo implements IChartsRepository
 
         return $data->take(5);
     }
+
+    public function SimpleStats($appointments)
+    {
+        $stats['week-total'] = $appointments->count();
+        $stats['week-success'] = $appointments->where('status', 'done')->count();
+        $stats['week-rescheduled'] = $appointments->where('status', 'rescheduled')->count();
+        $stats['success'] =  ($stats['week-success'] / $stats['week-total']) * 100;
+
+        return $stats;
+    }
 }

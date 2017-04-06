@@ -19,7 +19,7 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard($guard)->check()) {
             if (Auth::user()->role->title == 'com' || Auth::user()->role->title == 'admin') {
-                return '/'.Auth::user()->role->title.'/appointments';
+                return redirect('/'.Auth::user()->role->title.'/appointments');
             }
             return redirect('/'.$request->user()->role->title.'/dashboard');
         }

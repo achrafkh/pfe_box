@@ -49,10 +49,7 @@ class DashboardController extends Controller
         $clients = Client::get();
 
 
-        $stats['week-total'] = $apps->count();
-        $stats['week-success'] = $apps->where('status', 'done')->count();
-        $stats['week-rescheduled'] = $apps->where('status', 'rescheduled')->count();
-        $stats['success'] =  ($stats['week-success'] / $stats['week-total']) * 100;
+        $stats = $this->charts->SimpleStats($apps);
 
         return view('mark.index', compact('invoices', 'area', 'miniDonut', 'apps', 'clients', 'stats', 'total'));
     }
