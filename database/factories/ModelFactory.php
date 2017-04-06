@@ -29,6 +29,17 @@ $factory->define(App\Invoice::class, function (Faker\Generator $faker) {
 
     ];
 });
+$invoices = App\Invoice::count();
+
+$factory->define(App\InvoiceLine::class, function (Faker\Generator $faker) use ($invoices) {
+    return [
+        'description' => $faker->company,
+        'quantity'  => $faker->numberBetween(1, 6),
+        'price' => $faker->randomFloat($nbMaxDecimals = 2, $min = 10, $max = 50),
+        'invoice_id' => $faker->numberBetween(1, $invoices),
+
+    ];
+});
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
