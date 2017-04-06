@@ -24,128 +24,6 @@
 
 @endsection
 
-@section('js')
-
-<script src="{{ asset('js/charting.js') }}"></script>
-
-<!-- Sparkline chart JavaScript -->
-<script src="/js/libs/jquery.sparkline.min.js"></script>
-
-<script src="{{ asset('js/jquery.counterup.min.js') }}"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
-<script src="//cdn.jsdelivr.net/spinjs/1.3.0/spin.min.js"></script>
-<script type="text/javascript">
-
-var areadata = {!! json_encode($area->toarray()) !!};
-var miniDonut =  {!! json_encode($miniDonut) !!};
-
-for (i = 0; i < areadata.length; ++i) {
-    areadata[i].week = moment().day("Monday").week(areadata[i].period).format('YYYY-MM-DD');
-}
-
-$(document).ready(function() {
-    
-   var sparklineLogin = function() { 
-        $('#sales1').sparkline(miniDonut, {
-            type: 'pie',
-            height: '100',
-            resize: true,
-            sliceColors: ['#808f8f', '#fecd36', '#f1f2f7']
-        });
-        $('#sales2').sparkline([6, 10, 9, 11, 9, 10, 12], {
-            type: 'bar',
-            height: '154',
-            barWidth: '4',
-            resize: true,
-            barSpacing: '10',
-            barColor: '#25a6f7'
-        });
-        
-   }
-    var sparkResize;
- 
-        $(window).resize(function(e) {
-            clearTimeout(sparkResize);
-            sparkResize = setTimeout(sparklineLogin, 500);
-        });
-        sparklineLogin();
-
-});
-
-/*var donut = {!! json_encode($donut) !!};
-    Morris.Donut({
-        element: 'morris-donut-chart',
-        data: donut,
-        resize: true,
-        colors:['#99d683', '#13dafe', '#6164c1']
-    });*/
-
-Morris.Area({
-        element: 'morris-area-chart2',
-        data: areadata,
-        xkey: 'week',
-        ykeys: ['total'],
-        labels: ['Sales Total'],
-        pointSize: 0,
-        fillOpacity: 0.4,
-        pointStrokeColors:['#01c0c8'],
-        behaveLikeLine: true,
-        gridLineColor: 'rgba(255, 255, 255, 0.1)',
-        lineWidth: 0,
-        gridTextColor: '#96a2b4',
-        smooth: false,
-        hideHover: 'auto',
-        lineColors: ['#01c0c8'],
-        resize: true
-        
-    });
-
-    $(function () {
-        var spinTarget = document.getElementById('stats-container');
-        function requestData( chart) {
-            var spinner = new Spinner().spin(spinTarget);
-            $.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: "/mark/api"
-            })
-                .done(function (data) {
-                    for (i = 0; i < data.length; ++i) {
-                        data[i].week = moment().day("Monday").week(data[i].date).format('MMM Do');
-                    }
-                    chart.setData(data);
-                })
-                .fail(function () {
-                    alert("error occured");
-                })
-                .always(function () {
-                    spinner.stop();
-                });
-        }
-        var chart = Morris.Bar({
-            element: 'stats-container',
-            data: [0, 0], 
-              xkey: 'week',
-              ykeys: ['done','pending','rescheduled'],
-              labels: ['Done', 'Still Pending', 'Rescheduled'],
-              fillOpacity: 0.6,
-              hideHover: 'auto',
-              behaveLikeLine: true,
-              resize: true,
-              pointFillColors:['#ffffff'],
-              pointStrokeColors: ['black'],
-              barColors: ['#fecd36', '#AB8CE4', '#01c0c8'],
-              xLabelMargin: 2
-
-
-        });
-
-        requestData(chart);
-    });
-
-    </script>
-@endsection
-
 @section('content1')
 <div class="row">
   <div class="col-md-12 col-lg-12 col-sm-12">
@@ -240,7 +118,15 @@ Morris.Area({
         </div>
         <div class="col-md-4 col-lg-3 col-sm-6 col-xs-12">
           <div  class="white-box">
-            <h3 class="box-title">Total Sites Visit</h3>
+            <h3 class="box-title">Invoices</h3>
+             <ul class="list-inline">
+              <li>
+                <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>Paid</h5>
+              </li>
+              <li>
+                <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>Pending</h5>
+              </li>
+            </ul>
             <div class="row">
               <div class="col-md-6 col-sm-6 col-xs-6  m-t-30">
                 <h1 class="text-warning">TND {{  $invoices->Sum('total') }}</h1>
@@ -289,7 +175,7 @@ Morris.Area({
                 <p>SALES REPORT</p>
               </div>
               <div class="col-md-6 col-sm-6 col-xs-6 ">
-                <h1 class="text-right text-success m-t-20">TND {{ $invoices->where('status','paid')->sum('total')  }} </h1>
+                <h1 class="text-right text-success m-t-20">TND {{ $total  }} </h1>
               </div>
             </div>
             <div class="table-responsive">
@@ -353,4 +239,120 @@ Morris.Area({
         </div>
       </div>
       <!-- row -->
+@endsection
+
+
+
+
+@section('js')
+
+<script src="{{ asset('js/charting.js') }}"></script>
+
+<!-- Sparkline chart JavaScript -->
+<script src="/js/libs/jquery.sparkline.min.js"></script>
+
+<script src="{{ asset('js/jquery.counterup.min.js') }}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdn.jsdelivr.net/spinjs/1.3.0/spin.min.js"></script>
+<script type="text/javascript">
+
+var areadata = {!! json_encode($area->toarray()) !!};
+var miniDonut =  {!! json_encode($miniDonut) !!};
+
+for (i = 0; i < areadata.length; ++i) {
+    areadata[i].week = moment().day("Monday").week(areadata[i].period).format('YYYY-MM-DD');
+}
+
+$(document).ready(function() {
+   var sparklineLogin = function() { 
+        $('#sales1').sparkline(miniDonut, {
+            type: 'pie',
+            height: '100',
+            resize: true,
+            sliceColors: ['#00bfc7','#fb9678']
+        });
+        $('#sales2').sparkline([6, 10, 9, 11, 9, 10, 12], {
+            type: 'bar',
+            height: '154',
+            barWidth: '4',
+            resize: true,
+            barSpacing: '10',
+            barColor: '#25a6f7'
+        });
+        
+   }
+    var sparkResize;
+ 
+        $(window).resize(function(e) {
+            clearTimeout(sparkResize);
+            sparkResize = setTimeout(sparklineLogin, 500);
+        });
+        sparklineLogin();
+
+});
+
+Morris.Area({
+        element: 'morris-area-chart2',
+        data: areadata,
+        xkey: 'week',
+        ykeys: ['total'],
+        labels: ['Sales Total'],
+        pointSize: 0,
+        fillOpacity: 0.4,
+        pointStrokeColors:['#01c0c8'],
+        behaveLikeLine: true,
+        gridLineColor: 'rgba(255, 255, 255, 0.1)',
+        lineWidth: 0,
+        gridTextColor: '#96a2b4',
+        smooth: false,
+        hideHover: 'auto',
+        lineColors: ['#01c0c8'],
+        resize: true
+        
+    });
+
+    $(function () {
+        var spinTarget = document.getElementById('stats-container');
+        function requestData( chart) {
+            var spinner = new Spinner().spin(spinTarget);
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: "/mark/api"
+            })
+                .done(function (data) {
+                    for (i = 0; i < data.length; ++i) {
+                        data[i].week = moment().day("Monday").week(data[i].date).format('MMM Do');
+                    }
+                    chart.setData(data);
+                })
+                .fail(function () {
+                    alert("error occured");
+                })
+                .always(function () {
+                    spinner.stop();
+                });
+        }
+        var chart = Morris.Bar({
+            element: 'stats-container',
+            data: [0, 0], 
+              xkey: 'week',
+              ykeys: ['done','pending','rescheduled'],
+              labels: ['Done', 'Still Pending', 'Rescheduled'],
+              fillOpacity: 0.6,
+              hideHover: 'auto',
+              behaveLikeLine: true,
+              resize: true,
+              pointFillColors:['#ffffff'],
+              pointStrokeColors: ['black'],
+              barColors: ['#fecd36', '#AB8CE4', '#01c0c8'],
+              xLabelMargin: 2
+
+
+        });
+
+        requestData(chart);
+    });
+
+    </script>
 @endsection

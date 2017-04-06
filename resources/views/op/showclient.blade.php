@@ -195,7 +195,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" id="close-create" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-info " id="create-app">Save changes</button>
+				<button type="button" class="btn btn-info " id="create-app">Save changes<i style="margin-left:2%;" class="" id="bt-spin"></i></button>
 			</div>
 		</div>
 	</div>
@@ -215,7 +215,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" id="close-update" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-info " id="edit-app">Save changes</button>
+				<button type="button" class="btn btn-info " id="edit-app">Save changes<i style="margin-left:2%;" class="" id="bt-spin2"></i></button>
 			</div>
 		</div>
 	</div>
@@ -228,7 +228,6 @@
 <script src="{{ asset('js/charting.js') }}"></script>
 <script type="text/javascript" src="{{asset('js/libs/bootstrap-datepicker.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/libs/bootstrap-clockpicker.js')}}"></script>
-<script src="//cdn.jsdelivr.net/spinjs/1.3.0/spin.min.js"></script>
 
 <script type="text/javascript">
 var evs = {!! json_encode($calendar) !!};
@@ -236,20 +235,16 @@ var errors = {!! json_encode($errors->first()) !!};
 var donut = {!! json_encode($donut) !!};
 var userdate = {!! json_encode($client->birthdate) !!};
 
-var spinTarget1 = document.getElementById('create-spinner');
-var spinTarget2 = document.getElementById('update-spinner');
-       
-
 
 if (donut[0].value || donut[1].value || donut[2].value) {
-	$('#pending').text(donut[2].value);
-	$('#resc').text(donut[1].value);
-	$('#done').text(donut[0].value);
+    $('#pending').text(donut[2].value);
+    $('#resc').text(donut[1].value);
+    $('#done').text(donut[0].value);
     Morris.Donut({
         element: 'morris-donut-chart',
         data: donut,
         resize: true,
-        colors: ['#99d683', '#FB9678','#6164c1']
+        colors: ['#99d683', '#FB9678', '#6164c1']
     });
 } else {
     $('#morris-donut-chart').html('<h1 style="margin-top:40%;">Not enough data to Render The Chart</h1>').addClass('text-center');
@@ -295,27 +290,21 @@ $(window).load(function() {
             modaldatepicker.datepicker('update', moment(start).format('YYYY-MM-DD'));
             $('#fc_create').click();
             $("#create-app").unbind('click').bind("click", function() {
-            	var form = $('#create-appointment');
-            	var myform = form.serializeArray();
-            	$("#create-app").attr("disabled",true);
-            	$("#create-appointment :input").prop("disabled", true);
-            	var spinner = new Spinner().spin(spinTarget1);
-                
-                
-                /*            	myform.push(
-                			        {name: 'age',      value: 25},
-                			        {name: 'sex',      value: 'M'},
-                			        {name: 'weight',   value: 200}
-                			      );*/
+                var form = $('#create-appointment');
+                var myform = form.serializeArray();
+                $("#create-app").attr("disabled", true);
+                $("#create-appointment :input").prop("disabled", true);
+
+                $('#bt-spin').addClass('fa fa-spinner fa-spin');
                 $.ajax({
                     url: '/op/setappointment',
                     type: 'post',
                     dataType: 'json',
                     statusCode: {
                         422: function(response) {
-                        	$("#create-appointment :input").prop("disabled", false);
-                        	spinner.stop();
-                        	$("#create-app").attr("disabled",false);
+                            $("#create-appointment :input").prop("disabled", false);
+                            $('#create-spinner').removeClass('fa fa-spinner fa-spin');
+                            $("#bt-spin").attr("disabled", false);
                             $.each(response.responseJSON, function(key, value) {
                                 var id = "#" + form.attr('id') + " p[name=" + key + "E]";
                                 $(id).css('margin-top', '10px').text(value);
@@ -326,7 +315,7 @@ $(window).load(function() {
                     data: myform,
 
                     success: function(data) {
-                        console.log(data);
+
 
                         $("#create-appointment").trigger('reset');
                         var NewEvent = {
@@ -341,17 +330,16 @@ $(window).load(function() {
                             color: '#1751c3',
                         };
                         calendar.fullCalendar('renderEvent', NewEvent, false);
-                        spinner.stop();
+                        $('#bt-spin').removeClass('fa fa-spinner fa-spin');
                         $('#close-create').click();
-                        $("#create-app").attr("disabled",false);
+                        $("#create-app").attr("disabled", false);
                         $("#create-appointment :input").prop("disabled", false);
-                       
+
                     },
                     error: function(errors) {
-                        console.log(errors);
                         $("#create-appointment :input").prop("disabled", false);
-                        spinner.stop();
-                        $("#create-app").attr("disabled",false);
+                        $('#bt-spin').removeClass('fa fa-spinner fa-spin');
+                        $("#create-app").attr("disabled", false);
                     }
                 });
                 calendar.fullCalendar('unselect');
@@ -368,7 +356,7 @@ $(window).load(function() {
                     'end': event.end.format('YYYY-MM-DD HH:MM:SS')
                 },
                 success: function(data) {
-                    console.log(data);
+                    //
                 },
             });
             return false;
@@ -385,11 +373,10 @@ $(window).load(function() {
                     'end': event.end != null ? event.end.format('YYYY-MM-DD HH:MM:SS') : start,
                 },
                 success: function(data) {
-                    console.log(data);
-                    
+                    //
                 },
             });
-            
+
         },
         eventClick: function(calEvent, jsEvent, view) {
 
@@ -403,24 +390,24 @@ $(window).load(function() {
 
             $('#fc_edit').click();
             $("#edit-app").unbind('click').bind("click", function() {
-            	var form = $('#edit-appointment').serialize();
-            	$("#edit-appointment :input").prop("disabled", true);
-            	var spinner2 = new Spinner().spin(spinTarget2);
-            	$("#edit-app").attr("disabled",true);
-     
+                var form = $('#edit-appointment').serialize();
+                $("#edit-appointment :input").prop("disabled", true);
+                $('#bt-spin2').addClass('fa fa-spinner fa-spin');
+                $("#edit-app").attr("disabled", true);
+
                 $.ajax({
                     url: '/op/updateappointment',
                     type: 'post',
                     dataType: 'json',
                     statusCode: {
                         422: function(response) {
-                        	$("#edit-appointment :input").prop("disabled", false);
-                        	spinner2.stop();
-                        	$("#edit-app").attr("disabled",false);
+                            $("#edit-appointment :input").prop("disabled", false);
+                            $('#bt-spin2').removeClass('fa fa-spinner fa-spin');
+                            $("#edit-app").attr("disabled", false);
                             $.each(response.responseJSON, function(key, value) {
                                 var id = "#" + form.attr('id') + " p[name=" + key + "E]";
                                 $(id).css('margin-top', '10px').text(value);
-                                
+
                             });
                         }
                     },
@@ -439,18 +426,17 @@ $(window).load(function() {
                             notes: data.event.notes,
                             color: '#1751c3',
                         };
-                        console.log(UpdatedEvent);
                         calendar.fullCalendar('removeEvents', [data.event.id]);
                         calendar.fullCalendar('renderEvent', UpdatedEvent, false);
-                        spinner2.stop();
+                        $('#bt-spin2').removeClass('fa fa-spinner fa-spin');
                         $('#close-update').click();
-                        $("#edit-app").attr("disabled",false);
+                        $("#edit-app").attr("disabled", false);
                         $("#edit-appointment :input").prop("disabled", false);
-                        
+
                     },
-                    error: function(errors){
-                    	$("#edit-appointment :input").prop("disabled", false);
-                    	spinner2.stop();
+                    error: function(errors) {
+                        $("#edit-appointment :input").prop("disabled", false);
+                        $('#bt-spin2').removeClass('fa fa-spinner fa-spin');
                     }
                 });
             });

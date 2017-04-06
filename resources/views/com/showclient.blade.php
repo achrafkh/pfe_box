@@ -242,7 +242,6 @@
 <script src="{{ asset('js/charting.js') }}"></script>
 <script type="text/javascript" src="{{asset('js/libs/bootstrap-datepicker.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/libs/bootstrap-clockpicker.js')}}"></script>
-<script src="//cdn.jsdelivr.net/spinjs/1.3.0/spin.min.js"></script>
 
 <script type="text/javascript">
 var evs = {!! json_encode($calendar) !!};
@@ -250,20 +249,15 @@ var errors = {!! json_encode($errors->first()) !!};
 var donut = {!! json_encode($donut) !!};
 var userdate = {!! json_encode($client->birthdate) !!};
 
-var spinTarget1 = document.getElementById('create-spinner');
-var spinTarget2 = document.getElementById('update-spinner');
-       
-
-
 if (donut[0].value || donut[1].value || donut[2].value) {
-	$('#pending').text(donut[2].value);
-	$('#resc').text(donut[1].value);
-	$('#done').text(donut[0].value);
+    $('#pending').text(donut[2].value);
+    $('#resc').text(donut[1].value);
+    $('#done').text(donut[0].value);
     Morris.Donut({
         element: 'morris-donut-chart',
         data: donut,
         resize: true,
-        colors: ['#99d683', '#FB9678','#6164c1']
+        colors: ['#99d683', '#FB9678', '#6164c1']
     });
 } else {
     $('#morris-donut-chart').html('<h1 style="margin-top:40%;">Not enough data to Render The Chart</h1>').addClass('text-center');
@@ -286,15 +280,15 @@ $(window).load(function() {
         },
         eventClick: function(calEvent, jsEvent, view) {
             var evid = calEvent._id;
-            if ( !$('#view-invoice').hasClass( "hidden" ) ) {
-        		$('#view-invoice').addClass('hidden');
-        	}
-        	if ( !$('#create-invoice').hasClass( "hidden" ) ) {
-        		$('#create-invoice').addClass('hidden');
-        	}
+            if (!$('#view-invoice').hasClass("hidden")) {
+                $('#view-invoice').addClass('hidden');
+            }
+            if (!$('#create-invoice').hasClass("hidden")) {
+                $('#create-invoice').addClass('hidden');
+            }
 
-        	
-            $('#name').text(calEvent.client.firstname +' '+ calEvent.client.lastname);
+
+            $('#name').text(calEvent.client.firstname + ' ' + calEvent.client.lastname);
             $('#email').text(calEvent.client.email);
             $('#birthdate').text(calEvent.client.birthdate);
             $('#phone').text(calEvent.client.phone);
@@ -303,30 +297,32 @@ $(window).load(function() {
             $('#status option[value="' + calEvent.status + '"]').prop('selected', true);
 
 
-            if(calEvent.status == 'done' && calEvent.invoice == null)
+            if (calEvent.status == 'done' && calEvent.invoice == null)
             {
-            	var appid = calEvent.id;
-            	var showid = calEvent.showroom_id;
+                var appid = calEvent.id;
+                var showid = calEvent.showroom_id;
 
-            	var url = "/invoice/"+showid+"/"+appid+'/create';
+                var url = "/invoice/" + showid + "/" + appid + '/create';
 
-            	$('#create-invoice').attr("href", url).removeClass('hidden');
+                $('#create-invoice').attr("href", url).removeClass('hidden');
             }
-            if(calEvent.invoice != null)
+            if (calEvent.invoice != null)
             {
-            	var appid = calEvent.id;
-            	var showid = calEvent.showroom_id;
+                var appid = calEvent.id;
+                var showid = calEvent.showroom_id;
 
-            	var url = "/invoice/"+showid+"/"+appid;
-            	$('#view-invoice').attr("href", url).removeClass('hidden');
+                var url = "/invoice/" + showid + "/" + appid;
+                $('#view-invoice').attr("href", url).removeClass('hidden');
             }
             $('#fc_edit').click();
 
-             $("#save-status").unbind('click').bind("click", function() {
+            $("#save-status").unbind('click').bind("click", function() {
+
+                $('#bt-spin').addClass('fa fa-spinner fa-spin');
 
                 var data = {
                     id: calEvent.id,
-                    status:  $('#status').val(),
+                    status: $('#status').val(),
                 };
                 $.ajax({
                     url: '/com/updatestatus',
@@ -349,15 +345,19 @@ $(window).load(function() {
                             color: data.event.color,
                             client: data.event.client,
                         };
+                        $('#bt-spin').removeClass('fa fa-spinner fa-spin');
                         calendar.fullCalendar('removeEvents', evid);
                         calendar.fullCalendar('renderEvent', UpdatedEvent, false);
+                    },
+                    error: function() {
+                        $('#bt-spin').removeClass('fa fa-spinner fa-spin');
                     }
                 });
                 $('#close-update').click();
             });
-           $("#close-update").unbind('click').bind("click", function() {
+            $("#close-update").unbind('click').bind("click", function() {
 
-            	calendar.fullCalendar('unselect');
+                calendar.fullCalendar('unselect');
             });
             calendar.fullCalendar('unselect');
         },

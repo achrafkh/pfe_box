@@ -35,14 +35,15 @@ class DashboardController extends Controller
         $clients = Cache::remember('clients', 10, function () {
             return Client::get();
         });
-        $prep = Invoice::orderby('created_at', 'DESC');
+        $prep = Invoice::where('created_at', '>', Carbon::now()->subMonth())->orderby('created_at', 'DESC');
         $dat= $prep->get();
+        $total =  $dat->sum('total');
+
         $miniDonut['paid'] = $dat->where('status', 'paid')->count();
-        $miniDonut['canceled'] = $dat->where('status', 'canceled')->count();
+        //$miniDonut['canceled'] = $dat->where('status', 'canceled')->count();
         $miniDonut['pending'] = $dat->where('status', 'pending')->count();
         $invoices  = $prep->paginate(9);
 
-        $donut = $this->charts->AppointmentsDonutChart($data);
 
         $apps = $data->where('start_at', '>=', Carbon::now()->subWeek());
         $clients = Client::get();
@@ -53,15 +54,7 @@ class DashboardController extends Controller
         $stats['week-rescheduled'] = $apps->where('status', 'rescheduled')->count();
         $stats['success'] =  ($stats['week-success'] / $stats['week-total']) * 100;
 
-        $rd1 = ($data->where("status", "done")->count() / $data->count()) * 100;
-        $rd2 = ($data->where('start_at', '>', Carbon::now()->subMonth())->where('start_at', '<', Carbon::now())->count() / $data->count()) * 100;
-        $rd3 = ($data->count() / $clients->count());
-
-        $this_month = $data->where('start_at', '>=', Carbon::now()->subMonth())->where('start_at', '<=', Carbon::now())->where('status', 'done')->count();
-        $last_month = $data->where('start_at', '>=', Carbon::now()->subMonths(2))->where('start_at', '<=', Carbon::now()->subMonth())->where('status', 'done')->count();
-
-        $rd4 = (($this_month - $last_month) / $data->count())*100;
-        return view('mark.index', compact('rd1', 'rd2', 'rd3', 'rd4', 'donut', 'invoices', 'area', 'miniDonut', 'apps', 'clients', 'stats'));
+        return view('mark.index', compact('invoices', 'area', 'miniDonut', 'apps', 'clients', 'stats', 'total'));
     }
 
 
