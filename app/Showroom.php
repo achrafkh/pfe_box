@@ -16,6 +16,10 @@ class Showroom extends Model
 
     public function invoices()
     {
-        return $this->hasMany(Invoice::class);
+        return $this->hasMany(Invoice::class)->orderBy('created_at', 'desc');
+    }
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class)->orderBy('end_at', 'desc');
     }
 }

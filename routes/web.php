@@ -12,8 +12,7 @@
 
 // Authentication Routes...
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginview');
-
-
+    
 Route::post('login', 'Auth\LoginController@login')->name('login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/login', function () {
@@ -46,6 +45,8 @@ Route::middleware(['auth', 'role:com'])->namespace('Commercial')->prefix('com')-
 //  Routes des Marketeurs..
 Route::middleware(['auth', 'role:mark'])->namespace('Marketer')->prefix('mark')->group(function () {
     Route::get('/dashboard', 'DashboardController@index')->name('mark');
+    Route::get('/showrooms', 'DashboardController@showrooms')->name('Showrooms');
+    Route::get('/showroom/{showroom}', 'DashboardController@show')->name('singleShowroom');
     Route::get('/api', 'DashboardController@getBarData');
 });
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repo\Charts\IChartsRepository;
 use App\Appointment;
+use App\Showroom;
 use App\Client;
 use App\Invoice;
 use Carbon\Carbon;
@@ -40,7 +41,6 @@ class DashboardController extends Controller
         $total =  $dat->sum('total');
 
         $miniDonut['paid'] = $dat->where('status', 'paid')->count();
-        //$miniDonut['canceled'] = $dat->where('status', 'canceled')->count();
         $miniDonut['pending'] = $dat->where('status', 'pending')->count();
         $invoices  = $prep->paginate(9);
 
@@ -66,5 +66,25 @@ class DashboardController extends Controller
         $stats = $this->charts->AppointmentsBarChart($range, $range2);
 
         return response()->json($stats);
+    }
+
+
+    public function showrooms()
+    {
+        $showrooms = Showroom::with('users', 'invoices')->get();
+        return view('mark.showrooms', compact('showrooms'));
+    }
+    public function show(Showroom $showroom)
+    {
+        $range = Carbon::now();
+        $range2 = Carbon::now()->subMonths(1);
+
+        $showroom->load('users', 'invoices.items', 'appointments');
+
+
+        $area = $this->charts->SalesAreaChart($range, $range2, $showroom->id);
+        $donut = $this->charts->AppointmentsDonutChart($showroom->appointments);
+        
+        return view('mark.singleshowroom', compact('showroom', 'area', 'donut'));
     }
 }

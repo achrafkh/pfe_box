@@ -27,7 +27,8 @@
 			@endif
 			@if(Auth::user()->hasRole('mark'))
 			<ul class="sidebar-menu nav">
-				<li><a href="{{ url('/mark')}} ">Check Statistiques</a></li>
+				<li><a href="{{ url('/mark/dashboard')}} ">Global Statistiques</a></li>
+				<li><a href="{{ url('/mark/showrooms')}} ">Showrooms</a></li>
 			</ul>
 			@endif
 			@if(Auth::user()->hasRole('admin'))

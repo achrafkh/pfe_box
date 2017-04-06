@@ -33,17 +33,21 @@ class ChartsRepo implements IChartsRepository
         return $donut;
     }
 
-    public function SalesAreaChart($range, $range2)
+    public function SalesAreaChart($range, $range2, $id = null)
     {
-        return DB::table('invoices')
-            ->where('updated_at', '<', $range)
-            ->where('updated_at', '>', $range2)
+        $data =  DB::table('invoices')
+            ->where('created_at', '<', $range)
+            ->where('created_at', '>', $range2)
             ->groupBy('period')
             ->orderBy('period', 'DESC')
             ->get([
-            DB::raw('week(updated_at) as period'),
+            DB::raw('week(created_at) as period'),
             DB::raw("SUM(CASE WHEN status = 'paid' THEN total ELSE 0 END) as total"),
-            ])
-            ->take(5);
+            ]);
+        if ($id != null) {
+            $data->where('showroom_id', $id);
+        }
+
+        return $data->take(5);
     }
 }

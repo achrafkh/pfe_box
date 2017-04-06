@@ -17,20 +17,33 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="white-box printableArea">
-			<h3><b>INVOICE</b> <span class="pull-right">#5669626</span></h3>
+			<h3><b>INVOICE</b> <span class="pull-right">#{{ $appointment->invoice->id }}</span></h3>
 			<hr>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="pull-left"> <address>
 						<h3> &nbsp;<b class="text-danger">{{ config('app.name') }}</b></h3>
 						<p class="text-muted m-l-5"><strong>Showroom : </strong>{{ $showroom->city }}, <br/>
-							Nr' Viswakarma Temple, <br/>
-							Talaja Road, <br/>
-						Bhavnagar - 364002</p>
+							Box ADS, <br/>
+							KheirEddne, 364002<br/>
+						</p><br/>
+
+						<strong>Status : </strong>
+						@if($appointment->invoice->status == 'done')
+                        <span class="label label-success font-weight-100">Paid</span>
+                      @elseif($appointment->invoice->status =='pending')
+                        <span class="label label-primary font-weight-100">Pending</span>
+                      @else
+                        <span class="label label-danger font-weight-100">Canceled</span>
+                      @endif
 					</address> </div>
 					<div class="pull-right text-right"> <address>
 						<h3>To,</h3>
-						<h4 class="font-bold"><a href="{{ url(Auth::user()->role->title . '/client/'.$appointment->client->id)}}" style="text-decoration: none;">{{ $appointment->client->firstname . ' '. $appointment->client->lastname  }}</a></h4>
+						@if(Auth::user()->role->title == "mark")
+						<h4 class="font-bold">{{ $appointment->client->firstname . ' '. $appointment->client->lastname  }}</h4>
+						@else
+						<h4 class="font-bold"><a onclick="goto()" style="text-decoration: none;cursor: pointer;">{{ $appointment->client->firstname . ' '. $appointment->client->lastname  }}</a></h4>
+						@endif
 						<p class="text-muted m-l-30">{{ $appointment->client->city }} <br/>
 							{{ $appointment->client->address }}, <br/>
 							{{$appointment->client->phone }}, <br/>
@@ -87,16 +100,25 @@
 
 @section('js')
 
+
+
 <script src="/js/jquery.PrintArea.js" type="text/JavaScript"></script>
-    <script>
-    $(document).ready(function(){
-        $("#print").click(function(){
-            var mode = 'iframe'; //popup
-            var close = mode == "popup";
-            var options = { mode : mode, popClose : close};
-            $("div.printableArea").printArea( options );
-        });
+<script>
+var url = {!! json_encode(url(Auth::user()->role->title . '/client/'.$appointment->client->id))!!};
+function goto() {
+    window.location.href = url;
+}
+$(document).ready(function () {
+    $("#print").click(function () {
+        var mode = 'iframe'; //popup
+        var close = mode == "popup";
+        var options = {
+            mode: mode,
+            popClose: close
+        };
+        $("div.printableArea").printArea(options);
     });
-  </script>
+}); 
+</script>
 
 @endsection
