@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Commercial;
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Repo\Calendar\ICalendarRepository;
+use App\Repo\Charts\IChartsRepository;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Appointment;
@@ -19,14 +20,16 @@ class ClientsController extends Controller
 {
     protected $data;
     
-    public function __construct(ICalendarRepository $calendar)
+    protected $charts;
+
+    public function __construct(ICalendarRepository $calendar, IChartsRepository $charts)
     {
         $this->data = $calendar;
+        $this->charts = $charts;
     }
     public function index()
     {
         $apps = Appointment::where('start_at', '>=', Carbon::now()->subWeek())->get();
-        $cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('name', 'postal');
         $clients = Client::get();
 
         $stats['week-total'] = $apps->count();
@@ -34,25 +37,20 @@ class ClientsController extends Controller
         $stats['week-rescheduled'] = $apps->where('status', 'rescheduled')->count();
         $stats['success'] =  ($stats['week-success'] / $stats['week-total']) * 100;
 
-        return view('com.clients', compact('clients', 'cities', 'apps', 'stats'));
+        return view('com.clients', compact('clients', 'apps', 'stats'));
     }
 
     public function show(Client $client)
     {
         $calendar = $this->data->getClientCalender($client->id);
-        $cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('name', 'postal');
        
         $data =  Appointment::where('client_id', $client->id)->get();
 
-        $donut[] = ["label" => "done","value" => $data->where("status", "done")->count()];
-        $donut[] = ["label" => "rescheduled","value" => $data->where("status", "rescheduled")->count()];
-        $donut[] = ["label" => "pending","value" => $data->where("status", "pending")->count()];
-
-        $showrooms = Showroom::get();
-        $client->load('invoices.showroom');
-
-       // dd($calendar[0]);
+        $donut = $this->charts->AppointmentsDonutChart($data);
         
-        return view('com.showclient', compact('showrooms', 'client', 'calendar', 'donut', 'cities'));
+        $showrooms = Showroom::get();
+        $client->load('invoices.showroom', 'invoices.appointment');
+        
+        return view('com.showclient', compact('showrooms', 'client', 'calendar', 'donut'));
     }
 }

@@ -118,7 +118,7 @@
                                     @foreach($client->invoices as $item)
                                     <tr>
                                         <td>{{ $item->id }}</td>
-                                        <td>{{ $item->appointment->client->firstname .' '.$item->appointment->client->lastname }}</td>
+                                        <td>{{ $client->firstname .' '.$client->lastname }}</td>
                                         <td>{{ $item->showroom->city }}</td>
                                         <td><span class="text-muted"><i class="fa fa-clock-o"></i>{{ $item->created_at->format('l jS \\of F Y ') }}</span> </td>
                                         

@@ -31,7 +31,7 @@ class ClientsController extends Controller
     public function index()
     {
         $apps = Appointment::where('start_at', '>=', Carbon::now()->subWeek())->get();
-        $cities = Countries::where('name.common', 'Tunisia')->first()->states->pluck('name', 'postal');
+        
         $clients = Client::get();
 
         $stats['week-total'] = $apps->count();
@@ -39,20 +39,15 @@ class ClientsController extends Controller
         $stats['week-rescheduled'] = $apps->where('status', 'rescheduled')->count();
         $stats['success'] =  ($stats['week-success'] / $stats['week-total']) * 100;
 
-        return view('op.index', compact('clients', 'cities', 'apps', 'stats'));
+        return view('op.index', compact('clients', 'apps', 'stats'));
     }
 
     public function show(Client $client)
     {
         $id = $client->id;
-        $minutes = 1;
+        $minutes = 10;
         $data = Cache::remember('user-apps-'.$id, $minutes, function () use ($id) {
             return Appointment::where('client_id', $id)->get();
-        });
-
-        
-        $cities = Cache::remember('cities', $minutes, function () {
-            return Countries::where('name.common', 'Tunisia')->first()->states->pluck('name', 'postal');
         });
         
         $calendar = Cache::remember('calendar-'.$id, $minutes, function () use ($id) {
@@ -69,7 +64,7 @@ class ClientsController extends Controller
 
         $client->load('invoices.showroom', 'invoices.appointment.client');
 
-        return view('op.showclient', compact('showrooms', 'client', 'calendar', 'donut', 'cities'));
+        return view('op.showclient', compact('showrooms', 'client', 'calendar', 'donut'));
     }
 
     public function create()
