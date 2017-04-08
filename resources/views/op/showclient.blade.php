@@ -309,14 +309,14 @@ $(window).load(function() {
                                 var id = "#" + form.attr('id') + " p[name=" + key + "E]";
                                 $(id).css('margin-top', '10px').text(value);
                             });
-                            return false;
+                            
                         }
                     },
                     data: myform,
 
                     success: function(data) {
 
-
+                        showAlert('success', 'Success','Appointment Set Successfuly');
                         $("#create-appointment").trigger('reset');
                         var NewEvent = {
                             id: data.event.id,
@@ -337,6 +337,7 @@ $(window).load(function() {
 
                     },
                     error: function(errors) {
+                        showAlert('error', 'Error','Something Went Wrong! Please Verify Your input!');
                         $("#create-appointment :input").prop("disabled", false);
                         $('#bt-spin').removeClass('fa fa-spinner fa-spin');
                         $("#create-app").attr("disabled", false);
@@ -356,10 +357,10 @@ $(window).load(function() {
                     'end': event.end.format('YYYY-MM-DD HH:MM:SS')
                 },
                 success: function(data) {
-                    //
+                    showAlert('success', 'Success','Appointment Updated Successfuly');
                 },
             });
-            return false;
+            
         },
         eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc) {
             var start = event.start.format('YYYY-MM-DD HH:MM:SS');
@@ -373,9 +374,11 @@ $(window).load(function() {
                     'end': event.end != null ? event.end.format('YYYY-MM-DD HH:MM:SS') : start,
                 },
                 success: function(data) {
-                    //
+                    var msg = 'Appointment "'+ event.title +'" Updated Successfuly';
+                    showAlert('success', 'Success',msg);
                 },
             });
+            
 
         },
         eventClick: function(calEvent, jsEvent, view) {
@@ -413,6 +416,7 @@ $(window).load(function() {
                     },
                     data: form,
                     success: function(data) {
+                        showAlert('success', 'Success','Appointment Updated Successfuly');
                         $("#edit-appointment").trigger('reset');
                         var UpdatedEvent = {
                             _id: data.event.id,
@@ -435,6 +439,7 @@ $(window).load(function() {
 
                     },
                     error: function(errors) {
+                        showAlert('error', 'Error','Something Went Wrong! Please Verify Your input!');
                         $("#edit-appointment :input").prop("disabled", false);
                         $('#bt-spin2').removeClass('fa fa-spinner fa-spin');
                     }

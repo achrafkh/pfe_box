@@ -31,11 +31,12 @@ class ClientsController extends Controller
     public function index()
     {
         $apps = Appointment::where('start_at', '>=', Carbon::now()->subWeek())->get();
-        
+        $stats = null;
         $clients = Client::get();
-
-        $stats = $this->charts->SimpleStats($apps);
-
+        if ($apps->count()) {
+            $stats = $this->charts->SimpleStats($apps);
+        }
+        
         return view('op.index', compact('clients', 'apps', 'stats'));
     }
 
@@ -60,7 +61,7 @@ class ClientsController extends Controller
         });
 
         $client->load('invoices.showroom', 'invoices.appointment.client');
-
+    
         return view('op.showclient', compact('showrooms', 'client', 'calendar', 'donut'));
     }
 

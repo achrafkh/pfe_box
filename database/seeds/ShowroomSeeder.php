@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ClientAndAppsSeeder extends Seeder
+class ShowroomSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +11,6 @@ class ClientAndAppsSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Client::class, 60)->create();
-        factory(App\Appointment::class, 100)->create();
+        factory(App\Showroom::class, 10)->create();
     }
 }

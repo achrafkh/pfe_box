@@ -42,24 +42,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- /#wrapper -->
       @include('layouts.partials.scripts')
       @yield('js')
-      <script type="text/javascript">
-      var msgs = false;
-      </script>
-      @if(Session::has('success') || Session::has('error'))
-      <script type="text/javascript">
-      msgs = true;
-      </script>
-      @endif
-      
-      <script type="text/javascript">
-
-      if(msgs){
-      $("#alerttopright").fadeToggle(350);
-      }
-      $(".myadmin-alert .closed").click(function (event) {
-            $(this).parents(".myadmin-alert").fadeToggle(350);
-            return false;
-        });
-      </script>
+   <script type="text/javascript">
+      function showAlert(status, heading,body) {
+         var icon = 'error';
+         if (status == 'success') {
+            icon = 'success';
+         }
+         $.toast({
+            heading: heading,
+            text: body,
+            position: 'top-right',
+            loaderBg: '#ff6849',
+            icon: icon,
+            hideAfter: 6000,
+            stack: 6
+         });
+      };
+   </script>
    </body>
 </html>

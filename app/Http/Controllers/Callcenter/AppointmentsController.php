@@ -14,6 +14,7 @@ use App\Appointment;
 use App\Client;
 use App\User;
 use Session;
+use Cache;
 
 class AppointmentsController extends Controller
 {
@@ -44,6 +45,7 @@ class AppointmentsController extends Controller
 
         // Mail::to($users)->queue(new newAppointment($client, $appointment));
         // Mail::to($client)->queue(new newAppointmentClient($appointment));
+        Cache::forget('calendar-'.$appointment->client_id);
 
         return response()->json($data);
     }
@@ -73,7 +75,7 @@ class AppointmentsController extends Controller
 
         $data["status"] = true;
         $data["event"]  = $appointment->toarray();
-
+        Cache::forget('calendar-'.$appointment->client_id);
         return response()->json($data);
     }
     
@@ -90,13 +92,14 @@ class AppointmentsController extends Controller
 
     public function updateTime(Request $request)
     {
-        $app = Appointment::find($request->id)->update([
+        $app = Appointment::find($request->id);
+        $update = $app->update([
             'start_at' => $request->start,
             'end_at'   => $request->end,
             ]);
 
-
-        if (!$app) {
+        Cache::forget('calendar-'.$app->client_id);
+        if (!$update) {
             return response()->json(false);
         }
         return response()->json(true);

@@ -241,7 +241,11 @@
   <a href="#" class="closed">&times;</a>
   <p id="msg"></p>
 </div>
-
+<style type="text/css">
+  #myTable > tbody > tr.odd.newLine{
+    background-color: rgb(223, 255, 247)!important;
+  }
+</style>
 
 @endsection
 @section('js')
@@ -269,7 +273,7 @@
                 "orderable": false,
             }],
             "order": [
-                [6, 'asc']
+                [5, 'desc']
             ],
             "displayLength": 10,
         });
@@ -288,10 +292,7 @@
                 ] ).draw( false ).node();
 
             $(rowNode)
-                .css('background-color', 'red')
-                .animate({
-                    color: 'black'
-                });
+                .addClass('newLine');
         }
         $('#newClient').wizard({
 
@@ -387,23 +388,15 @@
                     dataType: 'json',
                     data: $("#validation").serialize(),
                     success: function(response) {
-                        if (response.status) {
-                            $("#msg").text('Added Successfully');
-                            $("#client-alert").addClass('alert-success');
-
-                            addRow(response.data)
-                        } else {
-                            $("#msg").text('Something Went Wrong');
-                            $("#client-alert").addClass('alert-danger');
-                        }
-                        $("#client-alert").fadeToggle(350);
-                        //
+                        addRow(response.data);
+                        showAlert('success', 'Success','Client Added Successfuly');
                     },
                     error: function(response) {
+                        //Error message
+                        showAlert('error', 'Error','OOps Something Went Wrong');
+
                         $('#close-create-client').click();
-                        $("#msg").text('Something Went Wrong');
-                        $("#client-alert").addClass('alert-danger');
-                        $("#client-alert").fadeToggle(350);
+                        
                     },
                 });
 
@@ -414,15 +407,13 @@
                 $('li.active').addClass('current');
                 $("#validation").data('formValidation').resetForm();
                 
-                if ($("#client-alert").hasClass("alert-success")) {
-                    $("#client-alert").removeClass('alert-success');
-                }
-                if ($("#client-alert").hasClass("alert-danger")) {
-                    $("#client-alert").removeClass('alert-danger');
-                }
+               
             }
 
         });
     });
 </script>
+
+
+
 @endsection
