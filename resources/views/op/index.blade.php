@@ -236,17 +236,6 @@
     </div>
   </div>
 </div>
-
-<div id="client-alert" class="myadmin-alert myadmin-alert-top-right">
-  <a href="#" class="closed">&times;</a>
-  <p id="msg"></p>
-</div>
-<style type="text/css">
-  #myTable > tbody > tr.odd.newLine{
-    background-color: rgb(223, 255, 247)!important;
-  }
-</style>
-
 @endsection
 @section('js')
 <script src="{{ asset('js/datatables.js') }} "></script>
