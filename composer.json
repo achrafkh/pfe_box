@@ -8,12 +8,13 @@
         "php": ">=5.6.4",
         "barryvdh/laravel-debugbar": "^2.3",
         "facebook/graph-sdk": "*",
+        "fzaninotto/faker": "~1.4",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4",
-        "fzaninotto/faker": "~1.4",
-        "pragmarx/countries": "^0.1.0"
+        "pragmarx/countries": "^0.1.0",
+        "yajra/laravel-datatables-oracle": "7.2"
     },
     "require-dev": {
         "appzcoder/crud-generator": "^2.0",

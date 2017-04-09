@@ -73,6 +73,6 @@ background: #fff
 	    margin-right: 0;
 	}
 }
-#myTable > tbody > tr.odd.newLine{
+#myTable > tbody > tr.odd.newClient{
   background-color: rgb(223, 255, 247)!important;
 }

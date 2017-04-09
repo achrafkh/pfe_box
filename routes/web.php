@@ -10,6 +10,7 @@
 |
 */
 
+
 // Authentication Routes...
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginview');
     
@@ -23,7 +24,7 @@ Route::middleware(['auth', 'role:op'])->namespace('Callcenter')->prefix('op')->g
     /*Route::get('/', 'DashboardController@index');*/
     Route::get('/dashboard', 'ClientsController@index')->name('op');
     Route::get('/client/create', 'ClientsController@create')->name('addClientForm');
-
+    Route::get('/getclients', 'ClientsController@getClients')->name('getClients');
     Route::post('/client/create', 'ClientsController@store')->name('createClient');
     Route::post('/client/update', 'ClientsController@update')->name('updateClient');
     Route::get('/client/{client}', 'ClientsController@show')->name('showClient');
@@ -36,6 +37,7 @@ Route::middleware(['auth', 'role:op'])->namespace('Callcenter')->prefix('op')->g
 });
 //  Routes des Commerciaux...
 Route::middleware(['auth', 'role:com'])->namespace('Commercial')->prefix('com')->group(function () {
+    Route::get('/getclients', 'ClientsController@getClients')->name('getClientsCom');
     Route::get('/clients', 'ClientsController@index')->name('ClientsCom');
     Route::get('/client/{client}', 'ClientsController@show')->name('showClientCom');
     Route::get('/appointments', 'AppointmentsController@index')->name('com');

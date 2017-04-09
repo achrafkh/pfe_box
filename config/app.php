@@ -170,6 +170,8 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         PragmaRX\Countries\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Yajra\Datatables\DatatablesServiceProvider::class,
+
 
 
 

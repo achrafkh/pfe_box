@@ -33,7 +33,7 @@
               <h5 class="text-muted vb">Total Clients</h5>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
-              <h3 class="counter text-right m-t-15 text-danger">{{ $clients->where('created_at','>',Carbon\Carbon::now()->subWeek())->count() }}</h3>
+              <h3 class="counter text-right m-t-15 text-danger">50</h3>
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="progress">
@@ -102,6 +102,7 @@
         <table id="myTable" class="table table-striped">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Name</th>
               <th>Email</th>
               <th>Phone Number</th>
@@ -112,17 +113,7 @@
             </tr>
           </thead>
           <tbody>
-            @foreach($clients as $client)
-            <tr>
-              <td>{{  $client->firstname .' ' . $client->lastname }} </td>
-              <td>{{  $client->email }}</td>
-              <td>{{  $client->phone }}</td>
-              <td>{{  $client->address }}</td>
-              <td>{{  $client->city }}</td>
-              <td>{{  $client->created_at }}</td>
-              <td class="text-center"><a href="{{ url('/com/client',$client->id) }}" class="btn btn-info waves-effect waves-light m-t-10">View</a></td>
-            </tr>
-            @endforeach
+           
           </tbody>
         </table>
       </div>
@@ -244,15 +235,31 @@
 <script>
 
     $(document).ready(function() {
-        var table = $('#myTable').DataTable({
-            "columnDefs": [{
+      $('#myTable').DataTable({
+          columnDefs: [{
                 "targets": 'no-sort',
                 "orderable": false,
             }],
-            "order": [
-                [6, 'asc']
+            order: [
+                [5, 'desc']
             ],
-            "displayLength": 10,
+            displayLength: 10,
+            processing: true,
+            serverSide: true,
+            ajax: '/com/getclients',
+            columns: [
+                { 'data': 'id', 'name': 'id' },
+                { 'data': 'name', 'name': 'name' },
+                { 'data': 'email', 'name': 'email' },
+                { 'data': 'phone', 'name': 'phone' },
+                { 'data': 'address', 'name': 'address' },
+                { 'data': 'city', 'name': 'city' },
+                { 'data': 'created_at', 'name': 'created_at' },
+                { 'data': 'id', render: function(data, type, full, meta)
+                  {
+                    return  '<a href="/op/client/'+data+'" class="btn btn-info waves-effect waves-light m-t-10">View</a>';
+                  }}
+            ]
         });
     });
 </script>

@@ -11,7 +11,7 @@ class InvoicesSeeder extends Seeder
      */
     public function run(Faker\Generator $faker)
     {
-        factory(App\Invoice::class, 70)->create()->each(function ($u) use ($faker) {
+        factory(App\Invoice::class, 100)->create()->each(function ($u) use ($faker) {
             $number = $faker->numberBetween(1, 5);
             $u->items()->saveMany(factory(App\InvoiceLine::class, $number)->make());
         });

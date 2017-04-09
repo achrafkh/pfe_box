@@ -24,31 +24,22 @@ class ChartsRepo implements IChartsRepository
             ->take(5);
     }
 
-    public function AppointmentsDonutChart($appointments)
-    {
-        $donut[] = ["label" => "done","value" => $appointments->where("status", "done")->count()];
-        $donut[] = ["label" => "rescheduled","value" => $appointments->where("status", "rescheduled")->count()];
-        $donut[] = ["label" => "pending","value" => $appointments->where("status", "pending")->count()];
-
-        return $donut;
-    }
-
     public function SalesAreaChart($range, $range2, $id = null)
     {
         $data =  DB::table('invoices')
             ->where('created_at', '<', $range)
             ->where('created_at', '>', $range2)
             ->groupBy('period')
-            ->orderBy('period', 'DESC')
-            ->get([
-            DB::raw('week(created_at) as period'),
-            DB::raw("SUM(CASE WHEN status = 'paid' THEN total ELSE 0 END) as total"),
-            ]);
-        if ($id != null) {
+            ->orderBy('period', 'DESC');
+        if ($id) {
             $data->where('showroom_id', $id);
         }
+        $chartData = $data->get([
+            DB::raw('week(created_at) as period'),
+            DB::raw("SUM(CASE WHEN status = 'paid' THEN total ELSE 0 END) as total"),
+        ]);
 
-        return $data->take(5);
+        return $chartData->take(5);
     }
 
     public function SimpleStats($appointments)
@@ -59,5 +50,14 @@ class ChartsRepo implements IChartsRepository
         $stats['success'] =  ($stats['week-success'] / $stats['week-total']) * 100;
 
         return $stats;
+    }
+
+    public function AppointmentsDonutChart($appointments)
+    {
+        $donut[] = ["label" => "done","value" => $appointments->where("status", "done")->count()];
+        $donut[] = ["label" => "rescheduled","value" => $appointments->where("status", "rescheduled")->count()];
+        $donut[] = ["label" => "pending","value" => $appointments->where("status", "pending")->count()];
+
+        return $donut;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Callcenter;
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Repo\Calendar\ICalendarRepository;
+use Yajra\Datatables\Facades\Datatables;
 use App\Repo\Charts\IChartsRepository;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use Countries;
 use App\User;
 use Session;
 use Cache;
+use DB;
 
 class ClientsController extends Controller
 {
@@ -32,12 +34,16 @@ class ClientsController extends Controller
     {
         $apps = Appointment::where('start_at', '>=', Carbon::now()->subWeek())->get();
         $stats = null;
-        $clients = Client::get();
         if ($apps->count()) {
             $stats = $this->charts->SimpleStats($apps);
         }
         
         return view('op.index', compact('clients', 'apps', 'stats'));
+    }
+
+    public function getClients()
+    {
+       return Datatables::of(DB::select('select concat(firstname, " ", lastname) as name,id,email,phone,address,city,created_at from clients'))->make(true);
     }
 
     public function show(Client $client)

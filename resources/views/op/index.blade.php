@@ -18,10 +18,10 @@
 <!-- .row -->
 @endsection
 @section('css')
-<link href="{{ asset('css/datatables.css') }}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="{{asset('css/libs/bootstrap-datepicker.css')}}">
 @endsection
 @section('css-top')
+<link href="{{ asset('css/datatables.css') }}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/css/libs/wizard.css">
 @endsection
 @section('content1')
@@ -35,7 +35,7 @@
               <h5 class="text-muted vb">Total Clients</h5>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
-              <h3 class="counter text-right m-t-15 text-danger">{{ $clients->where('created_at','>',Carbon\Carbon::now()->subWeek())->count() }}</h3>
+              <h3 class="counter text-right m-t-15 text-danger">5</h3>
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="progress">
@@ -107,6 +107,7 @@
         <table id="myTable" class="table table-striped">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Name</th>
               <th>Email</th>
               <th>Phone Number</th>
@@ -117,17 +118,7 @@
             </tr>
           </thead>
           <tbody>
-            @foreach($clients as $client)
-            <tr>
-              <td>{{  $client->firstname .' ' . $client->lastname }} </td>
-              <td>{{  $client->email }}</td>
-              <td>{{  $client->phone }}</td>
-              <td>{{  $client->address }}</td>
-              <td>{{  $client->city }}</td>
-              <td>{{  $client->created_at }}</td>
-              <td class="text-center"><a href="{{ url('/op/client',$client->id) }}" class="btn btn-info waves-effect waves-light m-t-10">View</a></td>
-            </tr>
-            @endforeach
+           
           </tbody>
         </table>
       </div>
@@ -256,32 +247,47 @@
             format: 'yyyy/mm/dd',
         });
 
-        var table = $('#myTable').DataTable({
-            "columnDefs": [{
+      var table = $('#myTable').DataTable({
+          columnDefs: [{
                 "targets": 'no-sort',
                 "orderable": false,
             }],
-            "order": [
+            order: [
                 [5, 'desc']
             ],
-            "displayLength": 10,
+            displayLength: 10,
+            processing: true,
+            serverSide: true,
+            ajax: '/op/getclients',
+            columns: [
+                { 'data': 'id', 'name': 'id' },
+                { 'data': 'name', 'name': 'name' },
+                { 'data': 'email', 'name': 'email' },
+                { 'data': 'phone', 'name': 'phone' },
+                { 'data': 'address', 'name': 'address' },
+                { 'data': 'city', 'name': 'city' },
+                { 'data': 'created_at', 'name': 'created_at' },
+                { 'data': 'id', render: function(data, type, full, meta)
+                  {
+                    return  '<a href="/op/client/'+data+'" class="btn btn-info waves-effect waves-light m-t-10">View</a>';
+                  }}
+            ]
         });
         function addRow(data) {
-          console.log(data);
-
           var link = '<a href="/op/client/' + data.id + '" class="btn btn-info waves-effect waves-light m-t-10">View</a>';
-          var rowNode = table.row.add( [
-                    data.firstname +' '+ data.lastname,
-                    data.email,
-                    data.phone,
-                    data.address,
-                    data.city,
-                    data.created_at,
-                    link,
-                ] ).draw( false ).node();
+          
+          var rowNode = table.row.add( {
+                   'name': data.firstname +' '+ data.lastname,
+                   'email': data.email,
+                   'phone':  data.phone,
+                   'address':  data.address,
+                   'city':  data.city,
+                   'created_at':  data.created_at,
+                   'id':  link,
+                } ).draw( false ).node();
 
-            $(rowNode)
-                .addClass('newLine');
+              $(rowNode)
+                  .addClass('newClient');
         }
         $('#newClient').wizard({
 

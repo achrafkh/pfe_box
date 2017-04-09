@@ -78,7 +78,7 @@ class DashboardController extends Controller
 
         $showroom->load('users', 'invoices.items', 'appointments');
 
-
+      
         $area = $this->charts->SalesAreaChart($range, $range2, $showroom->id);
         $donut = $this->charts->AppointmentsDonutChart($showroom->appointments);
         
