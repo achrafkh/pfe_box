@@ -59,6 +59,7 @@ class Kernel extends HttpKernel
 
         // Custom
         'role' => \App\Http\Middleware\Custom\Rolemiddleware::class,
+        'settings' => \App\Http\Middleware\pageSetMiddleware::class,
 
     ];
 }

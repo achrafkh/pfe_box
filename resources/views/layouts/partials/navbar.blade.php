@@ -33,10 +33,10 @@
 			@endif
 			@if(Auth::user()->hasRole('admin'))
 			<ul class="sidebar-menu nav">
-				<li><a href="{{ url('/admin/dashboard')}} ">Dashboard</a></li>
 				<li><a href="{{ url('/admin/users')}} ">Manage Users</a></li>
 				<li><a href="{{ url('/admin/appointments')}} ">Manage Appointments</a></li>
 				<li><a href="{{ url('/invoices')}} ">Manage Invoices</a></li>
+				<li><a href="{{ url('/admin/pages')}} ">Manage Forms</a></li>
 			</ul>
 			@endif
 			<!-- Left navbar-header end -->

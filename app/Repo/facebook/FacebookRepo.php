@@ -2,9 +2,6 @@
 
 namespace App\Repo\facebook;
 
-use FacebookAds\Api;
-use FacebookAds\Object\AdUser;
-use \Facebook\Facebook;
 
 class FacebookRepo implements IFacebookRepository
 {
@@ -13,34 +10,65 @@ class FacebookRepo implements IFacebookRepository
     protected $client;
     protected $baseurl;
 
-    public function __construct()
+    public function __construct($app_secret,$app_id)
     {
-        $this->app_secret = env('FACEBOOK_APP_SECRET');
-        $this->app_id = env('FACEBOOK_APP_ID');
+        $this->app_secret = $app_secret;
+        $this->app_id = $app_id;
         $this->baseurl = 'https://graph.facebook.com/v2.8/';
-
         $this->client = new \GuzzleHttp\Client();
     }
 
-    public function getToken($short_access)
+    public function getLegalContentId($pageid,$access,$url)
     {
-        $response = $this->client->request('GET', $this->baseurl.'oauth/access_token?grant_type=fb_exchange_token&client_id='.$this->app_id.'&client_secret='.$this->app_secret.'&fb_exchange_token='.$short_access);
+            $response= $this->client->request('POST', $this->baseurl.$pageid.'/leadgen_legal_content', [
+                'form_params' => [
+                    'access_token' => $access,
+                    'privacy_policy[url]' => $url,
+                ]
+            ]);
 
-        return json_decode($response->getBody())->access_token;
+        return json_decode($response->getBody())->id;
     }
 
-
-    public function getLeads($access_token, $formid)
+    public function CreateForm($pageid,$access,$url,$name,$form,$legalid)
     {
-        $response = $this->client->request('GET', $this->baseurl.$formid.'/leads?access_token='.$access_token);
+            $response= $this->client->request('POST', $this->baseurl.$pageid.'/leadgen_forms', [
+                'form_params' => [
+                    'access_token' => $access,
+                    'name' => $name,
+                    'follow_up_action_url' => $url,
+                    'questions' => $form,
+                    'legal_content_id' => $legalid,
+                ]
+            ]);
 
-        return json_decode($response->getBody())->data[0];
+        return json_decode($response->getBody())->id;
     }
-
-    public function getForms($pageid, $access_token)
+    public function GetForms($pageid,$access)
     {
-        $response = $this->client->request('GET', $this->baseurl.$pageid.'/leadgen_forms?access_token='.$access_token);
+        $response = $this->client->request('GET', $this->baseurl.$pageid.'/leadgen_forms?access_token='.$access);
 
         return json_decode($response->getBody())->data;
     }
+    public function Getleads($formid,$access)
+    {
+        $response = $this->client->request('GET', $this->baseurl.$formid.'/leads?access_token='.$access);
+
+        return json_decode($response->getBody())->data;
+    }
+
+    public function DeleteFrom($formid,$pageaccess)
+    {
+        $response = $this->client->request('DELETE', $this->baseurl.$formid.'?access_token='.$pageaccess);
+
+        return json_decode($response->getBody());
+    }
+
+    public function GetForm($formid,$access)
+    {
+         $response = $this->client->request('GET', $this->baseurl.$formid.'?access_token='.$access);
+
+        return json_decode($response->getBody());
+    }
+
 }

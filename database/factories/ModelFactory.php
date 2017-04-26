@@ -24,7 +24,7 @@ $factory->define(App\Invoice::class, function (Faker\Generator $faker) {
         'total' => $faker->randomFloat($nbMaxDecimals = 2, $min = 10, $max = 500),
         'status'  => $status,
         'showroom_id' => $faker->numberBetween(1, 10),
-        'appointment_id' => $faker->numberBetween(1, 100),
+        'appointment_id' => $faker->numberBetween(1, 500),
         'created_at' => $created_at,
 
     ];

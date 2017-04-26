@@ -4,7 +4,10 @@ namespace App\Repo\facebook;
 
 interface IFacebookRepository
 {
-    public function getToken($short_access);
-    public function getLeads($access_token, $formid);
-    public function getForms($pageid, $access_token);
+    public function getLegalContentId($pageid,$access,$url);
+    public function CreateForm($pageid,$access,$url,$name,$form,$legalid);
+    public function GetForms($pageid,$access);
+    public function Getleads($formid,$access);
+    public function DeleteFrom($formid,$access);
+    public function GetForm($formid,$access);
 }
