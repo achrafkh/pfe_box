@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Repo\facebook\IFacebookRepository;
 use App\Http\Requests\SettingsRequest;
+use App\Http\Controllers\Controller;
+use App\Jobs\SyncClientsWithFb;
+use Illuminate\Http\Request;
+use App\Client;
 use App\Access;
+use Session;
+
 
 class FacebookController extends Controller
 {
@@ -16,7 +20,7 @@ class FacebookController extends Controller
     {
         $this->middleware('settings')->except('settings','setSettings');
         
-    	$this->form = '[{"type":"FULL_NAME"},{"type": "EMAIL"},{"type": "PHONE"},{"type": "COUNTRY"},{"type": "STREET_ADDRESS"},{"type": "CITY"}]';
+    	$this->form = '[{"type":"FULL_NAME"},{"type": "EMAIL"},{"type": "PHONE"},{"type": "STREET_ADDRESS"},{"type": "CITY"}]';
         $this->settings = Access::first();
 
     	$this->facebook = $repo;
@@ -37,7 +41,6 @@ class FacebookController extends Controller
     }
      public function showForm()
     {
-
         return view('admin.pages.create');
     }
 
@@ -45,6 +48,8 @@ class FacebookController extends Controller
     {
         $legalid = $this->facebook->getLegalContentId($this->settings->page_id,$this->settings->access_token,$request->legalurl);
         $formid = $this->facebook->CreateForm($this->settings->page_id,$this->settings->access_token,$request->redirect,$request->name,$this->form,$legalid);
+
+        Session::flash('flash', 'Form has Been Added Succesfully ');
         return redirect('admin/leads/'.$formid);
     }
 
@@ -61,6 +66,54 @@ class FacebookController extends Controller
         {
             return redirect('admin/pages/settings');
         }
+        Session::flash('flash', 'Access details Updated Succesfully');
         return redirect('admin/pages');
+    }
+
+    public function edit()
+    {
+        $data = $this->settings;
+        return view('admin.pages.edit',compact('data'));
+    }
+
+    public function sync(Request $request)
+    {
+        $leads = $this->facebook->Getleads($request->formid,$this->settings->access_token);
+
+       dispatch(new SyncClientsWithFb($leads));
+       
+       return response()->json(['success'=> true]);
+
+    }
+    public function getPageToken()
+    {
+        $data =  $this->facebook->getPageToken($this->settings->access_token);
+        $token = null;
+        foreach($data as $row)
+        {
+            if($row->id == $this->settings->page_id)
+            {
+                $token = $row->access_token;
+
+                $access = Access::first();
+                $access->page_token = $token;
+                $access->save();
+                break;
+            }
+        }
+
+        return $token;
+    }
+    public function deleteFrom($id,Request $request)
+    {
+        if(isset($this->settings->page_token))
+        {
+            $this->settings->page_token = $this->getPageToken();
+        }
+        $this->facebook->DeleteFrom($id,$this->settings->page_token);
+
+        Session::flash('flash', 'Form has Been Removed Succesfully ');
+        return redirect('admin/pages');
+
     }
 }

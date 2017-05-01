@@ -19,10 +19,11 @@
 <div class="panel panel-default">
     <div class="panel-heading">Leads for Form : {{ $form->name }}</div>
     <div class="panel-body">
-    <p>Form ID : {{ $form->id }}</p>
+     <a href="{{ url('/admin/pages') }}" title="Back"><button class="btn btn-warning btn-xs"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+    <p style="padding-top:2%;">Form ID : {{ $form->id }}</p>
     <div class="row">
-           <a class="btn btn-success ">Sync</a>
-           <a class="btn btn-info " style="margin-left:2%;margin-right:2%;">Download CSV</a> 
+           <a href="#" class="btn btn-success " id="sync">Sync <i id="spin" class=""></i></a>
+           <a target="_blank" class="btn btn-info " href=" {{ url($form->leadgen_export_csv_url) }} " style="margin-left:2%;margin-right:2%;">Download CSV</a> 
     </div>
     <div class="row" style="margin-top :3%;">
         @if(count($leads))
@@ -32,7 +33,6 @@
                         <th>Fullname</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>Country</th>
                         <th>Adresse</th>
                         <th>City</th>
                     </tr>
@@ -46,7 +46,6 @@
                             <td>{{ $lead->field_data['2']->values['0'] }} </td>
                             <td>{{ $lead->field_data['3']->values['0'] }} </td>
                             <td>{{ $lead->field_data['4']->values['0'] }} </td>
-                            <td>{{ $lead->field_data['5']->values['0'] }} </td>
                         </tr>
                   
                     @endforeach
@@ -61,4 +60,36 @@
     </div>
 </div>
 
+@endsection
+
+
+@section('js')
+<script type="text/javascript">
+var formid = {!! json_encode($form->id) !!}
+    $(window).load(function() {
+        $("#sync").unbind('click').bind("click", function(e) {
+            $("#spin").fadeToggle("slow").toggleClass('fa fa-spinner fa-spin');
+            e.preventDefault();
+            $.ajax({
+                url: '/admin/leads/sync',
+                type: 'post',
+                dataType: 'json',
+                data: {'formid':formid},
+                success: function(data) {
+                    if(data)
+                    {
+                        showAlert('success', 'Success','Form : '+ formid +' Data Are being Synced');
+                    } else{
+                        showAlert('error', 'Error','Something Went Wrong!');
+                    }
+                    $("#spin").fadeToggle("slow").toggleClass('fa fa-spinner fa-spin');
+                },
+                error: function(errors) {
+                    showAlert('error', 'Error','Something Went Wrong!');
+                    $("#spin").fadeToggle("slow").toggleClass('fa fa-spinner fa-spin');
+                }
+            });
+        });
+    });
+</script>
 @endsection

@@ -59,5 +59,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
          });
       };
    </script>
+   @if(Session::has('flash'))
+      <script type="text/javascript">
+         var msg = {!! json_encode(Session::get('flash'))  !!};
+         showAlert( 'success','Success',msg);
+      </script>
+   @endif
+
    </body>
 </html>

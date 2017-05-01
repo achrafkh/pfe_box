@@ -10,7 +10,6 @@
 |
 */
 
-
 Route::get('/fb', 'TestController@index');
 // Authentication Routes...
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginview');
@@ -67,14 +66,16 @@ Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->
     Route::get('/pages/settings', 'FacebookController@settings');
     Route::post('/pages/settings', 'FacebookController@setSettings');
 
+    Route::get('/pages/edit', 'FacebookController@edit');
+    Route::patch('/pages/update', 'FacebookController@setSettings');
+    Route::post('/leads/sync ', 'FacebookController@sync');
+    Route::get('/pages/gettoken ', 'FacebookController@getPageToken');
+
+    Route::delete('/form/delete/{id}', 'FacebookController@deleteFrom');
+    
     Route::get('/leads/{id}', 'FacebookController@getLeads');
     Route::get('forms/create', 'FacebookController@showForm');
     Route::post('forms/create', 'FacebookController@store');
-
-
-
-
-
 });
 
 Route::middleware(['auth'])->group(function () {

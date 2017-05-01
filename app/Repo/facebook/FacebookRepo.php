@@ -71,4 +71,11 @@ class FacebookRepo implements IFacebookRepository
         return json_decode($response->getBody());
     }
 
+    public function getPageToken($access)
+    {
+        $response = $this->client->request('GET', 'https://graph.facebook.com/me/accounts?access_token='.$access);
+
+         return json_decode($response->getBody())->data;
+    }
+
 }

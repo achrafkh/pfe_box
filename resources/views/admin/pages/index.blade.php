@@ -17,25 +17,45 @@
 
 @section('content1')
 <div class="panel panel-default">
-	<div class="panel-heading">Facebook Forms</div>
+	<div class="panel-heading">Facebook Forms <a class="btn btn-info pull-right" href="{{ url('/admin/pages/edit') }} ">Edit</a></div>
 	<div class="panel-body">
 		
 		<div class="row">
-			<div class="col-md-12 p-20">
-			        <a href="{{ url('/admin/forms/create') }}" class="btn btn-success btn-sm" title="Add New Form">
+			        <a href="{{ url('/admin/forms/create') }}" class="btn btn-primary btn-sm" title="Add New Form">
 			            <i class="fa fa-plus" aria-hidden="true"></i> Generate New Form
 			        </a>
 			@if(count($forms))
 				@foreach($forms as $form)
-				<div class="media">
-					<div class="media-body">
-						<h4 class="media-heading">Form name : {{ $form->name }} </h4>Form ID : {{ $form->id }} | Status :  {{ $form->status }}
-						| Local :  {{ $form->locale }}
-					</div>
-					<div class="media-right">
-						<a href="{{ url('/admin/leads',$form->id) }} " class="btn btn-info" style="margin-top:25%;">Check Leads</a>
-					</div>
-				</div>
+				    <div class="row m-b-10 " style="padding-top : 2%;">
+                        <div class="">
+                            <div class="ribbon-wrapper">
+
+                            @if($form->status == "ACTIVE")
+                                <div class="ribbon ribbon-bookmark ribbon-success">{{ $form->status }}</div>
+                            @else
+                            	<div class="ribbon ribbon-bookmark ribbon-danger">{{ $form->status }}</div>
+                            @endif
+                                    <p class="ribbon-content">Form name : {{ $form->name }} </h4>
+                                    Form ID : {{ $form->id }} | Local :  {{ $form->locale }}
+                                    <a href="{{ url('/admin/leads',$form->id) }} " class="btn btn-info pull-right" >Check Leads</a>
+                                    {!! Form::open([
+                                        'method'=>'DELETE',
+                                        'url' => ['/admin/form/delete', $form->id],
+                                        'style' => 'display:inline'
+                                        ]) !!}
+                                        {!! Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Form', array(
+                                        'type' => 'submit',
+                                        'class' => 'btn btn-danger btn-xs',
+                                        'title' => 'Delete User',
+                                        'onclick'=>'return confirm("Confirm delete?")'
+                                        )) !!}
+                                        {!! Form::close() !!}
+
+                                    </p>
+                            </div>
+                        </div>
+                    </div>
+				
 				@endforeach
 			@else
 
@@ -49,3 +69,4 @@
 </div>
 
 @endsection
+

@@ -10,4 +10,5 @@ interface IFacebookRepository
     public function Getleads($formid,$access);
     public function DeleteFrom($formid,$access);
     public function GetForm($formid,$access);
+    public function getPageToken($access);
 }

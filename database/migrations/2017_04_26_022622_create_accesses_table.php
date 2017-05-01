@@ -19,6 +19,7 @@ class CreateAccessesTable extends Migration
             $table->string('page_id');
             $table->string('app_sercret');
             $table->string('app_id');
+            $table->string('page_token')->nullable();
             $table->timestamps();
         });
     }
