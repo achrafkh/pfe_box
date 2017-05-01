@@ -10,7 +10,9 @@
 |
 */
 
-Route::get('/fb', 'TestController@index');
+Route::post('/getleads','Admin\FacebookController@HandleWebhook');
+Route::get('/getleads','Admin\FacebookController@validateWH');
+
 // Authentication Routes...
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginview');
     
@@ -76,6 +78,11 @@ Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->
     Route::get('/leads/{id}', 'FacebookController@getLeads');
     Route::get('forms/create', 'FacebookController@showForm');
     Route::post('forms/create', 'FacebookController@store');
+
+
+
+
+    
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -85,22 +92,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('invoice/create', 'InvoicesController@store');
 });
 
-
-Route::get('/getleads', function(Illuminate\Http\Request $request){
-    
-    $challenge = $request->hub_challenge;
-
-    //$input = json_decode(file_get_contents('php:://input'), true);
-    $fp = fopen('data.txt', 'w');
-    foreach($request->all() as $row)
-    {
-        fwrite($fp,  $row.PHP_EOL);
-    }
-    fclose($fp);
-
-    echo $challenge;
-    exit();
-});
 
 Route::get('/getdb', function () {
     $connectstr_dbhost = '';

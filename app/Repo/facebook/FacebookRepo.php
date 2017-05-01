@@ -78,4 +78,26 @@ class FacebookRepo implements IFacebookRepository
          return json_decode($response->getBody())->data;
     }
 
+    public function subscribe($pagetoken,$pageid,$url)
+    {
+     $response= $this->client->request('POST', $this->baseurl.$pageid.'/subscriptions', [
+                'form_params' => [
+                    'access_token' => $pagetoken,
+                    'callback_url' => $url,
+                    'fields' => 'leadgen',
+                    'verify_token' => 'aze',
+                    'object' => 'page',
+                ]
+            ]);
+
+        return json_decode($response->getBody());
+    }
+
+    public function GetLead($leadid,$access)
+    {
+        $response = $this->client->request('GET', 'https://graph.facebook.com/v2.9/'. $leadid .'/?access_token='.$access);
+
+         return json_decode($response->getBody());
+    }
+
 }

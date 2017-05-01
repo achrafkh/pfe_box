@@ -11,4 +11,6 @@ interface IFacebookRepository
     public function DeleteFrom($formid,$access);
     public function GetForm($formid,$access);
     public function getPageToken($access);
+    public function subscribe($pagetoken,$pageid,$url);
+    public function GetLead($leadid,$acess);
 }

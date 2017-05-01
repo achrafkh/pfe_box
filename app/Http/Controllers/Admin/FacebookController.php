@@ -18,7 +18,7 @@ class FacebookController extends Controller
     protected $settings;
 	public function __construct(IFacebookRepository $repo)
     {
-        $this->middleware('settings')->except('settings','setSettings');
+        $this->middleware('settings')->except('settings','setSettings','HandleWebhook');
         
     	$this->form = '[{"type":"FULL_NAME"},{"type": "EMAIL"},{"type": "PHONE"},{"type": "STREET_ADDRESS"},{"type": "CITY"}]';
         $this->settings = Access::first();
@@ -48,7 +48,6 @@ class FacebookController extends Controller
     {
         $legalid = $this->facebook->getLegalContentId($this->settings->page_id,$this->settings->access_token,$request->legalurl);
         $formid = $this->facebook->CreateForm($this->settings->page_id,$this->settings->access_token,$request->redirect,$request->name,$this->form,$legalid);
-
         Session::flash('flash', 'Form has Been Added Succesfully ');
         return redirect('admin/leads/'.$formid);
     }
@@ -66,6 +65,7 @@ class FacebookController extends Controller
         {
             return redirect('admin/pages/settings');
         }
+        $this->facebook->subscribe($request->app_id.'|'.$request->app_sercret,$request->page_id,url('/getleads'));
         Session::flash('flash', 'Access details Updated Succesfully');
         return redirect('admin/pages');
     }
@@ -106,7 +106,7 @@ class FacebookController extends Controller
     }
     public function deleteFrom($id,Request $request)
     {
-        if(isset($this->settings->page_token))
+        if(!isset($this->settings->page_token))
         {
             $this->settings->page_token = $this->getPageToken();
         }
@@ -115,5 +115,36 @@ class FacebookController extends Controller
         Session::flash('flash', 'Form has Been Removed Succesfully ');
         return redirect('admin/pages');
 
+    }
+
+    public function HandleWebhook(Request $request)
+    {
+        $challenge = $request->hub_challenge;
+        $data = $request->all();
+
+        foreach($data['entry'] as $entry)
+        {
+            foreach($entry['changes'] as $val)
+            {
+                $leadgenid = $val['value']['leadgen_id'];
+                file_put_contents('data.txt', print_r($leadgenid,true), FILE_APPEND | LOCK_EX);
+                break;
+            }
+            
+        }
+
+    }
+    public function validateWH(Request $request)
+    {
+        $challenge = $request->hub_challenge;
+        echo $challenge;
+        exit();
+    }
+
+    public function getLead($id)
+    {
+        $lead = $this->facebook->GetLead($id,$this->settings->access_token);
+
+        return  $lead;
     }
 }
