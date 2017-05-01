@@ -9,6 +9,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
       @include('layouts.partials.head')
       @yield('css')
       <style type="text/css">
+      body {
+         font-family: "Helvetica Neue",Roboto,Arial,"Droid Sans",sans-serif !important;
+      }
       </style>
    </head>
    <body>
