@@ -39,7 +39,7 @@ class ClientsController extends Controller
     }
         public function getClients()
     {
-       return Datatables::of(DB::select('select concat(firstname, " ", lastname) as name,id,email,phone,address,city,created_at from clients'))->make(true);
+        return Datatables::of(DB::select('select concat(firstname, " ", lastname) as name,src,id,email,phone,address,city,created_at from clients'))->make(true);
     }
 
     public function show(Client $client)

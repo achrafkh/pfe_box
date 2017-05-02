@@ -10,6 +10,8 @@
 |
 */
 
+
+//Routes De webhook facebook
 Route::post('/getleads','Admin\FacebookController@HandleWebhook');
 Route::get('/getleads','Admin\FacebookController@validateWH');
 
@@ -52,8 +54,7 @@ Route::middleware(['auth', 'role:mark'])->namespace('Marketer')->prefix('mark')-
     Route::get('/showroom/{showroom}', 'DashboardController@show')->name('singleShowroom');
     Route::get('/api', 'DashboardController@getBarData');
 });
-
-
+//  Routes des Admins..
 Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->group(function () {
 
     Route::get('/appointments', 'AppointmentsController@index')->name('admin');
@@ -80,7 +81,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('invoice/{showroom}/{appointment}/create', 'InvoicesController@create');
     Route::post('invoice/create', 'InvoicesController@store');
 });
-
 
 Route::get('/getdb', function () {
     $connectstr_dbhost = '';
