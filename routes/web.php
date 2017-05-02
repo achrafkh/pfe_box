@@ -15,7 +15,7 @@ Route::get('/getleads','Admin\FacebookController@validateWH');
 
 // Authentication Routes...
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginview');
-    
+
 Route::post('login', 'Auth\LoginController@login')->name('login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/login', function () {
@@ -23,7 +23,6 @@ Route::get('/login', function () {
 });
 //  Routes des Operateurs...
 Route::middleware(['auth', 'role:op'])->namespace('Callcenter')->prefix('op')->group(function () {
-    /*Route::get('/', 'DashboardController@index');*/
     Route::get('/dashboard', 'ClientsController@index')->name('op');
     Route::get('/client/create', 'ClientsController@create')->name('addClientForm');
     Route::get('/getclients', 'ClientsController@getClients')->name('getClients');
@@ -56,33 +55,23 @@ Route::middleware(['auth', 'role:mark'])->namespace('Marketer')->prefix('mark')-
 
 
 Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->group(function () {
-    Route::get('/dashboard', 'DashboardController@index')->name('adminDashboard');
+
     Route::get('/appointments', 'AppointmentsController@index')->name('admin');
     Route::post('/updatestatus', 'AppointmentsController@updateStatus');
     Route::post('/getevents', 'AppointmentsController@getEvents');
     Route::resource('users', 'UsersController');
 
-
-
     Route::get('/pages', 'FacebookController@index')->middleware('settings');
     Route::get('/pages/settings', 'FacebookController@settings');
     Route::post('/pages/settings', 'FacebookController@setSettings');
-
     Route::get('/pages/edit', 'FacebookController@edit');
     Route::patch('/pages/update', 'FacebookController@setSettings');
     Route::post('/leads/sync ', 'FacebookController@sync');
     Route::get('/pages/gettoken ', 'FacebookController@getPageToken');
-
     Route::delete('/form/delete/{id}', 'FacebookController@deleteFrom');
-    
     Route::get('/leads/{id}', 'FacebookController@getLeads');
-    Route::get('forms/create', 'FacebookController@showForm');
-    Route::post('forms/create', 'FacebookController@store');
-
-
-
-
-    
+    Route::get('/forms/create', 'FacebookController@showForm');
+    Route::post('/forms/create', 'FacebookController@store');
 });
 
 Route::middleware(['auth'])->group(function () {

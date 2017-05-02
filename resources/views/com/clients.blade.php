@@ -9,7 +9,7 @@
   <!-- .breadcrumb -->
   <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
     <ol class="breadcrumb">
-      <li><a href="starter-page.html#">Dashboard</a></li>
+      <li><a href="{{ url('/') }} ">Dashboard</a></li>
       <li class="active">Clients</li>
     </ol>
   </div>

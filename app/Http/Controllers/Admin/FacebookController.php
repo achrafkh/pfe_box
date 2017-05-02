@@ -18,7 +18,7 @@ class FacebookController extends Controller
     protected $settings;
 	public function __construct(IFacebookRepository $repo)
     {
-        $this->middleware('settings')->except('settings','setSettings','HandleWebhook');
+        $this->middleware('settings')->except('settings','setSettings','HandleWebhook','validateWH');
         
     	$this->form = '[{"type":"FULL_NAME"},{"type": "EMAIL"},{"type": "PHONE"},{"type": "STREET_ADDRESS"},{"type": "CITY"}]';
         $this->settings = Access::first();
@@ -127,7 +127,8 @@ class FacebookController extends Controller
             foreach($entry['changes'] as $val)
             {
                 $leadgenid = $val['value']['leadgen_id'];
-                file_put_contents('data.txt', print_r($leadgenid,true), FILE_APPEND | LOCK_EX);
+                $lead = $this->facebook->GetLead('1224504420981828',$this->settings->access_token); // to be changed
+               	dispatch(new SyncClientsWithFb([$lead]));
                 break;
             }
             
