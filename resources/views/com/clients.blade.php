@@ -257,7 +257,7 @@
                 { 'data': 'created_at', 'name': 'created_at' },
                 { 'data': 'id', render: function(data, type, full, meta)
                   {
-                    return  '<a href="/op/client/'+data+'" class="btn btn-info waves-effect waves-light m-t-10">View</a>';
+                    return  '<a href="/com/client/'+data+'" class="btn btn-info waves-effect waves-light m-t-10">View</a>';
                   }}
             ]
         });
