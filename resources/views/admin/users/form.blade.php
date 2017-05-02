@@ -7,7 +7,8 @@
         {!! Form::text('fullname', null, ['class' => 'form-control']) !!}
         {!! $errors->first('fullname', '<p class="help-block">:message</p>') !!}
     </div>
-</div><div class="form-group {{ $errors->has('username') ? 'has-error' : ''}}">
+</div>
+<div class="form-group {{ $errors->has('username') ? 'has-error' : ''}}">
     {!! Form::label('username', 'Username', ['class' => 'col-md-4 control-label']) !!}
     <div class="col-md-6">
         {!! Form::text('username', null, ['class' => 'form-control']) !!}
@@ -32,10 +33,10 @@
 </div><div class="form-group {{ $errors->has('role') ? 'has-error' : ''}}">
     {!! Form::label('role', 'Role', ['class' => 'col-md-4 control-label']) !!}
     <div class="col-md-6">
-        {!! Form::select('role_id', $roles, null, ['class' => 'form-control']) !!}
+        {!! Form::select('role_id', $roles, null, ['class' => 'form-control','id' => 'role']) !!}
         {!! $errors->first('role', '<p class="help-block">:message</p>') !!}
     </div>
-</div><div class="form-group {{ $errors->has('showroom') ? 'has-error' : ''}}">
+</div><div id="showroom" class="form-group {{ $errors->has('showroom') ? 'has-error' : ''}}">
     {!! Form::label('showroom', 'Showroom', ['class' => 'col-md-4 control-label']) !!}
     <div class="col-md-6">
         {!! Form::select('showroom_id', $showrooms, null, ['placeholder' => 'Pick a size...','class' => 'form-control']) !!}

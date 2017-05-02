@@ -30,3 +30,23 @@
     </div>
 </div>
 @endsection
+
+@section('js')
+
+<script type="text/javascript">
+$(function() {
+    if($('#role').val() != '2')
+    {
+        $('#showroom').hide();
+    }
+    $('#role').change(function(){
+        if($('#role').val() == '2') {
+            $('#showroom').show(); 
+        } else {
+            $('#showroom').hide(); 
+        } 
+    });
+});
+</script>
+
+@endsection

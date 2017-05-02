@@ -26,6 +26,11 @@ class UserRequest extends FormRequest
         if(isset($this->id))
         {
             $user = User::find($this->id);
+
+            if($user->role->title == 'com')
+            {
+                $req = 'required|exists:showrooms,id';
+            }
         }
         
 
@@ -37,7 +42,7 @@ class UserRequest extends FormRequest
                     'password'      => 'required|min:6',
                     'email'         => 'required|email|max:255|unique:users',
                     'role_id'       => 'required',
-                    'showroom_id'   => 'exists:showrooms,id',
+                    'showroom_id'   => isset($req) ? $req : '',
                     
                     
                 ];
@@ -50,7 +55,7 @@ class UserRequest extends FormRequest
                     'password'      => '',
                     'email'         => 'required|email|max:255|unique:users,email,'.$user->id,
                     'role_id'       => 'required',
-                    'showroom_id'   => 'exists:showrooms,id',
+                    'showroom_id'   => isset($req) ? $req : '',
                 ];
         }
 
