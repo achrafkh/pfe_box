@@ -22,8 +22,16 @@ mix.copy('node_modules/raphael/raphael.js', 'resources/assets/js/libs')
 	.copy('node_modules/clockpicker/dist/bootstrap-clockpicker.css', 'public/css/libs')
 	.copy('node_modules/clockpicker/dist/bootstrap-clockpicker.js', 'public/js/libs')
 	.copy('node_modules/jquery-sparkline/jquery.sparkline.min.js', 'public/js/libs')
-	// .js('resources/assets/js/op/showclient.js', 'public/js/op')
-	// .js('resources/assets/js/com/showroom.js', 'public/js/com')
+
+	.js('resources/assets/custom/com/index.js', 'public/js/com')
+	.js('resources/assets/custom/com/showclient.js', 'public/js/com')
+	.js('resources/assets/custom/com/clients.js', 'public/js/com')
+
+	.js('resources/assets/custom/op/index.js', 'public/js/op')
+	.js('resources/assets/custom/op/showclient.js', 'public/js/op')
+
+	.js('resources/assets/custom/mark/index.js', 'public/js/mark')
+	.js('resources/assets/custom/mark/singleshowroom.js', 'public/js/mark')
 
 	.sass('resources/assets/sass/app.scss', 'public/css')
 	.js('resources/assets/js/app.js', 'public/js')

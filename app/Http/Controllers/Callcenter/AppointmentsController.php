@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Callcenter;
 
 use App\Http\Requests\CreateAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
+use App\Mail\newAppointmentUpdatedClient;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\newAppointmentClient;
 use Illuminate\Support\Collection;
+use App\Mail\AppointmentDeleted;
 use Illuminate\Http\Request;
 use App\Mail\newAppointment;
 use App\Appointment;
@@ -43,8 +45,12 @@ class AppointmentsController extends Controller
         $client = Client::find($appointment->client_id);
         $users = User::where('showroom_id', $appointment->showroom_id)->get();
 
-        // Mail::to($users)->queue(new newAppointment($client, $appointment));
-        // Mail::to($client)->queue(new newAppointmentClient($appointment));
+        if(env('EMAILS'))
+        {
+            Mail::to($users)->queue(new newAppointment($client, $appointment));
+            Mail::to($client)->queue(new newAppointmentClient($appointment));
+        }
+        
         Cache::forget('calendar-'.$appointment->client_id);
 
         return response()->json($data);
@@ -72,7 +78,12 @@ class AppointmentsController extends Controller
             $data["event"]  = [];
             return response()->json($data);
         }
-
+        if(env('EMAILS'))
+        {
+            $client = Client::find($appointment->client_id);
+            Mail::to($client)->queue(new newAppointmentUpdatedClient($appointment));
+        }
+        
         $data["status"] = true;
         $data["event"]  = $appointment->toarray();
         Cache::forget('calendar-'.$appointment->client_id);

@@ -10,7 +10,6 @@
 |
 */
 
-
 //Routes De webhook facebook
 Route::post('/getleads','Admin\FacebookController@HandleWebhook');
 Route::get('/getleads','Admin\FacebookController@validateWH');

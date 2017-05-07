@@ -4,8 +4,10 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Mail\ClientReminder;
 use App\Appointment;
 use Carbon\Carbon;
+use App\Client;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,10 +28,19 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->call(function () {
-        //     $app = Appointment::where('end_at', '<', Carbon::now()->addWeek())->where('status', 'pending')->get();
-        //     $app->each->update(['status' => 'rescheduled']);
-        // })->Daily();
+        $schedule->call(function () {
+            $app = Appointment::where('end_at', '<', Carbon::now())->where('status', 'pending')->get();
+            $app->each->update(['status' => 'rescheduled']);
+        })->Daily();
+
+        $schedule->call(function () {
+            $date = Carbon::now()->addDay();
+            $apps = Appointment::whereMonth('start_at','=',$date->month)->whereDay('start_at','=',$date->day)->with('client','showroom')->get();
+            foreach($apps as $appointment)
+            {
+                Mail::to($appointment->client)->queue(new ClientReminder($appointment));
+            }  
+        })->dailyAt('18:00');
     }
 
     /**

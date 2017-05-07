@@ -125,8 +125,7 @@
 						</div>
 						<hr>
 						<div class="row text-center m-t-10">
-							<div class="col-md-6 b-r"><strong>ShowRoom</strong><p id="showroom"></p></div>
-							<div class="col-md-6"><strong>With Agent</strong><p id="agent"></p></div>
+							<div class="col-md-12 b-r"><strong>ShowRoom</strong><p id="showroom"></p></div>
 						</div>
 						<!-- /.row -->
 						<hr>

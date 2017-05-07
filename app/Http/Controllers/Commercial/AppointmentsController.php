@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Commercial;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repo\Calendar\ICalendarRepository;
+use App\Mail\newAppointmentUpdatedClient;
+use App\Mail\AppointmentDeleted;
 use App\Appointment;
 use App\Showroom;
 use App\User;
+use App\Client;
+use Mail;
 
 class AppointmentsController extends Controller
 {
@@ -50,6 +54,12 @@ class AppointmentsController extends Controller
         }
 
         $app->load('client');
+
+        if(env('EMAILS'))
+        {
+            $client = Client::find($app->client_id);
+            Mail::to($client)->queue(new newAppointmentUpdatedClient($app));
+        }
 
         $data['status'] = true;
         $data['event'] = $app->toarray();
