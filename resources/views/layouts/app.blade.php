@@ -51,13 +51,6 @@
     <!-- /#wrapper -->
 
     <script src="{{ asset('js/app.js') }}"></script>
-    
-    <script type="text/javascript">
-            var loc = window.location.pathname;
-        $('#nav').find('a').each(function() {
-            $(this).toggleClass('active', $(this).attr('href') == loc);
-        });
-    </script>
 
     @yield('js')
 </body>

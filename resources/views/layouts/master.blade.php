@@ -24,7 +24,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
          @include('layouts.partials.topbar')
          <!-- End Top Navigation -->
          <!-- Main navbar-header -->
-         @include('layouts.partials.navbar')
+         @include('layouts.partials.navbar2')
          <!-- Main navbar-header end -->
          <!-- Page Content -->
          <div id="page-wrapper">
@@ -68,6 +68,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
          showAlert( 'success','Success',msg);
       </script>
    @endif
-
+   <script type="text/javascript">
+      $("ul.nav a").removeClass('active');
+         var e = window.location,
+                i = $("ul.nav a").filter(function() {
+                    return (this.pathname == e.pathname);
+                }).addClass("active").parent().parent().addClass("in").parent();
+            i.is("li") && i.addClass("active");
+   </script>
    </body>
 </html>

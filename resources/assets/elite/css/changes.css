@@ -76,3 +76,13 @@ background: #fff
 #myTable > tbody > tr.odd.newClient{
   background-color: rgb(223, 255, 247)!important;
 }
+.footer {
+    bottom: 0;
+    color: #636363;
+    left: 0;
+    padding: 20px 30px;
+    position: absolute;
+    z-index: 120;
+    right: 0;
+    background: #ffffff;
+}

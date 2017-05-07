@@ -49,7 +49,7 @@ mix.copy('node_modules/raphael/raphael.js', 'resources/assets/js/libs')
 	.styles([
 		'resources/assets/elite/css/animate.css',
 	  	'resources/assets/elite/css/toast.css',
-	 	'resources/assets/elite/css/style1.css',
+	 	'resources/assets/elite/css/style.css',
 	 	'resources/assets/elite/css/blue.css', 
 	  	'resources/assets/elite/css/spinners.css',
 	    'resources/assets/elite/css/changes.css'],

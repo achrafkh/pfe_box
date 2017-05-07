@@ -25,7 +25,7 @@
 <div class="row">
 	<div class="col-md-4 col-xs-12">
 		<div class="white-box">
-			<div class="user-btm-box" style="margin-top: -15%;">
+			<div class="user-btm-box" style="margin-top: -10%;">
 				<!-- .row -->
 				<div class="row text-center m-t-10" >
 					<div class="col-md-6 b-r"><strong>Name</strong><p>{{ucfirst($client->firstname) . ' ' . $client->lastname}}</p></div>

@@ -4,7 +4,7 @@
     <div class="navbar-header">
 
       <!-- .Logo -->
-      <div class="top-left-part"><a class="logo" href="index.html"><!--This is logo icon--><img src="/logo.jpg" alt="home" class="light-logo" /></a></div>
+      <div class="top-left-part"><a class="logo" href="index.html"><!--This is logo icon--></a></div>
       <ul class="nav navbar-top-links navbar-left hidden-xs">
         <li><a href="javascript:void(0)" class="logotext"><!--This is logo text--><img src="/logo.png" alt="home" class="light-logo" alt="home" /></a></li>
       </ul>
