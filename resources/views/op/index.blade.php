@@ -235,9 +235,6 @@
 <link rel="stylesheet" href="{{ asset('/css/libs/formValidation.min.css') }}">
 <script src="{{ asset('js/libs/formvalidation/formValidation.min.js') }} "></script>
 <script src="{{ asset('js/libs/formvalidation/bootstrap.min.js') }} "></script>
-<script type="text/javascript">
-  var url = window.location.origin;
-</script>
 <script type="text/javascript" src="{{asset('js/libs/bootstrap-datepicker.min.js')}}"></script>
 <script type="text/javascript" src="{{ url('/js/op/index.js') }} "></script>
 @endsection

@@ -166,7 +166,6 @@
 <script type="text/javascript">
 var evs = {!! json_encode($calendar) !!};
 var errors = {!! json_encode($errors->first()) !!};
-var url = window.location.origin;
 </script>
 <script type="text/javascript" src="{{ url('/js/com/index.js') }} "></script>
 @endsection

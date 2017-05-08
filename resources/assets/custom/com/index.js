@@ -8,7 +8,7 @@ function SetStats(stats){
 
 $( "#showroom-select" ).change(function() {
 	$.ajax({
-	    url: url+'/com/getevents',
+	    url: '/com/getevents',
 	    type: 'post',
 	    dataType: 'json',
 	    data: {
