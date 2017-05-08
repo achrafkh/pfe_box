@@ -17,7 +17,7 @@
             displayLength: 10,
             processing: true,
             serverSide: true,
-            ajax: '/op/getclients',
+            ajax: url+'/op/getclients',
             columns: 
             [
                 { 'data': 'src', render: function(data, type, full, meta)
