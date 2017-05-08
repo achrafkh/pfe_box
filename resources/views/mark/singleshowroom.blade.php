@@ -85,15 +85,6 @@
         <div class="col-md-7 col-lg-8 col-sm-12 col-xs-12">
           <div class="white-box">
             <h3 class="box-title">Sales</h3>
-{{--             <ul class="list-inline text-center">
-              <li>
-                <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>iMac</h5>
-              </li>
-              <li>
-                <h5><i class="fa fa-circle m-r-5" style="color: #b4becb;"></i>iPhone</h5>
-              </li>
-            </ul> --}}
-
             <div id="morris-area-chart2" style="height: 370px;"></div>
           </div>
         </div>

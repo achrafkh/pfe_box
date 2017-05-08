@@ -1,4 +1,4 @@
-for (i = 0; i < areadata.length; ++i) {
+for (var i = 0; i < areadata.length; ++i) {
   areadata[i].week = moment().day("Monday").week(areadata[i].period).format('YYYY-MM-DD');
 }
 $(document).ready(function () {

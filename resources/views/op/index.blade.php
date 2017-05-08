@@ -99,7 +99,7 @@
   <div class="col-sm-12">
     <div class="white-box">
       <div class="col-lg-2 col-sm-4 col-xs-12 pull-right">
-        <button class="btn btn-block btn-outline btn-rounded btn-info" data-toggle="modal" data-target="#create-client">Add User</button>
+        <button class="btn btn-block btn-outline btn-rounded btn-info" data-toggle="modal" data-target="#create-client" name="adduser" id="adduser">Add User</button>
       </div>
       <h3 class="box-title m-b-0">Clients</h3>
       <p class="text-muted m-b-30">All Clients By Groups</p>

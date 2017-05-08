@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="en">
    <head>
       @yield('css-top')
@@ -16,9 +12,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
    </head>
    <body>
       <!-- Preloader -->
-      {{-- <div class="preloader">
+      <div class="preloader">
          <div class="cssload-speeding-wheel"></div>
-      </div> --}}
+      </div>
       <div id="wrapper">
          <!-- Top Navigation -->
          @include('layouts.partials.topbar')
@@ -45,36 +41,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- /#wrapper -->
       @include('layouts.partials.scripts')
       @yield('js')
-   <script type="text/javascript">
-      function showAlert(status, heading,body) {
-         var icon = 'error';
-         if (status == 'success') {
-            icon = 'success';
-         }
-         $.toast({
-            heading: heading,
-            text: body,
-            position: 'top-right',
-            loaderBg: '#ff6849',
-            icon: icon,
-            hideAfter: 6000,
-            stack: 6
-         });
-      };
-   </script>
+   <script type="text/javascript" src="{{ url('/js/main.js') }} "></script>
    @if(Session::has('flash'))
       <script type="text/javascript">
          var msg = {!! json_encode(Session::get('flash'))  !!};
          showAlert( 'success','Success',msg);
       </script>
    @endif
-   <script type="text/javascript">
-      $("ul.nav a").removeClass('active');
-         var e = window.location,
-                i = $("ul.nav a").filter(function() {
-                    return (this.pathname == e.pathname);
-                }).addClass("active").parent().parent().addClass("in").parent();
-            i.is("li") && i.addClass("active");
-   </script>
    </body>
 </html>

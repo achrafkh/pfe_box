@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use App\Repo\facebook\FacebookRepo;
+use Laravel\Dusk\DuskServiceProvider;
 use Countries;
 use App\Access;
 class AppServiceProvider extends ServiceProvider
@@ -46,6 +47,9 @@ class AppServiceProvider extends ServiceProvider
 
         if ($this->app->environment() == 'localpc') {
             $this->app->register('Appzcoder\CrudGenerator\CrudGeneratorServiceProvider');
+            }
+        if ($this->app->environment('local', 'testing')) {
+            $this->app->register(DuskServiceProvider::class);
         }
     }
 }

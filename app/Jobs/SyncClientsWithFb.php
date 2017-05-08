@@ -43,7 +43,7 @@ class SyncClientsWithFb implements ShouldQueue
                 $data[$index]['src'] = "fb";
                 $data[$index]['address'] = $lead->field_data[3]->values[0];
                 $data[$index]['city'] = $lead->field_data[4]->values[0];
-                $data[$index]['birthdate'] = Carbon::now();
+                $data[$index]['birthdate'] = null;
                 $data[$index]['created_at'] = Carbon::now();
                 $data[$index]['updated_at'] = Carbon::now();
                 

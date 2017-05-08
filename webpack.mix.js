@@ -23,15 +23,17 @@ mix.copy('node_modules/raphael/raphael.js', 'resources/assets/js/libs')
 	.copy('node_modules/clockpicker/dist/bootstrap-clockpicker.js', 'public/js/libs')
 	.copy('node_modules/jquery-sparkline/jquery.sparkline.min.js', 'public/js/libs')
 
-	.js('resources/assets/custom/com/index.js', 'public/js/com')
-	.js('resources/assets/custom/com/showclient.js', 'public/js/com')
-	.js('resources/assets/custom/com/clients.js', 'public/js/com')
+	.babel(['resources/assets/custom/com/index.js'], 'public/js/com/index.js')
+	.babel(['resources/assets/custom/com/showclient.js'], 'public/js/com/showclient.js')
+	.babel(['resources/assets/custom/com/clients.js'], 'public/js/com/clients.js')
 
-	.js('resources/assets/custom/op/index.js', 'public/js/op')
-	.js('resources/assets/custom/op/showclient.js', 'public/js/op')
+	.babel(['resources/assets/custom/op/index.js'], 'public/js/op/index.js')
+	.babel(['resources/assets/custom/op/showclient.js'], 'public/js/op/showclient.js')
 
-	.js('resources/assets/custom/mark/index.js', 'public/js/mark')
-	.js('resources/assets/custom/mark/singleshowroom.js', 'public/js/mark')
+	.babel(['resources/assets/custom/mark/index.js'], 'public/js/mark/index.js')
+	.babel(['resources/assets/custom/mark/singleshowroom.js'], 'public/js/mark/singleshowroom.js')
+
+	.babel(['resources/assets/custom/main.js'], 'public/js/main.js')
 
 	.sass('resources/assets/sass/app.scss', 'public/css')
 	.js('resources/assets/js/app.js', 'public/js')
@@ -59,4 +61,5 @@ mix.copy('node_modules/raphael/raphael.js', 'resources/assets/js/libs')
 	 'public/js/datatables.js')
 	.copy('node_modules/datatables/media/css/jquery.dataTables.min.css',
 	 'public/css/datatables.css')
-	.autoload({});
+	.autoload({})
+	.options({ purifyCss: true });

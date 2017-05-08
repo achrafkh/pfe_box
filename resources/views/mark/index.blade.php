@@ -102,17 +102,6 @@
         <div class="col-md-8 col-lg-9 col-sm-6 col-xs-12">
           <div class="white-box">
              <h3 class="box-title">Last Month Sales</h3>
-           {{--  <ul class="list-inline text-right">
-              <li>
-                <h5><i class="fa fa-circle m-r-5" style="color: #00bfc7;"></i>iPhone</h5>
-              </li>
-              <li>
-                <h5><i class="fa fa-circle m-r-5" style="color: #fb9678;"></i>iPad</h5>
-              </li>
-              <li>
-                <h5><i class="fa fa-circle m-r-5" style="color: #9675ce;"></i>iPod</h5>
-              </li>
-            </ul> --}}
             <div id="morris-area-chart2" style="height: 370px;"></div>
           </div>
         </div>
@@ -258,6 +247,5 @@
 var areadata = {!! json_encode($area->toarray()) !!};
 var miniDonut =  {!! json_encode($miniDonut) !!};
 </script>
-
 <script type="text/javascript" src="{{ url('/js/mark/index.js') }} "></script>
 @endsection

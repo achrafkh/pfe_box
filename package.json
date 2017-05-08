@@ -22,8 +22,9 @@
   "dependencies": {
     "bootstrap-datepicker": "^1.6.4",
     "clockpicker": "0.0.7",
+    "jquery-sparkline": "2.4.0",
     "jquery-ui": "^1.12.1",
     "npm-font-open-sans": "^1.0.3",
-    "jquery-sparkline": "2.4.0"
+    "purify-css": "^1.1.9"
   }
 }

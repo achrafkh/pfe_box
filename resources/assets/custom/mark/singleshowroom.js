@@ -12,7 +12,7 @@ if (donut[0].value || donut[1].value || donut[2].value) {
 } else {
 	$('#morris-donut-chart').html('<h1 style="margin-top:40%;">Not enough data to Render The Chart</h1>').addClass('text-center');
 }
-for (i = 0; i < areadata.length; ++i) {
+for (var i = 0; i < areadata.length; ++i) {
   areadata[i].week = moment().day("Monday").week(areadata[i].period).format('YYYY-MM-DD');
 }
 // Dashboard 1 Morris-chart

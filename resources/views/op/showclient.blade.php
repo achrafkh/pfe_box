@@ -155,12 +155,6 @@
 						@include('op.partials.clientForm')
 					</form>
 				</div>
-				<!-- /.tabs2 -->
-				<!-- tabs3 -->
-{{-- 				<div class="tab-pane" id="invoices">
-					
-				</div> --}}
-				<!-- /.tabs3 -->
 			</div>
 		</div>
 	</div>
