@@ -6,7 +6,7 @@
       <!-- .Logo -->
       <div class="top-left-part"><a class="logo" href="index.html"><!--This is logo icon--></a></div>
       <ul class="nav navbar-top-links navbar-left hidden-xs">
-        <li><a href="javascript:void(0)" class="logotext"><!--This is logo text--><img src="/logo.png" alt="home" class="light-logo" alt="home" /></a></li>
+        <li><a href="javascript:void(0)" class="logotext"><!--This is logo text--><img src="/logo2.png" alt="home" class="light-logo" alt="home" /></a></li>
       </ul>
       <!-- /.Logo -->
 
