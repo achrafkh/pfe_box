@@ -5,7 +5,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <!-- Favicon icon -->
-<link rel="icon" type="image/png" sizes="16x16" href="http://eliteadmin.themedesigner.in/demos/plugins/images/favicon.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/logo.jpg">
 <title>{{ config('app.name', 'Laravel') }}</title>
 <!-- Bootstrap Core CSS -->
 
@@ -28,5 +28,21 @@ page. However, you can choose any other skin from folder css / colors .
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 	
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+<link href="{{ asset('css/app.css') }}" rel="stylesheet"  media="none" onload="if(media!='all')media='all'">
+<link href="{{ asset('css/main.css') }}" rel="stylesheet"  media="none" onload="if(media!='all')media='all'">
+<style type="text/css">
+    		.preloader {
+    		    width: 100%;
+    		    height: 100%;
+    		    top: 0;
+    		    position: fixed;
+    		    z-index: 99999;
+    		    background: #fff
+    		}
+    
+    		.preloader .cssload-speeding-wheel {
+    		    position: absolute;
+    		    top: calc(50% - 3.5px);
+    		    left: calc(50% - 3.5px)
+    		}
+</style>
