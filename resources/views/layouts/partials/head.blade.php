@@ -5,7 +5,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <!-- Favicon icon -->
-<link rel="icon" type="image/png" sizes="16x16" href="/logo.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="/logo.png">
 <title>{{ config('app.name', 'Laravel') }}</title>
 <!-- Bootstrap Core CSS -->
 

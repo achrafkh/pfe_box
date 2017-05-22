@@ -18,8 +18,8 @@
 				<div class="white-box">
 					<form class="form-horizontal form-material" id="loginform"  role="form" method="POST" action="{{ route('login') }}">
 						{{ csrf_field() }}
-						<b><img style=" display: block;margin: 0 auto;" src="/logo.jpg" alt="home" /></b>
-						<h3 class="box-title m-b-20 text-center">Sign In</h3>
+						<b><img style=" display: block;margin: 0 auto;" src="/logo.png" alt="home" /></b>
+						<br/>
 						<div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
 							<div class="col-xs-12">
 								<input id="username" type="text" class="form-control" placeholder="Username" name="username" value="{{ old('username') }}" required autofocus>
